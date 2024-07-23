@@ -1,6 +1,6 @@
 import React from 'react'
-import ChatWindow from '../components/ChatWindow';
-import Sidebar from '../components/Sidebar';
+import ChatWindow from '../components/chatbot/ChatWindow';
+import Sidebar from '../components/chatbot/Sidebar';
 import '../assets/styles/global.css';
 
 function ChatBotPage() {
