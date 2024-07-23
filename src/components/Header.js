@@ -39,22 +39,29 @@ function Header() {
 
 
   return (
-    <div>
+    // <div>
 
-      <Link to={'/'}>Home</Link>
-      <Link to={'/ContactPage'}>ContactPage</Link>
-      <Link to={'/AboutPage'}>AboutPage</Link>
+    //   <Link to={'/'}>Home</Link>
+    //   <Link to={'/ContactPage'}>ContactPage</Link>
+    //   <Link to={'/AboutPage'}>AboutPage</Link>
 
 
-      {/* 데이터를 사용하는 UI 구현 */}
-      <ul>
-        {data.map(item => (
-          <li key={item.id}>{item.name}</li>
-        ))}
-      </ul>
+    //   {/* 데이터를 사용하는 UI 구현 */}
+    //   <ul>
+    //     {data.map(item => (
+    //       <li key={item.id}>{item.name}</li>
+    //     ))}
+    //   </ul>
 
       
-    </div>
+    // </div>
+    <header>
+      <h1>NAGNAE</h1>
+      <nav>
+        <a href="#">My Page</a>
+        <button>Log out</button>
+      </nav>
+    </header>
   );
 }
 
