@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ChatMessage({ message }) {
+function ChatLegalVisaMessage({ message }) {
   return (
     <div className={`message ${message.isUser ? 'user' : 'bot'}`}>
       {message.text}
@@ -8,4 +8,4 @@ function ChatMessage({ message }) {
   );
 }
 
-export default ChatMessage;
+export default ChatLegalVisaMessage;

@@ -1,5 +1,5 @@
 import React from 'react'
-import ChatWindow from '../components/chatbot/ChatWindow';
+import ChatWindow from '../components/chatbot/ChatLegalVisaWindow';
 import Sidebar from '../components/chatbot/Sidebar';
 import '../assets/styles/global.css';
 
