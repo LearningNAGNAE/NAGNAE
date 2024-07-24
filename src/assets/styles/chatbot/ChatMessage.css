@@ -3,19 +3,19 @@
     overflow-y: auto;
   }
     
-  .message {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    border-radius: 5px;
-  }
-  
-  .message.user {
-    background-color: #F5DEB3;
-    align-self: flex-end;
-  }
-  
-  .message.bot {
-    background-color: #FFA500;
-  }
+.message {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.message.user {
+  background-color: #F5DEB3;
+  align-self: flex-end;
+}
+
+.message.bot {
+  background-color: #FFA500;
+}
   
   

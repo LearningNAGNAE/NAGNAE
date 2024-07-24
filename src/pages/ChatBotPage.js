@@ -4,9 +4,9 @@ import '../assets/styles/chatbot/ChatBotPage.css';
 
 function ChatBotPage() {
   return (
-    <div className="main-content">
-      <Sidebar />
-    </div>
+      <div className="main-content">
+        <Sidebar />
+      </div>
   )
 }
 
