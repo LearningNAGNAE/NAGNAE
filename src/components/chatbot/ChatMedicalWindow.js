@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ChatMessage from './ChatMedicalMessage';
+import '../../assets/styles/chatbot/ChatWindow.css';
 
 function ChatMedicalWindow() {
   const [messages, setMessages] = useState([

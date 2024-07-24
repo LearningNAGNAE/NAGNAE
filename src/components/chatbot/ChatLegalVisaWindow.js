@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import ChatMessage from './ChatLegalVisaMessage';
+import '../../assets/styles/chatbot/ChatWindow.css';
 
 function ChatLegalVisaWindow() {
   const [messages, setMessages] = useState([
     { id: 1, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
     { id: 2, text: "Yêu cầu pháp lý: Theo luật lao động Hàn Quốc, không bắt buộc phải lập hợp đồng bằng tiếng nước ngoài. Tuy nhiên, để bảo vệ quyền lợi của người lao động nước ngoài, việc này được khuyến khích mạnh mẽ.", isUser: false },
-    { id: 3, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
+    
   ]);
 
   const [input, setInput] = useState('');

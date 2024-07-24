@@ -5,6 +5,7 @@ import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import ChatBotPage from './pages/ChatBotPage';
 // 1. import `ChakraProvider` component
+import './assets/styles/global.css';
 import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {

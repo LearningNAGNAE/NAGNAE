@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../assets/styles/chatbot/ChatMessage.css';
 
 function ChatEmploymentMessage({ message }) {
   return (
