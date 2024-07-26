@@ -1,8 +1,49 @@
 aside {
-  background-color: #8B4513;
+  background-color: #775A45;
   color: white;
-  padding: 1rem;
-  width: 250px;
-  height: 1080px;
+  padding: 35px;
+  width: 300px;
+  border-radius: 30px;
+  margin: 30px 100px 0px 100px;
 }
 
+.category {
+  width: 220px;
+  border-bottom: 1px solid white;
+  font-size: 20px;
+  margin-top: 20px;
+  padding-bottom: 10px;
+}
+
+.image-class {
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
+}
+
+.recent {
+  display: flex;
+  justify-content: space-between;
+  width: 220px;
+  border-bottom: 1px solid white;
+  font-size: 20px;
+  margin-top: 20px;
+  padding-bottom: 10px;
+}
+
+.view_all {
+  color: white;
+  font-size: 15px;
+}
+
+.recent-ul {
+  list-style-type: none;
+}
+
+.recent-ul li {
+  width: 220px;
+  height: 60px;
+  align-content: center;
+  border-bottom: 1px solid white;
+}

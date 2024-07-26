@@ -10,13 +10,13 @@ header {
   background-color: white;
   display: flex;
   justify-content: space-between;
-  margin: 20px 50px 20px 50px;
-  border-bottom: 1px solid black;
+  margin: 20px 50px 0px 50px;
+  border-bottom: 1px solid #775A45;
 }
 .logo {
   width: 280px;
   /* height: 50px; */
-  color: #8B4513;
+  color: #775A45;
   font-size: 64px;
   font-weight: 500;
 }
@@ -35,17 +35,17 @@ header nav {
 .sign_in, .sign_out {
   width: 200px;
   height: 70px;
-  border: 1px solid #8B4513;
+  border: 1px solid #775A45;
   border-radius: 50px;
   margin: 0px 10px 0px 10px;
   padding-bottom: 5px;
-  background-color: #8B4513;
+  background-color: #775A45;
   color: white;
 }
 
 .sign_up, .my_page {
   width: 200px;
   height: 70px;
-  color: #8B4513;
+  color: #775A45;
   margin: 0px 10px 0px 10px;
 }
