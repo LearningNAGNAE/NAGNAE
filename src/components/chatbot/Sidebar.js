@@ -20,13 +20,13 @@ function Sidebar() {
           </TabList>
           <TabIndicator ml='-1.5px' width='2px' bg='blue.500' borderRadius='1px' />
           <TabPanels flex={1}>
-              <TabPanel minWidth="1000px" height="670px" position="relative" bottom="90px" border="1px solid #554235" borderRadius="20px">
+              <TabPanel minWidth="1280px" height="670px" position="relative" bottom="90px" border="1px solid #554235" borderRadius="20px">
                 <ChatLegalVisaWindow />
               </TabPanel>
-              <TabPanel minWidth="1000px" height="670px" position="relative" bottom="90px" border="1px solid #554235" borderRadius="20px">
+              <TabPanel minWidth="1280px" height="670px" position="relative" bottom="90px" border="1px solid #554235" borderRadius="20px">
                 <ChatMedicalWindow />
               </TabPanel>
-              <TabPanel minWidth="1000px" height="670px" position="relative" bottom="90px" border="1px solid #554235" borderRadius="20px">
+              <TabPanel minWidth="1280px" height="670px" position="relative" bottom="90px" border="1px solid #554235" borderRadius="20px">
                 <ChatEmploymentWindow />
               </TabPanel>
           </TabPanels>
