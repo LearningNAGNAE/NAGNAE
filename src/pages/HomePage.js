@@ -1,19 +1,14 @@
 import React from 'react'
-import Modal_Test from '../components/Modal_Test'
-
+import '../assets/styles/homepage/homepage.css'
 
 function HomePage() {
 
 
 
   return (
-    <div>
-      HomePage
-      <div>
-        <Modal_Test />
-      </div>
+    <div className='contents'>
+      test
     </div>
-    
   )
 }
 

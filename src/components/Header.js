@@ -56,10 +56,12 @@ function Header() {
       
     // </div>
     <header>
-      <h1>NAGNAE</h1>
+      <a className='logo' href='/'>NAGNAE</a>
       <nav>
-        <a href="#">My Page</a>
-        <button>Log out</button>
+        <a className='sign_up' href="#">Sign Up</a>
+        {/* <a className='my_page' href="#">My Page</a> */}
+        <button className='sign_in'>Sign in</button>
+        {/* <button className='sign_out'>Sign Out</button> */}
       </nav>
     </header>
   );
