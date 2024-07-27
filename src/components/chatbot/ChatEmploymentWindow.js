@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import ChatMessage from './ChatEmploymentMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
+import uploadIcon from '../../assets/images/free-icon-grab.png'; // 이미지 파일 경로
+import sendIcon from '../../assets/images/send.png'; // 이미지 파일 경로
+import Record_Modal from '../Record_Modal';
 
 function ChatEmploymentWindow() {
   const [messages, setMessages] = useState([
@@ -20,6 +23,12 @@ function ChatEmploymentWindow() {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit(e);
+    }
+  };
+
   return (
     <div className="chat-window">
       <div className="messages">
@@ -27,15 +36,30 @@ function ChatEmploymentWindow() {
           <ChatMessage key={message.id} message={message} />
         ))}
       </div>
-      <form onSubmit={handleSubmit}>
-        <input 
-          type="text" 
-          value={input} 
-          onChange={(e) => setInput(e.target.value)} 
-          placeholder="Type a message..."
-        />
-        <button type="submit">Send</button>
-      </form>
+      <div className='wrap-form-box'>
+        <form onSubmit={handleSubmit} className='form-box'>
+          <div className='upload-box'>
+            <label htmlFor="file-upload" className="custom-file-upload">
+              <img src={uploadIcon} alt="Upload" className="window-upload-icon" />
+            </label>
+            <input id="file-upload" type="file" style={{display: 'none'}}/>
+          </div>
+          <div className='modal_input_btn'>
+            <Record_Modal />
+            <input 
+              className='botinput'
+              type="text" 
+              value={input} 
+              onChange={(e) => setInput(e.target.value)} 
+              onKeyDown={handleKeyPress}
+              placeholder="Type a message..."
+            />
+          </div>
+          <button className='send-btn' type="submit">
+            <img src={sendIcon} alt="Send" className="window-send-icon" />
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

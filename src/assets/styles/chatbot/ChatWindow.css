@@ -3,22 +3,62 @@
     display: flex;
     flex-direction: column;
     padding: 1rem;
-  }
-
-form {
+    border: 1px solid #554235;
+    border-radius: 10px;
+    background-color: white;
+    padding: 16px 0px 16px 0px;
+}
+.wrap-form-box{
+    border-top: 1px solid black;
+    padding: 0px 16px 0px 16px;
+}
+.form-box {
     display: flex;
     margin-top: 1rem;
 }
-
-input {
+.modal_input_btn{
+    display: flex;
+    align-items: center;
+    flex: 1;
+    border: 1px solid #775A45;
+    border-radius: 50px;
+}
+.botinput {
+    color: black;
     flex: 1;
     padding: 0.5rem;
+    border-radius: 0px 50px 50px 0px;
 }
 
-button {
+.send-btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid black;
+    border-radius: 100%;
     background-color: #FF994F;
     color: black;
     border: none;
-    padding: 0.5rem 1rem;
     cursor: pointer;
+    padding-left: 7px;
+    margin-left: 15px;
+}
+.upload-box{
+    display: flex;
+    
+}
+.window-upload-icon, .window-send-icon {
+    width: 30px;
+    height: 30px;
+}
+.custom-file-upload {
+    background-color: #775A45;
+    width: 42px;
+    height: 42px;
+    align-content: center;
+    color: #775A45;
+    cursor: pointer;
+    border: 1px solid #775A45;
+    border-radius: 100%;
+    margin-right: 15px;
+    padding-left: 5px;
 }
