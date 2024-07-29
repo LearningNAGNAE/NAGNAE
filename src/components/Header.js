@@ -55,7 +55,7 @@ function Header() {
 
       
     // </div>
-    <header>
+    <header className="nagnae_header">
       <div className='header-content'>
         <a className='logo' href='/'>NAGNAE</a>
         <nav>

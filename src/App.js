@@ -15,7 +15,7 @@ function App() {
     <ChakraProvider>
       <BrowserRouter>
         <div className="App">
-          <Header />
+          <Header  />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/ChatBotPage" element={<ChatBotPage />} />

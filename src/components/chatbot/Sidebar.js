@@ -4,7 +4,8 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Flex, Box } from
 import '../../assets/styles/chatbot/Sidebar.css';
 import ChatLegalVisaWindow from '../chatbot/ChatLegalVisaWindow';
 import ChatMedicalWindow from '../chatbot/ChatMedicalWindow';
-import ChatEmploymentWindow from '../chatbot/ChatEmploymentWindow';
+import ChatStudyWindow from '../chatbot/ChatStudyWindow';
+import ChatJobWindow from '../chatbot/ChatJobWindow';
 import homePageImage from '../../assets/images/homepageimg.jpg';
 
 function Sidebar() {
@@ -16,7 +17,8 @@ function Sidebar() {
           <TabList width={["100%", "220px"]} marginRight={["0", "50px"]} marginBottom={["20px", "0"]}>
               <Tab height="90px" paddingLeft="0px" textAlign="left" color="white" borderBottom="1px solid white"><img src={homePageImage} alt="My Image" className="image-class" />Multilingual Legal / Visa Assistant</Tab>
               <Tab height="90px" paddingLeft="0px" textAlign="left" color="white" borderBottom="1px solid white"><img src={homePageImage} alt="My Image" className="image-class" />Medical Information / Health Consultation Service</Tab>
-              <Tab height="90px" paddingLeft="0px" textAlign="left" color="white" borderBottom="1px solid white"><img src={homePageImage} alt="My Image" className="image-class" />Employment / Academic Services</Tab>
+              <Tab height="90px" paddingLeft="0px" textAlign="left" color="white" borderBottom="1px solid white"><img src={homePageImage} alt="My Image" className="image-class" />Study</Tab>
+              <Tab height="90px" paddingLeft="0px" textAlign="left" color="white" borderBottom="1px solid white"><img src={homePageImage} alt="My Image" className="image-class" />Job</Tab>
           </TabList>
           <TabIndicator ml='-1.5px' width='2px' bg='blue.500' borderRadius='1px' />
           <TabPanels flex={1} width={["100%", "auto"]}>
@@ -57,7 +59,20 @@ function Sidebar() {
                 overflowX="auto"
                 backgroundColor='#BA9F8B'
               >
-                <ChatEmploymentWindow />
+                <ChatStudyWindow />
+              </TabPanel>
+              <TabPanel 
+                display="flex" 
+                minWidth={["100%", "300px", "1280px"]} 
+                height={["auto", "670px"]} 
+                position="relative" 
+                bottom={["0", "95px"]} 
+                border="1px solid #554235" 
+                borderRadius="20px"
+                overflowX="auto"
+                backgroundColor='#BA9F8B'
+              >
+                <ChatJobWindow />
               </TabPanel>
           </TabPanels>
         </Flex>

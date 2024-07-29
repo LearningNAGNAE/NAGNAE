@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../assets/styles/chatbot/ChatMessage.css';
 
-function ChatEmploymentMessage({ message }) {
+function ChatJobMessage({ message }) {
   return (
     <div className={`message ${message.isUser ? 'user' : 'bot'}`}>
       {message.text}
@@ -9,4 +9,4 @@ function ChatEmploymentMessage({ message }) {
   );
 }
 
-export default ChatEmploymentMessage;
+export default ChatJobMessage;

@@ -35,7 +35,7 @@ function HomePage() {
     let zoomDirection = 1;
     const zoomSpeed = 0.0005;
     const minZoom = 1;
-    const maxZoom = 1.1;
+    const maxZoom = 1.2;
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -54,9 +54,12 @@ function HomePage() {
 
       ctx.drawImage(image, x, y, imgWidth, imgHeight);
 
+      // Zoom 값을 자연스럽게 증가 및 감소하도록 변경
       zoom += zoomSpeed * zoomDirection;
-      if (zoom >= maxZoom || zoom <= minZoom) {
-        zoomDirection *= -1;
+      if (zoom >= maxZoom) {
+        zoomDirection = -1;
+      } else if (zoom <= minZoom) {
+        zoomDirection = 1;
       }
 
       animationFrameId = window.requestAnimationFrame(animate);
@@ -73,8 +76,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="contents">
-      <header className="header" />
+    <article className="contents">
       <section className="screen-all" style={{ backgroundPosition: `center ${scrollY * 0.5}px` }}>
         <div className="screen">
           <div className="simple-introduce-box">
@@ -92,7 +94,7 @@ function HomePage() {
         </div>
       </section>
       <canvas ref={canvasRef} id="webgl"></canvas>
-    </div>
+    </article>
   );
 }
 

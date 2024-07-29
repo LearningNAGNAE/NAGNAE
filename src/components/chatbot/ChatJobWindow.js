@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import ChatMessage from './ChatEmploymentMessage';
+import ChatMessage from './ChatJobMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
 import uploadIcon from '../../assets/images/free-icon-grab.png'; // 이미지 파일 경로
 import sendIcon from '../../assets/images/send.png'; // 이미지 파일 경로
 import Record_Modal from '../Record_Modal';
 
-function ChatEmploymentWindow() {
+function ChatJobWindow() {
   const [messages, setMessages] = useState([
     { id: 1, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
     { id: 2, text: "Yêu cầu pháp lý: Theo luật lao động Hàn Quốc, không bắt buộc phải lập hợp đồng bằng tiếng nước ngoài. Tuy nhiên, để bảo vệ quyền lợi của người lao động nước ngoài, việc này được khuyến khích mạnh mẽ.", isUser: false },
     { id: 3, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
     { id: 4, text: "2?", isUser: true },
+    { id: 5, text: "5?", isUser: true },
   ]);
 
   const [input, setInput] = useState('');
@@ -64,4 +65,4 @@ function ChatEmploymentWindow() {
   );
 }
 
-export default ChatEmploymentWindow;
+export default ChatJobWindow;

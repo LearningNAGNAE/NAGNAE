@@ -6,7 +6,7 @@
   justify-content: center;
 }
 /* header */
-header {
+.nagnae_header {
   background-color: white;
   display: flex;
   justify-content: space-between;
@@ -19,7 +19,7 @@ header {
 }
 
 @media screen and (min-width: 768px) {
-  header {
+  .nagnae_header {
     min-width: 100%;
     padding: 0 50px;
   }
