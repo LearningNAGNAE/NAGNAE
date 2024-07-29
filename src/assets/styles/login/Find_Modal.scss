@@ -1,0 +1,83 @@
+.find-btn {
+    font-size: 20px;
+    color: #775A45;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.find-id-pw-container {
+    background-color: #b39a87;
+    border-radius: 20px;
+    padding: 30px;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.find-id-pw-container h2 {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.find-id-pw-container .input-group {
+    margin-bottom: 15px;
+}
+
+.find-id-pw-container input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #f2e8e1;
+}
+
+.find-id-pw-container .find-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #8c7a6b;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.find-id-pw-container .divider {
+    border-top: 1px solid #f2e8e1;
+    margin: 30px 0;
+}
+
+/* 아이콘을 추가하려면 각 input에 대해 다음과 같은 스타일을 적용할 수 있습니다 */
+.find-id-pw-container .input-group {
+    position: relative;
+}
+
+.find-id-pw-container .input-group::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* 각 입력 필드에 대한 아이콘 설정 */
+.find-id-pw-container .input-group input[name="name"]::before,
+.find-id-pw-container .input-group input[name="foreignerNumber"]::before {
+// background-image: url('path-to-your-id-card-icon.png');
+}
+
+.find-id-pw-container .input-group input[name="hp"]::before {
+// background-image: url('path-to-your-phone-icon.png');
+}
+
+.find-id-pw-container .input-group input[name="email"]::before {
+// background-image: url('path-to-your-email-icon.png');
+}
+
+.find-id-pw-container .input-group input[name="id"]::before {
+// background-image: url('path-to-your-user-icon.png');
+}

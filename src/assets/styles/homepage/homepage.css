@@ -1,0 +1,50 @@
+.contents {
+    margin: 0px 50px 0px 50px;
+    background-color: #8B4513;
+}
+
+.screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #8B4513;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('../../images/homepageimg.jpg');
+    height: 800px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.simple-introduce-box {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+}
+
+.si-1 {
+    font-size: 40px;
+    color: white;
+    position: relative;
+    top: 70px; /* 원하는 만큼의 값으로 설정 */
+    font-family: 'HSBombaram3.0_Thin', sans-serif;
+}
+
+.si-2 {
+    font-size: 200px;
+    color: white;
+    font-family: 'HSBombaram3.0_세로쓰기전용_Vertical_Regular', sans-serif;
+    text-shadow: 10px 5px 0px rgba(186, 159, 139, 100);
+}
+  
+.start-btn {
+    display: inline-flex;
+    width: 200px;
+    height: 70px;
+    border: 1px solid #775A45;
+    border-radius: 50px;
+    margin: 0px 10px 0px 10px;
+    padding: 4px 0px 0px 20px;
+    background-color: #775A45;
+    color: white;
+    font-size: 36px;
+}

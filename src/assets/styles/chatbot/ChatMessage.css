@@ -1,12 +1,14 @@
 .messages {
     flex: 1;
     overflow-y: auto;
+    padding: 0px 16px 0px 16px;
   }
     
 .message {
   margin-bottom: 1rem;
   padding: 0.5rem;
   border-radius: 5px;
+  color: black;
 }
 
 .message.user {

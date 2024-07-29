@@ -56,11 +56,13 @@ function Header() {
       
     // </div>
     <header>
-      <h1>NAGNAE</h1>
-      <nav>
-        <a href="#">My Page</a>
-        <button>Log out</button>
-      </nav>
+      <div className='header-content'>
+        <a className='logo' href='/'>NAGNAE</a>
+        <nav>
+          <Link className='sign_up' to="/SignPage?type=signup">Sign Up</Link>
+          <Link className='sign_in' to="/SignPage?type=signin">Sign in</Link>
+        </nav>
+      </div>
     </header>
   );
 }
