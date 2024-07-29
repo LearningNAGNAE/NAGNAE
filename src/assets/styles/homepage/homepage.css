@@ -1,32 +1,66 @@
+/* styles.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: Arial, sans-serif;
+}
+
 .contents {
-    margin: 0px 50px 0px 50px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
     background-color: #8B4513;
+    position: relative; /* 필수: 내부에 절대 위치 요소를 올바르게 배치하기 위함 */
 }
 
 .screen {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #8B4513;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('../../images/homepageimg.jpg');
-    height: 800px;
-    background-repeat: no-repeat;
+    height: 100vh;
+    position: relative;
+}
+
+.screen2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    background-image: url('../../images/homepageimg.jpg'); /* 배경 이미지 */
     background-size: cover;
-    background-position: center;
+    background-attachment: fixed; /* 배경 이미지 고정 */
+    background-position: center center; /* 기본 위치 */
+    transition: background-position 0.3s ease; /* 배경 이동 효과 */
 }
 
 .simple-introduce-box {
     display: flex;
     text-align: center;
     flex-direction: column;
+    animation: fadeIn 2s ease-out;
+    z-index: 1; /* 캔버스 위에 표시되도록 설정 */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .si-1 {
     font-size: 40px;
     color: white;
-    position: relative;
-    top: 70px; /* 원하는 만큼의 값으로 설정 */
+    margin-bottom: 20px;
     font-family: 'HSBombaram3.0_Thin', sans-serif;
+    animation: slideInFromLeft 1.5s ease-out;
+}
+
+@keyframes slideInFromLeft {
+    from { transform: translateX(-100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
 .si-2 {
@@ -34,17 +68,63 @@
     color: white;
     font-family: 'HSBombaram3.0_세로쓰기전용_Vertical_Regular', sans-serif;
     text-shadow: 10px 5px 0px rgba(186, 159, 139, 100);
+    animation: pulseText 3s infinite alternate;
 }
-  
+
+@keyframes pulseText {
+    from { text-shadow: 10px 5px 0px rgba(186, 159, 139, 100); }
+    to { text-shadow: 15px 7px 0px rgba(186, 159, 139, 100); }
+}
+
 .start-btn {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 200px;
     height: 70px;
-    border: 1px solid #775A45;
+    border: none;
     border-radius: 50px;
-    margin: 0px 10px 0px 10px;
-    padding: 4px 0px 0px 20px;
+    margin: 20px auto;
     background-color: #775A45;
     color: white;
     font-size: 36px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.start-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    transition: all 0.5s;
+}
+
+.start-btn:hover:before {
+    left: 100%;
+}
+
+.start-btn:hover {
+    background-color: #8B4513;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#webgl {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* 캔버스가 가장 아래에 표시되도록 설정 */
 }
