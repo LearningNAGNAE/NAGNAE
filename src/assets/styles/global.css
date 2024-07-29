@@ -14,6 +14,8 @@ header {
   width: 100%;
   min-width: 768px;
   box-sizing: border-box;
+  z-index: 2;
+  position: fixed;
 }
 
 @media screen and (min-width: 768px) {
@@ -85,6 +87,8 @@ footer {
   min-width: 768px;
   box-sizing: border-box;
   height: 220px;
+  /* z-index: 2; */
+  /* position: relative; */
 }
 
 @media screen and (min-width: 768px) {
