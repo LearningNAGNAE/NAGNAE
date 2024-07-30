@@ -5,6 +5,9 @@
     overflow-x: visible;
     font-family: Arial, sans-serif;
 } */
+ body {
+  overflow: visible;
+}
 
 @keyframes slideInFromLeft {
     from { transform: translateX(-100px); opacity: 0; }
@@ -22,7 +25,7 @@
 }
 
 .contents {
-    height: 200vh;
+    height: 300vh;
     overflow-x: hidden;
     position: relative; /* 필수: 내부에 절대 위치 요소를 올바르게 배치하기 위함 */
 }
@@ -83,29 +86,40 @@
 }
 
 .main-explanation-1 {
-    border: 1px solid #000000;
-    width: 1500px;
-    height: 350px;
-    font-size: 40px;
-    color: #000000;
-    margin-bottom: 20px;
+    display: flex;
+    width: 90%;
+    height: 375px;
+    border-top: 2px solid #554235;
+    border-bottom: 2px solid #554235;
+    font-size: 2.1vw;
     font-family: 'HSBombaram3.0_Thin', sans-serif;
-    margin-top: 140px;
+    margin-top: 115px;
 }
 
 .main-explanation-1-1 {
-    display: flex;
-    width: 500px;
-    height: 350px;
-    border: 1px solid #000000;
-    float: left;
+    display: block;
+    text-align: center;
+    width: 35%;
+    height: 100%;
+    padding: 10px 70px 0px 70px;
 }
 
 .main-explanation-1-2 {
     display: block;
-    width: 1000px;
-    height: 350px;
-    border: 1px solid #000000;
+    width: 70%;
+    height: 373px;
+    padding: 10px 20px 0px 20px;
+    font-family: 'HSBombaram3.0_Regular';
+}
+
+.main-explanation-1-2-big-writing {
+    font-size: 3vw;
+    color: #775A45;
+}
+
+.main-explanation-1-2-small-writing {
+    font-size: 1.7vw;
+    color: #BA9F8B;
 }
 
 .si-2 {
@@ -117,17 +131,40 @@
 }
 
 .main-explanation-2 {
-    border: 1px solid #000000;
-    width: 1500px;
-    height: 350px;
-    font-size: 40px;
+    display: flex;
+    border-bottom: 2px solid #000000;
+    width: 90%;
+    height: 375px;
     color: #000000;
     margin-bottom: 20px;
     font-family: 'HSBombaram3.0_Thin', sans-serif;
-    margin-top: 10px;
 }
 
+.main-explanation-2-1 {
+    display: block;
+    text-align: center;
+    width: 35%;
+    height: 373px;
+    padding: 10px 70px 10px 70px;
+}
 
+.main-explanation-2-2 {
+    display: block;
+    width: 70%;
+    height: 373px;
+    padding: 10px 20px 0px 20px;
+    font-family: 'HSBombaram3.0_Regular';
+}
+
+.main-explanation-2-2-big-writing {
+    font-size: 3vw;
+    color: #775A45;
+}
+
+.main-explanation-2-2-small-writing {
+    font-size: 1.7vw;
+    color: #BA9F8B;
+}
 
 .start-btn {
     display: inline-flex;
@@ -145,24 +182,7 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-}
-
-.start-btn2 {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 70px;
-    border: none;
-    border-radius: 50px;
-    margin: 20px auto;
-    background-color: #775A45;
-    color: white;
-    font-size: 36px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    font-family: 'HSBombaram3.0_Thin', sans-serif;
 }
 
 .start-btn:before {
@@ -219,8 +239,8 @@
 
 .fade-element {
     opacity: 0;
-    transform: translateX(-100px);
-    transition: opacity 1s ease-out, transform 1s ease-out;
+    transform: translateX(-200px);
+    transition: opacity 2s ease-out, transform 2s ease-out;
 }
   
 .fade-in {
@@ -230,13 +250,43 @@
 
 .fade-element2 {
     opacity: 0;
-    transform: translateX(-100px);
-    transition: opacity 1s ease-out, transform 1s ease-out;
+    transform: translateX(200px);
+    transition: opacity 2s ease-out, transform 2s ease-out;
 }
   
 .fade-in2 {
     opacity: 1;
     transform: translateY(0);
+}
+
+.fade-element3 {
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+  
+.slide-in {
+    opacity: 1;
+    transform: translateX(0%);
+}
+
+.screen3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 3;
+    background-color: #fff;
+    transform: translateY(0);
+    /* 애니메이션을 위한 스타일을 여기 추가할 수 있습니다 */
+}
+  
+.slide-in-content {
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 #webgl {
@@ -246,4 +296,4 @@
     width: 100%;
     height: 100vh;
     z-index: 0;
-  }
+}

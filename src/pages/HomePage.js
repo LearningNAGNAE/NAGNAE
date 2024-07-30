@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../assets/styles/homepage/homepage.css';
 import homepageImg from '../assets/images/homepageimg.jpg';
+import ExplanationPage1 from '../assets/images/ExplanationPage1.png';
+import ExplanationPage2 from '../assets/images/ExplanationPage2.png';
 
 function HomePage() {
   const canvasRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const fadeRef1 = useRef(null);
   const fadeRef2 = useRef(null);
+  const fadeRef3 = useRef(null);
 
   useEffect(() => {
     const options = {
@@ -36,9 +39,20 @@ function HomePage() {
       });
     }, options);
 
+    const observer3 = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('slide-in');
+        } else {
+          entry.target.classList.remove('slide-in');
+        }
+      });
+    }, options);
+
     // 각 ref 요소를 관찰
     const currentFadeRef1 = fadeRef1.current;
     const currentFadeRef2 = fadeRef2.current;
+    const currentFadeRef3 = fadeRef3.current;
 
     if (currentFadeRef1) {
       observer1.observe(currentFadeRef1);
@@ -46,6 +60,10 @@ function HomePage() {
     
     if (currentFadeRef2) {
       observer2.observe(currentFadeRef2);
+    }
+
+    if (currentFadeRef3) {
+      observer3.observe(currentFadeRef3);
     }
 
     // 컴포넌트 언마운트 시 관찰 중지
@@ -56,6 +74,10 @@ function HomePage() {
       
       if (currentFadeRef2) {
         observer2.unobserve(currentFadeRef2);
+      }
+
+      if (currentFadeRef3) {
+        observer3.unobserve(currentFadeRef3);
       }
     };
   }, []);
@@ -161,12 +183,26 @@ function HomePage() {
       <section className="screen2" style={{ transform: `translateY(${Math.max(0, 100 - scrollPosition / 5)}%)` }}>
         <div className="simple-introduce-box2">
           <div ref={fadeRef1} className='main-explanation-1 fade-element'>
-            <span className="main-explanation-1-1">sddsdsdsdsd</span>
-            <span className="main-explanation-1-2">sddsdsdsdsd</span>
+            <img src={ExplanationPage1} alt="설명 이미지1" className="main-explanation-1-1"/>
+            <span className="main-explanation-1-2">
+              <p className="main-explanation-1-2-big-writing">Provides you with information related to various laws</p>
+              <p className="main-explanation-1-2-small-writing">Did you want to get information about Korean law, but had a hard time because it was written in difficult words? Don't worry anymore. The NAGNAE is with you.
+              NAGNAE provides various languages through AI.</p>
+            </span>
           </div>
-          <div>
-            <p ref={fadeRef2} className="main-explanation-2 fade-element2">MORE CONTENT</p>
+          <div ref={fadeRef2} className="main-explanation-2 fade-element2">
+            <span className="main-explanation-2-2">
+              <p className="main-explanation-2-2-big-writing">Provides you with information related to various laws</p>
+              <p className="main-explanation-2-2-small-writing">Did you want to get information about Korean law, but had a hard time because it was written in difficult words? Don't worry anymore. The NAGNAE is with you.
+              NAGNAE provides various languages through AI.</p>
+            </span>
+            <img src={ExplanationPage2} alt="설명 이미지2" className="main-explanation-2-1"/>
           </div>
+        </div>
+      </section>
+      <section ref={fadeRef3} className="screen3 fade-element3" style={{ transform: `translateY(${Math.max(0, 200 - scrollPosition / 5)}%)` }}>
+        <div className="slide-in-content">
+          <p>This is the new content that slides in from the left.</p>
         </div>
       </section>
       <canvas ref={canvasRef} id="webgl"></canvas>

@@ -38,6 +38,7 @@
   color: #775A45;
   font-size: 64px;
   font-weight: 500;
+  font-family: 'HSBombaram3.0_세로쓰기전용_Vertical_Regular', sans-serif;
 }
 
 header h1 {
@@ -87,7 +88,7 @@ footer {
   min-width: 768px;
   box-sizing: border-box;
   height: 220px;
-  z-index: 2;
+  z-index: 5;
   position: relative;
 }
 

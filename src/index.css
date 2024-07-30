@@ -1,21 +1,21 @@
 @font-face {
   font-family: 'HSBombaram3.0_Regular';
-  src: url('./assets/fonts/HSBombaram3.0_Regular.ttf') format('ttf');
+  src: url('./assets/fonts/HSBombaram3.0_Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'HSBombaram3.0_Thin';
-  src: url('./assets/fonts/HSBombaram3.0_Thin.ttf') format('ttf');
+  src: url('./assets/fonts/HSBombaram3.0_Thin.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'HSBombaram3.0_세로쓰기전용_Vertical_Thin';
-  src: url('./assets/fonts/HSBombaram3.0_세로쓰기전용_Vertical_Thin.ttf') format('ttf');
+  src: url('./assets/fonts/HSBombaram3.0_세로쓰기전용_Vertical_Thin.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'HSBombaram3.0_세로쓰기전용_Vertical_Regular';
-  src: url('./assets/fonts/HSBombaram3.0_세로쓰기전용_Vertical_Regular.ttf') format('ttf');
+  src: url('./assets/fonts/HSBombaram3.0_세로쓰기전용_Vertical_Regular.ttf') format('truetype');
 }
 
 body {
