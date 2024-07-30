@@ -4,7 +4,7 @@ import '../../assets/styles/chatbot/ChatMessage.css';
 function ChatStudyMessage({ message }) {
   return (
     <div className={`message ${message.isUser ? 'user' : 'bot'}`}>
-      {message.text}
+      {typeof message.text === 'object' ? JSON.stringify(message.text) : message.text}
     </div>
   );
 }
