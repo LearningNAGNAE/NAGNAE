@@ -4,7 +4,7 @@ import ChatStudyMessage from './ChatStudyMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
 import uploadIcon from '../../assets/images/free-icon-grab.png';
 import sendIcon from '../../assets/images/send.png';
-import Record_Modal from '../Record_Modal';
+import Record_Modal from '../chatbot/Record_Modal';
 
 function ChatStudyWindow() {
   const { messages, loading, error, sendMessage } = useChatStudy();
@@ -43,7 +43,10 @@ function ChatStudyWindow() {
             <input id="file-upload" type="file" style={{display: 'none'}}/>
           </div>
           <div className='modal_input_btn'>
-            <Record_Modal />
+            <Record_Modal 
+              onRecordingComplete={(blob) => console.log('Recording completed', blob)}
+              onAudioSend={(data) => console.log('Audio data', data)}
+            />
             <input 
               className='botinput'
               type="text" 

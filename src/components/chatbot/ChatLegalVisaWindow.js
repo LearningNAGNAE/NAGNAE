@@ -1,50 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ChatMessage from './ChatLegalVisaMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
-import uploadIcon from '../../assets/images/free-icon-grab.png';
-import sendIcon from '../../assets/images/send.png';
-import Record_Modal from '../Record_Modal';
-import axios from 'axios';
+import uploadIcon from '../../assets/images/free-icon-grab.png'; // 이미지 파일 경로
+import sendIcon from '../../assets/images/send.png'; // 이미지 파일 경로
+import Record_Modal from '../chatbot/Record_Modal';
 
 function ChatLegalVisaWindow() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    { id: 1, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
+    { id: 2, text: "Yêu cầu pháp lý: Theo luật lao động Hàn Quốc, không bắt buộc phải lập hợp đồng bằng tiếng nước ngoài. Tuy nhiên, để bảo vệ quyền lợi của người lao động nước ngoài, việc này được khuyến khích mạnh mẽ.", isUser: false },
+    
+  ]);
+
   const [input, setInput] = useState('');
-  const [sessionId, setSessionId] = useState('');
 
-  useEffect(() => {
-    // 세션 ID 생성
-    setSessionId(Math.random().toString(36).substring(7));
-  }, []);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (input.trim()) {
-      const userMessage = { id: messages.length + 1, text: input, isUser: true };
-      setMessages(prevMessages => [...prevMessages, userMessage]);
+      setMessages([...messages, { id: messages.length + 1, text: input, isUser: true }]);
       setInput('');
-
-      try {
-        const response = await axios.post('http://localhost:8000/ask', {
-          question: input,
-          session_id: sessionId
-        });
-
-        const botMessage = { 
-          id: messages.length + 2, 
-          text: response.data.answer, 
-          isUser: false,
-          detectedLanguage: response.data.detected_language
-        };
-        setMessages(prevMessages => [...prevMessages, botMessage]);
-      } catch (error) {
-        console.error('Error sending message:', error);
-        // 에러 메시지 표시
-        setMessages(prevMessages => [...prevMessages, { 
-          id: messages.length + 2, 
-          text: "Sorry, there was an error processing your request.", 
-          isUser: false 
-        }]);
-      }
     }
   };
 
@@ -70,7 +44,10 @@ function ChatLegalVisaWindow() {
             <input id="file-upload" type="file" style={{display: 'none'}}/>
           </div>
           <div className='modal_input_btn'>
-            <Record_Modal />
+            <Record_Modal 
+              onRecordingComplete={(blob) => console.log('Recording completed', blob)}
+              onAudioSend={(data) => console.log('Audio data', data)}
+            />
             <input 
               className='botinput'
               type="text" 
