@@ -6,20 +6,34 @@
     font-family: Arial, sans-serif;
 } */
 
+@keyframes slideInFromLeft {
+    from { transform: translateX(-100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseText {
+    from { text-shadow: 10px 5px 0px rgba(186, 159, 139, 100); }
+    to { text-shadow: 15px 7px 0px rgba(186, 159, 139, 100); }
+}
+
 .contents {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100vh;
-    /* overflow: auto; */
-    background-color: #8B4513;
+    height: 200vh;
+    overflow-x: hidden;
     position: relative; /* 필수: 내부에 절대 위치 요소를 올바르게 배치하기 위함 */
-    z-index: 0;
 }
 
 .screen-all {
-    position: relative;
-    
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
 }
 
 .screen {
@@ -31,18 +45,15 @@
 }
 
 .screen2 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100vh;
-    position: relative;
-    background-image: url('../../images/homepageimg.jpg'); /* 배경 이미지 */
-    background-size: cover;
-    background-attachment: fixed; /* 배경 이미지 고정 */
-    background-position: center center; /* 기본 위치 */
-    transition: background-position 0.3s ease; /* 배경 이동 효과 */
-    z-index: 1;
-}
+    z-index: 2;
+    transition: transform 0.3s ease;
+    background-color: #fff;
+  }
 
 .simple-introduce-box {
     display: flex;
@@ -52,9 +63,15 @@
     z-index: 1; /* 캔버스 위에 표시되도록 설정 */
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+.simple-introduce-box2 {
+    display: flex;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    z-index: 1; /* 캔버스 위에 표시되도록 설정 */
+    position: fixed;
 }
 
 .si-1 {
@@ -65,9 +82,30 @@
     animation: slideInFromLeft 1.5s ease-out;
 }
 
-@keyframes slideInFromLeft {
-    from { transform: translateX(-100px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+.main-explanation-1 {
+    border: 1px solid #000000;
+    width: 1500px;
+    height: 350px;
+    font-size: 40px;
+    color: #000000;
+    margin-bottom: 20px;
+    font-family: 'HSBombaram3.0_Thin', sans-serif;
+    margin-top: 140px;
+}
+
+.main-explanation-1-1 {
+    display: flex;
+    width: 500px;
+    height: 350px;
+    border: 1px solid #000000;
+    float: left;
+}
+
+.main-explanation-1-2 {
+    display: block;
+    width: 1000px;
+    height: 350px;
+    border: 1px solid #000000;
 }
 
 .si-2 {
@@ -78,12 +116,38 @@
     animation: pulseText 3s infinite alternate;
 }
 
-@keyframes pulseText {
-    from { text-shadow: 10px 5px 0px rgba(186, 159, 139, 100); }
-    to { text-shadow: 15px 7px 0px rgba(186, 159, 139, 100); }
+.main-explanation-2 {
+    border: 1px solid #000000;
+    width: 1500px;
+    height: 350px;
+    font-size: 40px;
+    color: #000000;
+    margin-bottom: 20px;
+    font-family: 'HSBombaram3.0_Thin', sans-serif;
+    margin-top: 10px;
 }
 
+
+
 .start-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 70px;
+    border: none;
+    border-radius: 50px;
+    margin: 20px auto;
+    background-color: #775A45;
+    color: white;
+    font-size: 36px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.start-btn2 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -117,7 +181,27 @@
     transition: all 0.5s;
 }
 
+.start-btn2:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    transition: all 0.5s;
+}
+
 .start-btn:hover:before {
+    left: 100%;
+}
+
+.start-btn2:hover:before {
     left: 100%;
 }
 
@@ -127,11 +211,39 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
+.start-btn2:hover {
+    background-color: #8B4513;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.fade-element {
+    opacity: 0;
+    transform: translateX(-100px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+  
+.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-element2 {
+    opacity: 0;
+    transform: translateX(-100px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+  
+.fade-in2 {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 #webgl {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 1225px;
-    z-index: 0; /* 캔버스가 가장 아래에 표시되도록 설정 */
-}
+    height: 100vh;
+    z-index: 0;
+  }
