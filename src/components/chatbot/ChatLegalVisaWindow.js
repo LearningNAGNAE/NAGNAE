@@ -1,24 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChatMessage from './ChatLegalVisaMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
-import uploadIcon from '../../assets/images/free-icon-grab.png'; // 이미지 파일 경로
-import sendIcon from '../../assets/images/send.png'; // 이미지 파일 경로
+import uploadIcon from '../../assets/images/free-icon-grab.png';
+import sendIcon from '../../assets/images/send.png';
 import Record_Modal from '../Record_Modal';
+import axios from 'axios';
 
 function ChatLegalVisaWindow() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
-    { id: 2, text: "Yêu cầu pháp lý: Theo luật lao động Hàn Quốc, không bắt buộc phải lập hợp đồng bằng tiếng nước ngoài. Tuy nhiên, để bảo vệ quyền lợi của người lao động nước ngoài, việc này được khuyến khích mạnh mẽ.", isUser: false },
-    
-  ]);
-
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [sessionId, setSessionId] = useState('');
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // 세션 ID 생성
+    setSessionId(Math.random().toString(36).substring(7));
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.trim()) {
-      setMessages([...messages, { id: messages.length + 1, text: input, isUser: true }]);
+      const userMessage = { id: messages.length + 1, text: input, isUser: true };
+      setMessages(prevMessages => [...prevMessages, userMessage]);
       setInput('');
+
+      try {
+        const response = await axios.post('http://localhost:8000/ask', {
+          question: input,
+          session_id: sessionId
+        });
+
+        const botMessage = { 
+          id: messages.length + 2, 
+          text: response.data.answer, 
+          isUser: false,
+          detectedLanguage: response.data.detected_language
+        };
+        setMessages(prevMessages => [...prevMessages, botMessage]);
+      } catch (error) {
+        console.error('Error sending message:', error);
+        // 에러 메시지 표시
+        setMessages(prevMessages => [...prevMessages, { 
+          id: messages.length + 2, 
+          text: "Sorry, there was an error processing your request.", 
+          isUser: false 
+        }]);
+      }
     }
   };
 
