@@ -11,6 +11,8 @@ my-react-app/
 │   ├── components/       // 재사용 가능한 컴포넌트
 │   │   ├── Header.js
 │   │   ├── Footer.js
+│   │   ├── chatbot/
+│   │   │   └── Record_Modal.js
 │   │   └── Button.js
 │   ├── pages/            // 페이지별 컴포넌트
 │   │   ├── HomePage.js

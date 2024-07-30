@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-const useRecord = (onRecordingComplete = () => {}) => {
+export const useRecorder = (onRecordingComplete) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [audioURL, setAudioURL] = useState('');
@@ -28,27 +28,23 @@ const useRecord = (onRecordingComplete = () => {}) => {
     return () => clearInterval(interval);
   }, [isRecording, isPaused]);
 
-  useEffect(() => {
-    if (mediaRecorder.current) {
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder.current = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+      
+      mediaRecorder.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunksRef.current.push(event.data);
+        }
+      };
+
       mediaRecorder.current.onstop = () => {
         const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
         const url = URL.createObjectURL(audioBlob);
         setAudioURL(url);
         setAudioBlob(audioBlob);
         onRecordingComplete(audioBlob);
-      };
-    }
-  }, [mediaRecorder, onRecordingComplete]);
-
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder.current = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-
-      mediaRecorder.current.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          chunksRef.current.push(event.data);
-        }
       };
 
       mediaRecorder.current.start();
@@ -62,11 +58,10 @@ const useRecord = (onRecordingComplete = () => {}) => {
   };
 
   const stopRecording = () => {
-    if (mediaRecorder.current && mediaRecorder.current.state !== 'inactive') {
+    if (mediaRecorder.current) {
       mediaRecorder.current.stop();
       setIsRecording(false);
       setIsPaused(false);
-      setTimeLeft(0);
     }
   };
 
@@ -103,5 +98,3 @@ const useRecord = (onRecordingComplete = () => {}) => {
     restartRecording
   };
 };
-
-export default useRecord;
