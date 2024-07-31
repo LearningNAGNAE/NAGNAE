@@ -6,6 +6,7 @@ import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import SignPage from './pages/SignPage';
 import ChatBotPage from './pages/ChatBotPage';
+import BoardPage from './pages/BoardPage';
 // 1. import `ChakraProvider` component
 import './assets/styles/global.css';
 import { ChakraProvider } from '@chakra-ui/react'
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/ChatBotPage" element={<ChatBotPage />} />
             <Route path="/SignPage" element={<SignPage />} />
+            <Route path="/BoardPage" element={<BoardPage />} />
             <Route path="/ContactPage" element={<ContactPage />} />
             <Route path="/AboutPage" element={<AboutPage />} />
           </Routes>
