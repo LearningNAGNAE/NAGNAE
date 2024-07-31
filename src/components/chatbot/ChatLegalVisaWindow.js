@@ -1,42 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChatMessage from './ChatLegalVisaMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
-import uploadIcon from '../../assets/images/free-icon-grab.png'; // 이미지 파일 경로
-import sendIcon from '../../assets/images/send.png'; // 이미지 파일 경로
-import Record_Modal from '../chatbot/Record_Modal';
+import uploadIcon from '../../assets/images/free-icon-grab.png';
+import sendIcon from '../../assets/images/send.png';
+import Record_Modal from './Record_Modal';
+import axios from 'axios';
 
 function ChatLegalVisaWindow() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
-    { id: 2, text: "Yêu cầu pháp lý: Theo luật lao động Hàn Quốc, không bắt buộc phải lập hợp đồng bằng tiếng nước ngoài. Tuy nhiên, để bảo vệ quyền lợi của người lao động nước ngoài, việc này được khuyến khích mạnh mẽ.", isUser: false },
-    
-  ]);
-
+  // 상태 관리: 메시지 목록, 입력값, 세션 ID
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [sessionId, setSessionId] = useState('');
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // 컴포넌트 마운트 시 세션 ID 생성
+    setSessionId(Math.random().toString(36).substring(7));
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.trim()) {
-      setMessages([...messages, { id: messages.length + 1, text: input, isUser: true }]);
+      // 사용자 메시지 추가
+      const userMessage = { id: messages.length + 1, text: input, isUser: true };
+      setMessages(prevMessages => [...prevMessages, userMessage]);
       setInput('');
+
+      try {
+        // 백엔드로 메시지 전송 및 응답 처리
+        const response = await axios.post('http://localhost:8000/law', {
+          question: input,
+          session_id: sessionId
+        });
+        // 봇 응답 메시지 추가
+        const botMessage = { 
+          id: messages.length + 2, 
+          text: response.data.answer, 
+          isUser: false,
+          detectedLanguage: response.data.detected_language
+        };
+        setMessages(prevMessages => [...prevMessages, botMessage]);
+      } catch (error) {
+        console.error('Error sending message:', error);
+        // 오류 발생 시 에러 메시지 표시
+        setMessages(prevMessages => [...prevMessages, { 
+          id: messages.length + 2, 
+          text: "Sorry, there was an error processing your request.", 
+          isUser: false 
+        }]);
+      }
     }
   };
 
+  // Enter 키 입력 시 메시지 전송
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSubmit(e);
     }
   };
 
+  // 음성 녹음 완료 시 처리 함수
+  const handleRecordingComplete = (blob) => {
+    console.log('Recording completed', blob);
+    // 음성 녹음 처리 로직 추가 필요
+  };
+
+  // 음성 데이터 전송 처리 함수
+  const handleAudioSend = (data) => {
+    console.log('Audio data', data);
+    // 음성 데이터 전송 로직 추가 필요
+  };
+
   return (
     <div className="chat-window">
+      {/* 메시지 목록 표시 영역 */}
       <div className="messages">
         {messages.map(message => (
           <ChatMessage key={message.id} message={message} />
         ))}
       </div>
+      {/* 메시지 입력 및 전송 폼 */}
       <div className='wrap-form-box'>
         <form onSubmit={handleSubmit} className='form-box'>
+          {/* 파일 업로드 버튼 */}
           <div className='upload-box'>
             <label htmlFor="file-upload" className="custom-file-upload">
               <img src={uploadIcon} alt="Upload" className="window-upload-icon" />
@@ -44,10 +89,12 @@ function ChatLegalVisaWindow() {
             <input id="file-upload" type="file" style={{display: 'none'}}/>
           </div>
           <div className='modal_input_btn'>
+            {/* 음성 녹음 모달 컴포넌트 */}
             <Record_Modal 
-              onRecordingComplete={(blob) => console.log('Recording completed', blob)}
-              onAudioSend={(data) => console.log('Audio data', data)}
+              onRecordingComplete={handleRecordingComplete}
+              onAudioSend={handleAudioSend}
             />
+            {/* 텍스트 입력 필드 */}
             <input 
               className='botinput'
               type="text" 
@@ -57,6 +104,7 @@ function ChatLegalVisaWindow() {
               placeholder="Type a message..."
             />
           </div>
+          {/* 메시지 전송 버튼 */}
           <button className='send-btn' type="submit">
             <img src={sendIcon} alt="Send" className="window-send-icon" />
           </button>
