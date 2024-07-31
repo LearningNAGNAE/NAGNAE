@@ -1,5 +1,4 @@
 import React from 'react'
-import '../assets/styles/login/SignPage.scss';
 import { useLocation } from 'react-router-dom';
 import SignUp from '../components/login/SignUp';
 import SignIn from '../components/login/SignIn';

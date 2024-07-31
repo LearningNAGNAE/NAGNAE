@@ -1,8 +1,7 @@
 import React from 'react'
-import '../../assets/styles/login/SignIn.scss';
 import userIcon from '../../assets/images/free_user.png'; // 이미지 파일 경로
 import lockIcon from '../../assets/images/free-lock.png'; // 이미지 파일 경로
-import Find_Modal from '../login/Find_Modal';
+import FindModal from '../login/FindModal.jsx';
 
 function SignIn() {
   const handleSubmit = (e) => {
@@ -34,7 +33,7 @@ function SignIn() {
         </div>
         <button type="submit" className="login-button">Sign In</button>
         <div className="options">
-          <Find_Modal />
+          <FindModal />
           <a className="signup-button">Sign up</a>
         </div>
       </form>

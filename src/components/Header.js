@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import useAuth from '../hooks/useAuth';
-import fetchData from '../contexts/apiService'; // fetchData 함수 가져오기
+// import useAuth from '../hooks/useAuth';
+// import fetchData from '../contexts/apiService'; // fetchData 함수 가져오기
 import { Link } from 'react-router-dom';
 
 function Header() {
-  const isAuthenticated = useAuth();
+  // const isAuthenticated = useAuth();
 
 
   const [data, setData] = useState([]);
