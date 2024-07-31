@@ -1,0 +1,129 @@
+/* mic-btn */
+.record-modal-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 30px;
+    border-radius: 50px 0px 0px 50px;
+    border-right: 1px solid #775A45;
+    margin-left: 15px;
+}
+.icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+/* /////// */
+/* audio-record */
+.total-audio-recorder {
+    border: 2px solid #775A45;
+    border-radius: 20px;
+    background-color: white;
+}
+.audio-recorder {
+  display: flexbox;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.record-button, .pause-button, .send-button, .restart-button, .record-modal-cancel-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  outline: none;
+  color: white;
+}
+
+.record-button {
+  background-color: #FF6B6B;
+}
+
+.record-button:hover {
+  background-color: #FF5252;
+}
+
+.record-button.recording {
+  background-color: #FF4081;
+  animation: pulse 1.5s infinite;
+}
+
+.pause-button {
+  background-color: #4ECDC4;
+  margin-top: 20px;
+}
+
+.pause-button:hover {
+  background-color: #45B7AA;
+}
+
+.restart-button {
+  background-color: #45B7D1;
+}
+
+.restart-button:hover {
+  background-color: #3CA2B9;
+}
+
+.send-button {
+  background-color: #66BB6A;
+  
+}
+
+.send-button:hover {
+  background-color: #4CAF50;
+}
+
+.record-modal-cancel-button {
+  background-color: #e66b6b;
+  
+}
+
+.record-modal-cancel-button:hover {
+  background-color: #ff3e3e;
+}
+
+.audio-player {
+  margin: 20px 10px;
+  border: 1px solid black;
+  border-radius: 20px;
+  width: 300px;
+}
+
+.record-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  margin-right: 8px;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 64, 129, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 64, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 64, 129, 0);
+  }
+}
+
+.record-text {
+    margin: 20px 10px;
+    padding: 20px;
+    border-top: 1px solid #838383;
+}
+
+/* //////////////////// */
+

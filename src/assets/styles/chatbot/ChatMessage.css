@@ -56,6 +56,12 @@
 }
 
 .user-icon, .bot-icon {
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 50%;
+  margin: 0 10px;
+  background-color: #775A45;
 }
 
 
