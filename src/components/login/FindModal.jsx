@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import '../../assets/styles/login/Find_Modal.scss';
 import {
   Modal,
   ModalOverlay,
