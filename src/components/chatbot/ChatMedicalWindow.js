@@ -4,21 +4,43 @@ import '../../assets/styles/chatbot/ChatWindow.css';
 import uploadIcon from '../../assets/images/free-icon-grab.png'; // 이미지 파일 경로
 import sendIcon from '../../assets/images/send.png'; // 이미지 파일 경로
 import Record_Modal from '../chatbot/Record_Modal';
+import axios from 'axios';
 
 function ChatMedicalWindow() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
-    { id: 2, text: "Yêu cầu pháp lý: Theo luật lao động Hàn Quốc, không bắt buộc phải lập hợp đồng bằng tiếng nước ngoài. Tuy nhiên, để bảo vệ quyền lợi của người lao động nước ngoài, việc này được khuyến khích mạnh mẽ.", isUser: false },
-    { id: 3, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
-  ]);
-
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.trim()) {
-      setMessages([...messages, { id: messages.length + 1, text: input, isUser: true }]);
+      const userMessage = { id: messages.length + 1, text: input, isUser: true };
+      setMessages([...messages, userMessage]);
       setInput('');
+
+      try {
+        // 백엔드로 메시지 전송 및 응답 처리
+        const response = await axios.post('http://localhost:8000/medical', {
+          input: input
+        });
+        // 봇 응답 메시지 추가
+        const botMessage = { 
+          id: messages.length + 2, 
+          text: response.data.answer,
+          isUser: false
+        };
+        console.log(response.data);
+        console.log(response.data.answer);
+        console.log(response.data.answer.answer);
+        setMessages(prevMessages => [...prevMessages, botMessage]);
+      } catch (error) {
+        console.error('Error sending message:', error);
+        // 오류 발생 시 에러 메시지 표시
+        setMessages(prevMessages => [...prevMessages, { 
+          id: messages.length + 2, 
+          text: "Sorry, there was an error processing your request.", 
+          isUser: false 
+        }]);
+      }
     }
   };
 
