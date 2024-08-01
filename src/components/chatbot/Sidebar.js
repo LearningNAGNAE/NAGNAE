@@ -6,8 +6,11 @@ import ChatLegalVisaWindow from '../chatbot/ChatLegalVisaWindow';
 import ChatMedicalWindow from '../chatbot/ChatMedicalWindow';
 import ChatStudyWindow from '../chatbot/ChatStudyWindow';
 import ChatJobWindow from '../chatbot/ChatJobWindow';
-import homePageImage from '../../assets/images/homepageimg.jpg';
 import { ChatStudyProvider } from '../../contexts/chatbot/ChatStudyApi';
+import categoryOneImage from '../../assets/images/category1.png';
+import categoryTwoImage from '../../assets/images/category2.png';
+import categoryThreeImage from '../../assets/images/category3.png';
+import categoryFourImage from '../../assets/images/category4.png';
 
 function Sidebar() {
   return (
@@ -16,12 +19,67 @@ function Sidebar() {
       <Tabs orientation='vertical' variant='unstyled'>
         <Flex direction={["column", "row"]} height={["auto", "300px"]}>
           <TabList width={["100%", "220px"]} marginRight={["0", "50px"]} marginBottom={["20px", "0"]}>
-              <Tab display="flex" justifyContent="start" height="90px" paddingLeft="0px" textAlign="left" color="white" borderBottom="1px solid white"><img src={homePageImage} alt="My Image" className="image-class" />Multilingual Legal / Visa Assistant</Tab>
-              <Tab display="flex" justifyContent="start" height="90px" paddingLeft="0px" textAlign="left" color="white" borderBottom="1px solid white"><img src={homePageImage} alt="My Image" className="image-class" />Medical Information / Health Consultation Service</Tab>
-              <Tab display="flex" justifyContent="start" height="90px" paddingLeft="0px" textAlign="left" color="white" borderBottom="1px solid white"><img src={homePageImage} alt="My Image" className="image-class" />Academic Service</Tab>
-              <Tab display="flex" justifyContent="start" height="90px" paddingLeft="0px" textAlign="left" color="white" borderBottom="1px solid white"><img src={homePageImage} alt="My Image" className="image-class" />Employment Service</Tab>
+              <Tab 
+                display="flex" 
+                justifyContent="start" 
+                height="90px" 
+                paddingLeft="0px" 
+                textAlign="left" 
+                color="white" 
+                borderBottom="1px solid white"
+                _selected={{ bg: 'rgba(255, 255, 255, 0.2)', fontWeight: 'bold' }}
+                _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
+                transition="background-color 0.3s"
+              >
+                <img src={categoryOneImage} alt="My Image" className="image-class" />
+                Multilingual Legal / Visa Assistant
+              </Tab>
+              <Tab 
+                display="flex" 
+                justifyContent="start" 
+                height="90px" 
+                paddingLeft="0px" 
+                textAlign="left" 
+                color="white" 
+                borderBottom="1px solid white"
+                _selected={{ bg: 'rgba(255, 255, 255, 0.2)', fontWeight: 'bold' }}
+                _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
+                transition="background-color 0.3s"
+              >
+                <img src={categoryTwoImage} alt="My Image" className="image-class" />
+                Medical Information / Health Consultation Service
+              </Tab>
+              <Tab 
+                display="flex" 
+                justifyContent="start" 
+                height="90px" 
+                paddingLeft="0px" 
+                textAlign="left" 
+                color="white" 
+                borderBottom="1px solid white"
+                _selected={{ bg: 'rgba(255, 255, 255, 0.2)', fontWeight: 'bold' }}
+                _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
+                transition="background-color 0.3s"
+              >
+                <img src={categoryFourImage} alt="My Image" className="image-class" />
+                Academic Service
+              </Tab>
+              <Tab 
+                display="flex" 
+                justifyContent="start" 
+                height="90px" 
+                paddingLeft="0px" 
+                textAlign="left" 
+                color="white" 
+                borderBottom="1px solid white"
+                _selected={{ bg: 'rgba(255, 255, 255, 0.2)', fontWeight: 'bold' }}
+                _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
+                transition="background-color 0.3s"
+              >
+                <img src={categoryThreeImage} alt="My Image" className="image-class" />
+                Employment Service
+              </Tab>
           </TabList>
-          <TabIndicator ml='-1.5px' width='2px' bg='blue.500' borderRadius='1px' />
           <TabPanels flex={1} width={["100%", "auto"]}>
               <TabPanel 
                 display="flex" 

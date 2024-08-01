@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ChatMessage from './ChatLegalVisaMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
 import uploadIcon from '../../assets/images/free-icon-grab.png';
@@ -11,11 +11,26 @@ function ChatLegalVisaWindow() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [sessionId, setSessionId] = useState('');
+  const messagesContainerRef = useRef(null); //스크롤
 
   useEffect(() => {
     // 컴포넌트 마운트 시 세션 ID 생성
     setSessionId(Math.random().toString(36).substring(7));
   }, []);
+
+  // ---스크롤 ---
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      const { scrollHeight, clientHeight } = messagesContainerRef.current;
+      messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
+    }
+  };
+
+  // -------------
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,7 +88,7 @@ function ChatLegalVisaWindow() {
   return (
     <div className="chat-window">
       {/* 메시지 목록 표시 영역 */}
-      <div className="messages">
+      <div className="messages" ref={messagesContainerRef}>
         {messages.map(message => (
           <ChatMessage key={message.id} message={message} />
         ))}
