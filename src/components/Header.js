@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 // import useAuth from '../hooks/useAuth';
 // import fetchData from '../contexts/apiService'; // fetchData 함수 가져오기
 import { Link } from 'react-router-dom';
+import logo from '../assets/images/logo.png';
 
 function Header() {
   // const isAuthenticated = useAuth();
@@ -57,7 +58,10 @@ function Header() {
     // </div>
     <header className="nagnae_header">
       <div className='header-content'>
-        <a className='logo' href='/'>NAGNAE</a>
+        <div className="logo-container">
+          <img src={logo} alt="logo" className="header-logo" />
+          <a className='logo' href='/'>NAGNAE</a>
+        </div>
         <nav>
           <Link className='sign_up' to="/SignPage?type=signup">Sign Up</Link>
           <Link className='sign_in' to="/SignPage?type=signin">Sign in</Link>
