@@ -1,28 +1,41 @@
 import React, { useState } from 'react';
 import ChatMessage from './ChatJobMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
-import uploadIcon from '../../assets/images/free-icon-grab.png'; // 이미지 파일 경로
-import sendIcon from '../../assets/images/send.png'; // 이미지 파일 경로
+import uploadIcon from '../../assets/images/free-icon-grab.png';
+import sendIcon from '../../assets/images/send.png';
 import Record_Modal from '../chatbot/Record_Modal';
+import axios from 'axios'; // axios를 사용하여 HTTP 요청 전송
 
 function ChatJobWindow() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
-    { id: 2, text: "Yêu cầu pháp lý: Theo luật lao động Hàn Quốc, không bắt buộc phải lập hợp đồng bằng tiếng nước ngoài. Tuy nhiên, để bảo vệ quyền lợi của người lao động nước ngoài, việc này được khuyến khích mạnh mẽ.", isUser: false },
-    { id: 3, text: "Có thể lập hợp đồng lao động chỉ bằng tiếng Hàn không?", isUser: true },
-    { id: 4, text: "2?", isUser: true },
-    { id: 5, text: "5?", isUser: true },
-  ]);
-
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.trim()) {
-      setMessages([...messages, { id: messages.length + 1, text: input, isUser: true }]);
+      const userMessage = { id: messages.length + 1, text: input, isUser: true };
+      setMessages([...messages, userMessage]);
       setInput('');
+  
+      try {
+        // 백엔드로 메시지 전송 및 응답 처리
+        const response = await axios.post('http://localhost:8000/ask', { query: input });
+  
+        // 응답 데이터와 상태 코드 확인
+        console.log('Response:', response.data); // 전체 응답 데이터
+        console.log('Status:', response.status); // 상태 코드
+  
+        // 응답에서 output을 추출. 사용자 메시지와 봇 메시지를 각각 고유한 ID로 구분
+        const botMessage = { id: messages.length + 2, text: response.data.output, isUser: false };
+        setMessages([...messages, userMessage, botMessage]);
+      } catch (error) {
+        console.error('Error sending message:', error.response ? error.response.data : error.message);
+        setMessages([...messages, userMessage, { id: messages.length + 2, text: "Sorry, there was an error processing your request.", isUser: false }]);
+      }
     }
   };
+  
+  
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
