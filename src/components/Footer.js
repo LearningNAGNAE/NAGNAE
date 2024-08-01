@@ -1,6 +1,14 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom';
 
 function Footer() {
+  const location = useLocation();
+
+  // HomePage와 ChatBotPage를 제외한 나머지 경로에서만 Footer를 렌더링
+  if (location.pathname === '/') {
+    return null;
+  }
+
   return (
     <footer>
       <div className='footer-wrap'>

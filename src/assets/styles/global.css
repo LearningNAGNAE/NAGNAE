@@ -14,7 +14,7 @@
   padding: 10px 50px;
   width: 100%;
   box-sizing: border-box;
-  z-index: 3;
+  z-index: 5;
   position: fixed;
 }
 
@@ -115,7 +115,7 @@ header nav {
 footer {
   background-color: #DEDEDE;
   display: flex;
-  margin: 20px auto 0px auto;
+  /* margin: 20px auto 0px auto; */
   width: 100%;
   min-width: 768px;
   box-sizing: border-box;
@@ -127,7 +127,7 @@ footer {
 @media screen and (min-width: 768px) {
   footer {
     min-width: 100%;
-    margin: 20px 0 0px 0px;
+    margin: 0px 0px 0px 0px;
     padding: 0 20px;
   }
 }

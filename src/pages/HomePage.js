@@ -3,13 +3,56 @@ import '../assets/styles/homepage/homepage.css';
 import homepageImg from '../assets/images/homepageimg.jpg';
 import ExplanationPage1 from '../assets/images/ExplanationPage1.png';
 import ExplanationPage2 from '../assets/images/ExplanationPage2.png';
+import YouTubeBackImg from '../assets/images/youtube_back_img.png';
+import InStagramBackImg from '../assets/images/instagram_back_img.png';
+import PlayStoreBackImg from '../assets/images/playstore_back_img.png';
+import AppStoreBackImg from '../assets/images/appstore_back_img.png';
+import NagnaeMascot from '../assets/images/nagnae_mococo.png';
+import YouTubeLogoImg from '../assets/images/link_youtube_logo.png';
+import InstagramLogoImg from '../assets/images/link_instagram_logo.png';
+
 
 function HomePage() {
   const canvasRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const fadeRef1 = useRef(null);
   const fadeRef2 = useRef(null);
-  const fadeRef3 = useRef(null);
+  const linkAllRef = useRef(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+  const [slideInThreshold, setSlideInThreshold] = useState(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const { width, height } = windowDimensions;
+    
+    if (height <= 713) {
+      setSlideInThreshold(600);
+    } else if (width <= 566) {
+      setSlideInThreshold(1200);
+    } else if (width <= 920) {
+      setSlideInThreshold(800);
+    } else {
+      setSlideInThreshold(1100);
+    }
+  }, [windowDimensions]);
 
   useEffect(() => {
     const options = {
@@ -18,7 +61,6 @@ function HomePage() {
       threshold: 0.5
     };
 
-    // 두 개의 IntersectionObserver 인스턴스 생성
     const observer1 = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -39,20 +81,8 @@ function HomePage() {
       });
     }, options);
 
-    const observer3 = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('slide-in');
-        } else {
-          entry.target.classList.remove('slide-in');
-        }
-      });
-    }, options);
-
-    // 각 ref 요소를 관찰
     const currentFadeRef1 = fadeRef1.current;
     const currentFadeRef2 = fadeRef2.current;
-    const currentFadeRef3 = fadeRef3.current;
 
     if (currentFadeRef1) {
       observer1.observe(currentFadeRef1);
@@ -62,11 +92,6 @@ function HomePage() {
       observer2.observe(currentFadeRef2);
     }
 
-    if (currentFadeRef3) {
-      observer3.observe(currentFadeRef3);
-    }
-
-    // 컴포넌트 언마운트 시 관찰 중지
     return () => {
       if (currentFadeRef1) {
         observer1.unobserve(currentFadeRef1);
@@ -75,29 +100,38 @@ function HomePage() {
       if (currentFadeRef2) {
         observer2.unobserve(currentFadeRef2);
       }
-
-      if (currentFadeRef3) {
-        observer3.unobserve(currentFadeRef3);
-      }
     };
   }, []);
 
   useEffect(() => {
-
-    // 스크롤 이벤트 핸들러
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
+
+      // 3번째 섹션에 도달했을 때 이미지 애니메이션 시작
+      if (linkAllRef.current) {
+        const images = linkAllRef.current.querySelectorAll('img');
+        if (scrollPosition > slideInThreshold  && !hasAnimated) {
+          images.forEach((img, index) => {
+            setTimeout(() => {
+              img.classList.add('animate');
+            }, index * 400);
+          });
+          setHasAnimated(true);
+        } else if (scrollPosition < slideInThreshold  && hasAnimated) {
+          images.forEach((img) => {
+            img.classList.remove('animate');
+          });
+          setHasAnimated(false);
+        }
+      }
     };
     
     const handleWheel = (e) => {
       e.preventDefault();
-      
-      // 스크롤 속도 조절 (숫자가 클수록 느려짐)
       const slowFactor = 3;
-      
-      const newPosition = scrollPosition + e.deltaY / slowFactor;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const newPosition = Math.min(Math.max(0, scrollPosition + e.deltaY / slowFactor), maxScroll);
       setScrollPosition(Math.max(0, newPosition));
-      
       window.scrollTo(0, newPosition);
     };
 
@@ -108,7 +142,7 @@ function HomePage() {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [scrollPosition]);
+  }, [scrollPosition,hasAnimated,slideInThreshold]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -148,7 +182,6 @@ function HomePage() {
 
       ctx.drawImage(image, x, y, imgWidth, imgHeight);
 
-      // Zoom 값을 자연스럽게 증가 및 감소하도록 변경
       zoom += zoomSpeed * zoomDirection;
       if (zoom >= maxZoom) {
         zoomDirection = -1;
@@ -200,9 +233,25 @@ function HomePage() {
           </div>
         </div>
       </section>
-      <section ref={fadeRef3} className="screen3 fade-element3" style={{ transform: `translateY(${Math.max(0, 200 - scrollPosition / 5)}%)` }}>
+      <section className={`screen3 ${scrollPosition > slideInThreshold ? 'slide-in' : ''}`}>
         <div className="slide-in-content">
-          <p>This is the new content that slides in from the left.</p>
+          <div className='link-all' ref={linkAllRef}> 
+            <a href='https://www.youtube.com/channel/UC0ePoqlReJuWcP1PVSkto6A'>
+              <img src={YouTubeLogoImg} alt='youtube_logo_img' className='youtube-logo-img' />
+              <img src= {YouTubeBackImg} alt='youtube_back_img' className='link-back-img-common youtube-back-img' />
+            </a>
+            <a>
+              <img src={InstagramLogoImg} alt='instagram_logo_img' className='instagram-logo-img' />
+              <img src= {InStagramBackImg} alt='instagram_back_img' className='link-back-img-common instagram-back-img' />
+            </a>
+            <a>
+              <img src= {PlayStoreBackImg} alt='platstore_back_img' className='link-back-img-common playstore-back-img' />
+            </a>
+            <a>
+              <img src= {AppStoreBackImg} alt='appstore_back_img' className='link-back-img-common appstore-back-img' />
+            </a>
+            <img src= {NagnaeMascot} alt='nagnae_mascot' className='nagnae-mascot-img' />
+          </div>
         </div>
       </section>
       <canvas ref={canvasRef} id="webgl"></canvas>
