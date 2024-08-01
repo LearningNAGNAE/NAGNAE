@@ -1,42 +1,49 @@
-/* styles.css */
-/* body, html {
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow: visible;
     margin: 0;
     padding: 0;
-    overflow-x: visible;
     font-family: Arial, sans-serif;
-} */
- body {
-  overflow: visible;
-}
-
-@keyframes slideInFromLeft {
-    from { transform: translateX(-100px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulseText {
-    from { text-shadow: 10px 5px 0px rgba(186, 159, 139, 100); }
-    to { text-shadow: 15px 7px 0px rgba(186, 159, 139, 100); }
 }
 
 .contents {
-    height: 300vh;
-    overflow-x: hidden;
-    position: relative; /* 필수: 내부에 절대 위치 요소를 올바르게 배치하기 위함 */
+    height: 2100px;
+    overflow: hidden;
+    position: relative;
 }
 
-.screen-all {
+.screen-all, .screen2, .screen3 {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100vh;
+    width: 100vw;
+    height: 1000px;
+}
+
+.screen-all {
     z-index: 1;
+}
+
+.screen2 {
+    z-index: 2;
+    transition: transform 0.3s ease;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+}
+
+.screen3 {
+    z-index: 3;
+    background-color: #fff;
+    transform: translateX(-100%);
+    transition: transform 1.5s ease-out;
+}
+
+.screen3.slide-in {
+    transform: translateX(0);
 }
 
 .screen {
@@ -44,197 +51,91 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    position: relative;
 }
 
-.screen2 {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 2;
-    transition: transform 0.3s ease;
-    background-color: #fff;
-  }
-
-.simple-introduce-box {
+.simple-introduce-box, .simple-introduce-box2 {
     display: flex;
-    text-align: center;
     flex-direction: column;
-    animation: fadeIn 2s ease-out;
-    z-index: 1; /* 캔버스 위에 표시되도록 설정 */
-}
-
-.simple-introduce-box2 {
-    display: flex;
-    left: 0;
-    width: 100%;
     align-items: center;
     text-align: center;
-    flex-direction: column;
-    z-index: 1; /* 캔버스 위에 표시되도록 설정 */
-    position: fixed;
+    width: 90%;
+    max-width: 1700px;
 }
 
 .si-1 {
-    font-size: 40px;
+    font-size: 2.5vw;
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 2vh;
     font-family: 'HSBombaram3.0_Thin', sans-serif;
     animation: slideInFromLeft 1.5s ease-out;
 }
 
-.main-explanation-1 {
-    display: flex;
-    width: 90%;
-    height: 375px;
-    border-top: 2px solid #554235;
-    border-bottom: 2px solid #554235;
-    font-size: 2.1vw;
-    font-family: 'HSBombaram3.0_Thin', sans-serif;
-    margin-top: 115px;
-}
-
-.main-explanation-1-1 {
-    display: block;
-    text-align: center;
-    width: 35%;
-    height: 100%;
-    padding: 10px 70px 0px 70px;
-}
-
-.main-explanation-1-2 {
-    display: block;
-    width: 70%;
-    height: 373px;
-    padding: 10px 20px 0px 20px;
-    font-family: 'HSBombaram3.0_Regular';
-}
-
-.main-explanation-1-2-big-writing {
-    font-size: 3vw;
-    color: #775A45;
-}
-
-.main-explanation-1-2-small-writing {
-    font-size: 1.7vw;
-    color: #BA9F8B;
-}
-
 .si-2 {
-    font-size: 200px;
+    font-size: 12.5vw;
     color: white;
     font-family: 'HSBombaram3.0_세로쓰기전용_Vertical_Regular', sans-serif;
-    text-shadow: 10px 5px 0px rgba(186, 159, 139, 100);
+    text-shadow: 0.625vw 0.3125vw 0px rgba(186, 159, 139, 100);
     animation: pulseText 3s infinite alternate;
-}
-
-.main-explanation-2 {
-    display: flex;
-    border-bottom: 2px solid #000000;
-    width: 90%;
-    height: 375px;
-    color: #000000;
-    margin-bottom: 20px;
-    font-family: 'HSBombaram3.0_Thin', sans-serif;
-}
-
-.main-explanation-2-1 {
-    display: block;
-    text-align: center;
-    width: 35%;
-    height: 373px;
-    padding: 10px 70px 10px 70px;
-}
-
-.main-explanation-2-2 {
-    display: block;
-    width: 70%;
-    height: 373px;
-    padding: 10px 20px 0px 20px;
-    font-family: 'HSBombaram3.0_Regular';
-}
-
-.main-explanation-2-2-big-writing {
-    font-size: 3vw;
-    color: #775A45;
-}
-
-.main-explanation-2-2-small-writing {
-    font-size: 1.7vw;
-    color: #BA9F8B;
 }
 
 .start-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 200px;
-    height: 70px;
+    width: 12.5rem;
+    height: 4.375rem;
     border: none;
-    border-radius: 50px;
-    margin: 20px auto;
+    border-radius: 3.125rem;
+    margin: 2vh auto;
     background-color: #775A45;
     color: white;
-    font-size: 36px;
+    font-size: 2.25rem;
     text-decoration: none;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     font-family: 'HSBombaram3.0_Thin', sans-serif;
+    }
+
+.main-explanation-1, .main-explanation-2 {
+    display: flex;
+    width: 90%;
+    border-bottom: 2px solid #554235;
+    font-size: 1.3125rem;
+    font-family: 'HSBombaram3.0_Thin', sans-serif;
 }
 
-.start-btn:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255, 255, 255, 0.4),
-        transparent
-    );
-    transition: all 0.5s;
+.main-explanation-1 {
+    border-top: 2px solid #554235;
+    margin-top: 7.1875rem;
 }
 
-.start-btn2:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255, 255, 255, 0.4),
-        transparent
-    );
-    transition: all 0.5s;
+.main-explanation-1-1, .main-explanation-2-1 {
+  
+    width: 35%;
+    padding: 0.625rem 1.375rem 0 1.375rem;
 }
 
-.start-btn:hover:before {
-    left: 100%;
+.main-explanation-1-2, .main-explanation-2-2 {
+    width: 65%;
+    padding: 0.625rem 1.25rem 0 1.25rem;
+    font-family: 'HSBombaram3.0_Regular';
 }
 
-.start-btn2:hover:before {
-    left: 100%;
+.main-explanation-1-2-big-writing, .main-explanation-2-2-big-writing {
+    font-size: 2.875rem;
+    color: #775A45;
 }
 
-.start-btn:hover {
-    background-color: #8B4513;
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+.main-explanation-1-2-small-writing, .main-explanation-2-2-small-writing {
+    font-size: 1.3625rem;
+    color: #BA9F8B;
 }
 
-.start-btn2:hover {
-    background-color: #8B4513;
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+img {
+    max-width: 100%;
+    height: 350px;
+    object-fit: contain;
 }
 
 .fade-element {
@@ -259,41 +160,219 @@
     transform: translateY(0);
 }
 
-.fade-element3 {
-    opacity: 0;
-    transform: translateX(-100%);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-}
-  
-.slide-in {
-    opacity: 1;
-    transform: translateX(0%);
-}
-
-.screen3 {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 3;
-    background-color: #fff;
-    transform: translateY(0);
-    /* 애니메이션을 위한 스타일을 여기 추가할 수 있습니다 */
-}
-  
 .slide-in-content {
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
 }
 
+.link-all {
+    display: flex;
+    width: 90%;
+    align-items: center;
+    position: relative;
+}
+
+.link-back-img-common {
+    width: 25%;
+    position: absolute;
+}
+
+.youtube-back-img {
+    left: 10%;
+    top: 40px;
+}
+
+.youtube-logo-img {
+    width: 25%;
+    height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
+    max-height: 70px; 
+    position: absolute;
+    left: 10%;
+    top: 180px;
+    z-index: 1;
+}
+
+.instagram-back-img {
+    left: 28%;
+    top: 10px;
+}
+
+.instagram-logo-img{
+    width: 25%;
+    height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
+    max-height: 100px; 
+    position: absolute;
+    left: 28%;
+    top: 135px;
+    z-index: 1;
+}
+
+.playstore-back-img {
+    left: 46%;
+    top: 40px;
+}
+
+.appstore-back-img {
+    left: 64%;
+    top: 10px;
+}
+
+.nagnae-mascot-img {
+    width: 25%;
+    left: 36%;
+    top: 240px;
+    height: 500px;
+    position: absolute;
+}
+
+.link-all img {
+    opacity: 0;
+    transform: translateY(40%);
+    transition: opacity 1.5s, transform 1.5s;
+}
+  
+.link-all img.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 920px) {
+    .contents {
+        height: 1900px;
+        overflow: hidden;
+        position: relative;
+    }  
+    .screen2 {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+        transition: transform 0.3s ease;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        height: 2100px;
+        width: 100vw;
+    }
+
+    .main-explanation-1, .main-explanation-2 {
+        flex-direction: column;
+    }
+
+    .main-explanation-1-1, .main-explanation-2-1,
+    .main-explanation-1-2, .main-explanation-2-2 {
+        width: 100%;
+    }
+
+    .si-1 {
+        font-size: 4vw;
+    }
+
+    .si-2 {
+        font-size: 16vw;
+    }
+
+    .start-btn {
+        width: 80%;
+        max-width: 12.5rem;
+    }
+
+    .screen3.slide-in {
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 566px) {
+    .contents {
+        height: 2200px;
+        overflow: hidden;
+        position: relative;
+    }
+    .screen2 {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+        transition: transform 0.3s ease;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        height: 2400px;
+        width: 100vw;
+    }
+
+    .screen3.slide-in {
+        transform: translateX(0);
+    }
+}
+
+@media (max-height: 713px) {
+    .contents {
+        height: 1900px;
+        overflow: hidden;
+        position: relative;
+    }
+    .screen2 {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+        transition: transform 0.3s ease;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        height: 2200px;
+        width: 100vw;
+    }
+}
+@media (max-width: 768px) {
+    .youtube-logo-img {
+        max-height: 30px; /* 작은 화면에서는 더 작게 표시 */
+        top: 200px; /* 위치 조정 */
+    }
+
+    .instagram-logo-img{
+        max-height: 50px; 
+        top: 160px;
+    }
+}
 #webgl {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     z-index: 0;
 }
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseText {
+    from { text-shadow: 0.625vw 0.3125vw 0px rgba(186, 159, 139, 100); }
+    to { text-shadow: 0.9375vw 0.4375vw 0px rgba(186, 159, 139, 100); }
+}
+
+@keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+}
+  
