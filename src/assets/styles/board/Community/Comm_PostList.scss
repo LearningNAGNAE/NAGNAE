@@ -1,45 +1,46 @@
-.ann_postlist_wrap{
-  .ann-post-list-header{
+.comm_postlist_wrap{
+  .comm-post-list-header{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .ann-input-btn-box {
+    .comm-input-btn-box {
       display: flex;
       border: 2px solid #775A45;
       border-radius: 50px;
       background-color: #FFF6ED;
-      .ann-search {
+      .comm-search {
         width: 260px;
         height: 45px;
         background-color: #FFF6ED;
         border-radius: 50px 0px 0px 50px;
         padding: 10px 10px 10px 20px;
         font-weight: 600;
+        
       }
-      .ann-search-btn {
+      .comm-search-btn {
         margin-left: 5px;
         background-color: #FFF6ED;
-        border-radius: 50px 50px 50px 50px;
+        border-radius: 50px;
         padding-right: 5px;
         &:hover {
           background-color: darken(#FFF6ED, 10%);
         }
       }
     }
-    .ann_h1 {
+    .comm_h1 {
       font-family: 'HSBombaram3.0_Thin', sans-serif;
       font-size: 40px;
       margin-bottom: 10px;
       color: #775A45;
     }
   }
-  .ann-post-list {
+  .comm-post-list {
     font-family: 'HSBombaram3.0_Thin', sans-serif;
     font-size: 24px;
     width: 100%;
     border-collapse: collapse;
     text-align: center;
-    .ann-thead {
+    .comm-thead {
       background-color: #775A45;
       color: white;
       tr:first-child {
@@ -68,7 +69,7 @@
         }
       }
     }
-    .ann-tbody {
+    .comm-tbody {
       tr {
         border-bottom: 1px solid #775A45;
         font-size: 16px;
@@ -146,7 +147,6 @@
           background-color: darken(#775A45, 10%);
         }
       }
-      
     }
     
   }

@@ -1,14 +1,14 @@
-.ann_postlist_wrap{
-  .ann-post-list-header{
+.info_postlist_wrap{
+  .info-post-list-header{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .ann-input-btn-box {
+    .info-input-btn-box {
       display: flex;
       border: 2px solid #775A45;
       border-radius: 50px;
       background-color: #FFF6ED;
-      .ann-search {
+      .info-search {
         width: 260px;
         height: 45px;
         background-color: #FFF6ED;
@@ -16,30 +16,30 @@
         padding: 10px 10px 10px 20px;
         font-weight: 600;
       }
-      .ann-search-btn {
+      .info-search-btn {
         margin-left: 5px;
         background-color: #FFF6ED;
-        border-radius: 50px 50px 50px 50px;
+        border-radius: 50px;
         padding-right: 5px;
         &:hover {
           background-color: darken(#FFF6ED, 10%);
         }
       }
     }
-    .ann_h1 {
+    .info_h1 {
       font-family: 'HSBombaram3.0_Thin', sans-serif;
       font-size: 40px;
       margin-bottom: 10px;
       color: #775A45;
     }
   }
-  .ann-post-list {
+  .info-post-list {
     font-family: 'HSBombaram3.0_Thin', sans-serif;
     font-size: 24px;
     width: 100%;
     border-collapse: collapse;
     text-align: center;
-    .ann-thead {
+    .info-thead {
       background-color: #775A45;
       color: white;
       tr:first-child {
@@ -68,7 +68,7 @@
         }
       }
     }
-    .ann-tbody {
+    .info-tbody {
       tr {
         border-bottom: 1px solid #775A45;
         font-size: 16px;
@@ -146,7 +146,6 @@
           background-color: darken(#775A45, 10%);
         }
       }
-      
     }
     
   }

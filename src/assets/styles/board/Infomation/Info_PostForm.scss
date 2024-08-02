@@ -1,23 +1,23 @@
-.ann-form-container {
+.info-form-container {
     margin: 0 auto;
     background-color: #FAF7F5;
     border-radius: 10px;
-    .ann-form-wrap{
+    .info-form-wrap{
         max-width: 1024px;
-        .ann_h1 {
+        .info_h1 {
             font-family: 'HSBombaram3.0_Thin', sans-serif;
             font-size: 40px;
             margin-bottom: 10px;
             color: #775A45;
         }
-        .ann-input-box{
+        .info-input-box{
             border-bottom: 1px solid #775A45;
-            .ann-input-group {
+            .info-input-group {
                 display: flex;
                 margin-bottom: 15px;
                 align-content: center;
             
-                .ann-write-title {
+                .info-write-title {
                     text-align: center;
                     width: 90px;
                     margin-right: 10px;
@@ -28,24 +28,24 @@
                     color: white;
                 }
             
-                #ann-title, #ann-content {
+                #info-title, #info-content {
                     width: 100%;
                     padding: 10px;
                     border: 1px solid #775A45;
                     border-radius: 10px;
                 }
             
-                #ann-content {
+                #info-content {
                     height: 350px;
                     resize: vertical;
                 }
             }
         }
     
-        .ann-list-write-btn{
+        .info-list-write-btn{
             display: flex;
             margin-top: 20px;
-            .ann-link-btn {
+            .info-link-btn {
                 background-color: #BA9F8B;
                 color: white;
                 padding: 10px 20px;
@@ -59,7 +59,7 @@
                     background-color: darken(#BA9F8B, 10%);
                 }
             }
-            .ann-submit-button {
+            .info-submit-button {
                 background-color: #FF994F;
                 color: white;
                 padding: 10px 20px;

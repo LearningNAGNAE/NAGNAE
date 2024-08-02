@@ -13,10 +13,10 @@ function Ann_PostList({ currentPage, totalPages, onPageChange }) {
   return (
     <div className='ann_postlist_wrap'>
       <div className='ann-post-list-header'>
-        <h1>Community</h1>
-        <div>
-          <input type='text' placeholder='Please enter your search term' />
-          <button>
+        <h1 className='ann_h1'>Announcements</h1>
+        <div className='ann-input-btn-box'>
+          <input className='ann-search' type='text' placeholder='Please enter your search term' />
+          <button className='ann-search-btn'>
             <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#5f6368">
               <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
             </svg>
@@ -25,7 +25,7 @@ function Ann_PostList({ currentPage, totalPages, onPageChange }) {
       </div>
 
       <table className="ann-post-list">
-        <thead>
+        <thead className='ann-thead'>
           <tr>
             <th>no</th>
             <th>title</th>
@@ -34,13 +34,13 @@ function Ann_PostList({ currentPage, totalPages, onPageChange }) {
             <th>hits</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='ann-tbody'>
             <tr>
               <td>1</td>
-              <td align='left'><Link to="/BoardPage?type=Comm_PostRead">링크</Link></td>
+              <td align='left'><Link to="/BoardPage?type=Ann_PostRead">링크</Link></td>
               <td>3</td>
               <td>4</td>
-              <td></td>
+              <td>8</td>
             </tr>
         </tbody>
 

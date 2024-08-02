@@ -1,0 +1,173 @@
+.ann-announcements {
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    
+    .ann-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #775A45;
+      padding-bottom: 10px;
+      
+      .ann_h1 {
+        font-family: 'HSBombaram3.0_Thin', sans-serif;
+        font-size: 40px;
+        margin-bottom: 10px;
+        color: #775A45;
+      }
+      
+      .ann-header-buttons {
+        .ann-modify, .ann-delete, .ann-list {
+          padding: 5px 10px;
+          margin-left: 10px;
+          border: none;
+          border-radius: 10px;
+          cursor: pointer;
+          
+          &.ann-list {
+            padding: 8px 21px;
+            background-color: #A48975;
+            color: white;
+            &:hover {
+                background-color: darken(#A48975, 10%);
+            }
+          }
+
+          &.ann-modify {
+            background-color: #A48975;
+            color: white;
+            &:hover {
+                background-color: darken(#A48975, 10%);
+            }
+          }
+          
+          &.ann-delete {
+            background-color: #AB4800;
+            color: white;
+            &:hover {
+                background-color: darken(#AB4800, 10%);
+            }
+          }
+        }
+      }
+    }
+    .ann-article-box {
+      margin-top: 20px;
+      .ann-article-header {
+        border-bottom: 1px solid #775A45;
+        .ann-article-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            .ann-img-auth-loc-box {
+                display: flex;
+                .ann-article-profile-img {
+                    width: 42px;
+                    height: 42px;
+                    background-color: #ccc;
+                    border-radius: 20%;
+                }
+                .ann-auth-loc-box {
+                    display: flexbox;
+                    margin-left: 10px;
+                    .ann-author, .ann-location {
+                        display: flexbox;
+                        margin-right: 16px;
+                    }
+                    .ann-author {
+                        font-size: 16px;
+                        font-weight: 700;
+                    }
+                    .ann-location {
+                        font-size: 11px;
+                    }
+                }
+            }
+            .ann-date-hits-box {
+                .ann-date, .ann-hits {
+                    margin-right: 16px;
+                    font-size: 11px;
+                }
+            }
+          }
+          .ann-article-h2 {
+            font-size: 27px;
+            margin-bottom: 15px;
+          }
+      }
+      .ann-article-content {
+        line-height: 1.6;
+        border-bottom: 1px solid #775A45;
+        padding: 20px 0px;
+      }
+    }
+
+
+    .ann-comments {
+      
+      .ann-comment {
+        display: flex;
+        align-items: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #775A45;
+        .ann-comment-img {
+            width: 40px;
+            height: 40px;
+            background-color: #ccc;
+            flex-shrink: 0; // 이미지 크기 유지
+            border-radius: 20%; // 선택적: 원형 이미지
+            margin-right: 10px; // 이미지와 텍스트 사이 간격
+        }
+        .ann-commenter-box {
+            display: flexbox;
+            .ann-commenter {
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+        }
+      }
+    }
+    
+    .ann-reply-box {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      .ann-reply-img {
+            width: 40px;
+            height: 40px;
+            background-color: #ccc;
+            flex-shrink: 0; // 이미지 크기 유지
+            border-radius: 20%; // 선택적: 원형 이미지
+            margin-right: 10px; // 이미지와 텍스트 사이 간격
+      }
+      .ann-reply-input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #775A45;
+        border-radius: 5px;
+      }
+      
+      .ann-send-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: #FF994F;
+        flex-shrink: 0; // 이미지 크기 유지
+        border: none;
+        border-radius: 100%;
+        margin-left: 10px;
+        cursor: pointer;
+        &:hover {
+            background-color: darken(#FF994F, 10%);
+        }
+        &::after {
+          color: white;
+        }
+      }
+    }
+  }
