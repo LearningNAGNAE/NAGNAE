@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useChatStudy } from '../../hooks/chatbot/useChatStudy';
 import ChatStudyMessage from './ChatStudyMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
@@ -9,6 +9,20 @@ import Record_Modal from '../chatbot/Record_Modal';
 function ChatStudyWindow() {
   const { messages, loading, error, sendMessage } = useChatStudy();
   const [input, setInput] = useState('');
+  const messagesContainerRef = useRef(null);
+
+  /*---스크롤---*/
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      const { scrollHeight, clientHeight } = messagesContainerRef.current;
+      messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
+    }
+  };
+  /*-----------*/
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,7 +41,7 @@ function ChatStudyWindow() {
 
   return (
     <div className="chat-window">
-      <div className="messages">
+      <div className="messages" ref={messagesContainerRef}>
         {messages.map((message, index) => (
           <ChatStudyMessage key={index} message={message} />
         ))}

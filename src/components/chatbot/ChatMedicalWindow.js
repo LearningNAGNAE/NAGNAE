@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ChatMessage from './ChatMedicalMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
 import uploadIcon from '../../assets/images/free-icon-grab.png'; // 이미지 파일 경로
@@ -9,6 +9,20 @@ import axios from 'axios';
 function ChatMedicalWindow() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const messagesContainerRef = useRef(null); //스크롤
+
+  // ---스크롤 ---
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      const { scrollHeight, clientHeight } = messagesContainerRef.current;
+      messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
+    }
+  };
+  // -------------
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,7 +66,7 @@ function ChatMedicalWindow() {
 
   return (
     <div className="chat-window">
-      <div className="messages">
+      <div className="messages" ref={messagesContainerRef}>
         {messages.map(message => (
           <ChatMessage key={message.id} message={message} />
         ))}
