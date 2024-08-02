@@ -6,7 +6,10 @@ import logo from '../assets/images/logo.png';
 
 function Header() {
   // const isAuthenticated = useAuth();
+  const [isVisible, setIsVisible] = useState(false);
 
+  const showNavLink = () => setIsVisible(true);
+  const hideNavLink = () => setIsVisible(false);
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,6 +42,7 @@ function Header() {
 
 
 
+  
   return (
     // <div>
 
@@ -57,7 +61,8 @@ function Header() {
       
     // </div>
     <header className="nagnae_header">
-      <div className='header-content'>
+      <div className='header-content' 
+          onMouseEnter={showNavLink}>
         <div className="logo-container">
           <img src={logo} alt="logo" className="header-logo" />
           <a className='logo' href='/'>NAGNAE</a>
@@ -66,6 +71,15 @@ function Header() {
           <Link className='sign_up' to="/SignPage?type=signup">Sign Up</Link>
           <Link className='sign_in' to="/SignPage?type=signin">Sign in</Link>
         </nav>
+      </div>
+      <div 
+        className={`header-nav-link ${isVisible ? 'show' : ''}`}
+        onMouseEnter={showNavLink}
+        onMouseLeave={hideNavLink}
+      >
+        <Link to="/ChatBotPage">ChatBot</Link>
+        <Link to="/BoardPage">Board</Link>
+        <Link to="/">Page 3</Link>
       </div>
     </header>
   );

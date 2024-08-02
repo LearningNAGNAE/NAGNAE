@@ -8,7 +8,7 @@ import SignPage from './pages/SignPage';
 import ChatBotPage from './pages/ChatBotPage';
 import BoardPage from './pages/BoardPage';
 // 1. import `ChakraProvider` component
-import './assets/styles/global.css';
+import './assets/styles/global.scss';
 import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {

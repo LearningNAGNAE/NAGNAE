@@ -21,23 +21,45 @@
     }
 
     nav {
-        .board-sidebar-category{
-            display: flexbox;
+        .board-sidebar-category {
+            display: flex;
+            flex-direction: column;
             list-style-type: none;
             text-align: center;
             border: 1px solid #775A45;
             border-radius: 10px;
+            overflow: hidden;
+
             li {
-                align-content: center;
-                height: 60px;
-                color: #775A45;
                 font-size: 20px;
-                margin: 0px 10px;
-            }
-            li:nth-child(2) {
-                border-top: 1px solid #775A45;
-                border-bottom: 1px solid #775A45;
-                margin: 0px 10px;
+                position: relative; // 가상 요소의 기준점
+                transition: all 0.3s ease;
+
+                &:not(:last-child)::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 7%; // 왼쪽에서 10% 떨어진 지점에서 시작
+                    width: 85%; // 전체 너비의 80%만 사용
+                    height: 1px;
+                    background-color: #775A45;
+                }
+
+                &.active {
+                    background-color: #EFE2D8;
+                    font-weight: bold;
+                }
+
+                &:hover {
+                    background-color: #EFE2D8;
+                }
+
+                a {
+                    display: block;
+                    padding: 15px;
+                    text-decoration: none;
+                    color: #775A45;
+                }
             }
         }
     }
