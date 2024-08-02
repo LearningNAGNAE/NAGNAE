@@ -10,7 +10,7 @@ body {
 }
 
 .contents {
-    height: 2100px;
+    height: 240vh;
     overflow: hidden;
     position: relative;
 }
@@ -20,7 +20,7 @@ body {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 1000px;
+    height: 100vh;
 }
 
 .screen-all {
@@ -40,6 +40,7 @@ body {
     background-color: #fff;
     transform: translateX(-100%);
     transition: transform 1.5s ease-out;
+    overflow: hidden;
 }
 
 .screen3.slide-in {
@@ -95,7 +96,7 @@ body {
     position: relative;
     overflow: hidden;
     font-family: 'HSBombaram3.0_Thin', sans-serif;
-    }
+}
 
 .main-explanation-1, .main-explanation-2 {
     display: flex;
@@ -111,7 +112,6 @@ body {
 }
 
 .main-explanation-1-1, .main-explanation-2-1 {
-  
     width: 35%;
     padding: 0.625rem 1.375rem 0 1.375rem;
 }
@@ -143,7 +143,7 @@ img {
     transform: translateX(-200px);
     transition: opacity 2s ease-out, transform 2s ease-out;
 }
-  
+
 .fade-in {
     opacity: 1;
     transform: translateY(0);
@@ -154,7 +154,7 @@ img {
     transform: translateX(200px);
     transition: opacity 2s ease-out, transform 2s ease-out;
 }
-  
+
 .fade-in2 {
     opacity: 1;
     transform: translateY(0);
@@ -179,44 +179,87 @@ img {
     position: absolute;
 }
 
+.earth-img {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 518px;
+}
+
 .youtube-back-img {
     left: 10%;
-    top: 40px;
+    top: 45px;
 }
 
 .youtube-logo-img {
     width: 25%;
-    height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
+    height: auto;
     max-height: 70px; 
     position: absolute;
     left: 10%;
-    top: 180px;
+    top: 185px;
     z-index: 1;
+}
+
+.youtube-container:hover .youtube-back-img {
+    transform: scale(1.2);
 }
 
 .instagram-back-img {
     left: 28%;
-    top: 10px;
+    top: 15px;
 }
 
-.instagram-logo-img{
+.instagram-logo-img {
     width: 25%;
-    height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
+    height: auto;
     max-height: 100px; 
     position: absolute;
     left: 28%;
-    top: 135px;
+    top: 140px;
     z-index: 1;
+}
+
+.instagram-container:hover .instagram-back-img {
+    transform: scale(1.2);
 }
 
 .playstore-back-img {
     left: 46%;
-    top: 40px;
+    top: 45px;
+}
+
+.googleplay-logo-img {
+    width: 25%;
+    height: auto;
+    max-height: 100px; 
+    position: absolute;
+    left: 46%;
+    top: 175px;
+    z-index: 1;
+}
+
+.googleplay-container:hover .playstore-back-img {
+    transform: scale(1.2);
 }
 
 .appstore-back-img {
     left: 64%;
-    top: 10px;
+    top: 15px;
+}
+
+.appstore-logo-img {
+    width: 25%;
+    height: auto;
+    max-height: 65px; 
+    position: absolute;
+    left: 64%;
+    top: 157px;
+    z-index: 1;
+}
+
+.appstore-container:hover .appstore-back-img {
+    transform: scale(1.2);
 }
 
 .nagnae-mascot-img {
@@ -232,15 +275,52 @@ img {
     transform: translateY(40%);
     transition: opacity 1.5s, transform 1.5s;
 }
-  
+
 .link-all img.animate {
     opacity: 1;
     transform: translateY(0);
 }
 
+.mascot-container {
+    position: relative;
+    width: 100%;
+  }
+  
+.speech-bubble {
+    position: absolute;
+    background-color: white;
+    border: 2px solid #775A45;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 200px;
+    top: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+  
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: #775A45 transparent;
+    transform: translateX(-50%);
+}
+  
+.nagnae-mascot-img:hover + .speech-bubble,
+.speech-bubble:hover {
+    opacity: 1;
+    visibility: visible;
+}
+
 @media (max-width: 920px) {
     .contents {
-        height: 1900px;
+        height: 200vh;
         overflow: hidden;
         position: relative;
     }  
@@ -324,17 +404,29 @@ img {
         width: 100vw;
     }
 }
-@media (max-width: 768px) {
+
+@media (max-width: 880px) {
     .youtube-logo-img {
-        max-height: 30px; /* 작은 화면에서는 더 작게 표시 */
-        top: 200px; /* 위치 조정 */
+        max-height: 30px;
+        top: 200px;
     }
 
     .instagram-logo-img{
         max-height: 50px; 
         top: 160px;
     }
+
+    .googleplay-logo-img {
+        max-height: 50px; 
+        top: 195px;
+    }
+
+    .appstore-logo-img {
+        max-height: 33px; 
+        top: 168px;
+    }
 }
+
 #webgl {
     position: fixed;
     top: 0;
@@ -375,4 +467,3 @@ img {
       transform: translateY(0);
     }
 }
-  

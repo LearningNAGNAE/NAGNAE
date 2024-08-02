@@ -10,6 +10,9 @@ import AppStoreBackImg from '../assets/images/appstore_back_img.png';
 import NagnaeMascot from '../assets/images/nagnae_mococo.png';
 import YouTubeLogoImg from '../assets/images/link_youtube_logo.png';
 import InstagramLogoImg from '../assets/images/link_instagram_logo.png';
+import GooglePlayLogoImg from '../assets/images/link_googleplay_logo.png';
+import AppStoreLogoImg from '../assets/images/link_appstore_logo.png';
+import Earth from '../assets/images/22222.png';
 
 
 function HomePage() {
@@ -24,6 +27,30 @@ function HomePage() {
     height: window.innerHeight
   });
   const [slideInThreshold, setSlideInThreshold] = useState(null);
+
+  useEffect(() => {
+    const mascot = document.querySelector('.nagnae-mascot-img');
+    const speechBubble = document.querySelector('.speech-bubble');
+  
+    const showSpeechBubble = () => {
+      speechBubble.style.opacity = '1';
+      speechBubble.style.visibility = 'visible';
+    };
+  
+    const hideSpeechBubble = () => {
+      speechBubble.style.opacity = '0';
+      speechBubble.style.visibility = 'hidden';
+    };
+  
+    mascot.addEventListener('mouseenter', showSpeechBubble);
+    mascot.addEventListener('mouseleave', hideSpeechBubble);
+  
+    return () => {
+      mascot.removeEventListener('mouseenter', showSpeechBubble);
+      mascot.removeEventListener('mouseleave', hideSpeechBubble);
+    };
+  }, []);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -109,7 +136,7 @@ function HomePage() {
 
       // 3번째 섹션에 도달했을 때 이미지 애니메이션 시작
       if (linkAllRef.current) {
-        const images = linkAllRef.current.querySelectorAll('img');
+        const images = linkAllRef.current.querySelectorAll('img','a');
         if (scrollPosition > slideInThreshold  && !hasAnimated) {
           images.forEach((img, index) => {
             setTimeout(() => {
@@ -236,21 +263,27 @@ function HomePage() {
       <section className={`screen3 ${scrollPosition > slideInThreshold ? 'slide-in' : ''}`}>
         <div className="slide-in-content">
           <div className='link-all' ref={linkAllRef}> 
-            <a href='https://www.youtube.com/channel/UC0ePoqlReJuWcP1PVSkto6A'>
+            <img src= {Earth} alt='earth' className='earth-img' />
+            <a href='https://www.youtube.com/channel/UC0ePoqlReJuWcP1PVSkto6A' className='youtube-container'>
               <img src={YouTubeLogoImg} alt='youtube_logo_img' className='youtube-logo-img' />
               <img src= {YouTubeBackImg} alt='youtube_back_img' className='link-back-img-common youtube-back-img' />
             </a>
-            <a>
+            <a href='https://www.instagram.com/jong990909/' className='instagram-container'>
               <img src={InstagramLogoImg} alt='instagram_logo_img' className='instagram-logo-img' />
               <img src= {InStagramBackImg} alt='instagram_back_img' className='link-back-img-common instagram-back-img' />
             </a>
-            <a>
-              <img src= {PlayStoreBackImg} alt='platstore_back_img' className='link-back-img-common playstore-back-img' />
+            <a href='https://play.google.com/store/games?device=windows&pli=1' className='googleplay-container'>
+              <img src={GooglePlayLogoImg} alt='googleplay_logo_img' className='googleplay-logo-img' /> 
+              <img src= {PlayStoreBackImg} alt='playstore_back_img' className='link-back-img-common playstore-back-img' />
             </a>
-            <a>
+            <a href='https://apps.apple.com/kr/charts/iphone' className='appstore-container'>
+              <img src={AppStoreLogoImg} alt='appstore_logo_img' className='appstore-logo-img' />
               <img src= {AppStoreBackImg} alt='appstore_back_img' className='link-back-img-common appstore-back-img' />
             </a>
-            <img src= {NagnaeMascot} alt='nagnae_mascot' className='nagnae-mascot-img' />
+            <div class="mascot-container">
+              <img src={NagnaeMascot} alt='nagnae_mascot' className='nagnae-mascot-img' />
+              <div class="speech-bubble">여기에 말풍선 내용을 넣으세요!</div>
+            </div>
           </div>
         </div>
       </section>
