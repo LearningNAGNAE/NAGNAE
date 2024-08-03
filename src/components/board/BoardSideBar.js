@@ -3,16 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../../assets/styles/board/BoardSideBar.scss';
 import img from '../../assets/images/sam.png';
+import { useBoardCategory } from '../../hooks/board/useBoardCategory';
 
 function BoardSideBar() {
-  const [activeCategory, setActiveCategory] = useState('');
-  const location = useLocation();
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const type = searchParams.get('type');
-    setActiveCategory(type || '');
-  }, [location]);
+  const activeCategory = useBoardCategory();
 
   return (
     <aside className="board-sidebar">
