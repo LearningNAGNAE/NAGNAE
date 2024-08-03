@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useChatStudy } from '../../hooks/chatbot/useChatStudy';
+import { useScrollToBottom, useMessageInput } from '../../hooks/chatbot/useScrollToBottom';
 import ChatStudyMessage from './ChatStudyMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
 import uploadIcon from '../../assets/images/free-icon-grab.png';
@@ -8,36 +9,8 @@ import Record_Modal from '../chatbot/Record_Modal';
 
 function ChatStudyWindow() {
   const { messages, loading, error, sendMessage } = useChatStudy();
-  const [input, setInput] = useState('');
-  const messagesContainerRef = useRef(null);
-
-  /*---스크롤---*/
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const scrollToBottom = () => {
-    if (messagesContainerRef.current) {
-      const { scrollHeight, clientHeight } = messagesContainerRef.current;
-      messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
-    }
-  };
-  /*-----------*/
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (input.trim() !== '') {
-      sendMessage(input); // 변경된 부분
-      setInput('');
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
+  const messagesContainerRef = useScrollToBottom([messages]);
+  const { input, setInput, handleSubmit, handleKeyPress } = useMessageInput(sendMessage);
 
   return (
     <div className="chat-window">
