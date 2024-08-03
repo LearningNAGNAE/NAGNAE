@@ -79,7 +79,7 @@ function Header() {
       >
         <Link to="/ChatBotPage">ChatBot</Link>
         <Link to="/BoardPage">Board</Link>
-        <Link to="/">Page 3</Link>
+        <Link to="/StudyPage">Study</Link>
       </div>
     </header>
   );
