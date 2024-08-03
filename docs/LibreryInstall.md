@@ -7,3 +7,5 @@ npm install axios
 npm install sass
 
 npm install antd @ant-design/icons
+
+npm install redux react-redux redux-thunk
