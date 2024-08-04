@@ -30,7 +30,7 @@ function App() {
               <Route path="/ContactPage" element={<ContactPage />} />
               <Route path="/AboutPage" element={<AboutPage />} />
               <Route path="/StudyPage" element={<StudyPage />} />
-              <Route path="/LoginTestPage" element={<LoginTestPage />} />
+              {/* <Route path="/LoginTestPage" element={<LoginTestPage />} /> */}
             </Routes>
             <Footer />
           </div>
