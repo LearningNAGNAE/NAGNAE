@@ -51,11 +51,7 @@ header nav {
   align-items: center;
 }
 
-.sign_up, .sign_in, .my_page, .sign_out {
-  font-size: 16px;
-  padding: 8px 20px;
-  margin: 0 5px;
-}
+
 
 @media screen and (min-width: 768px) {
   .nagnae_header {
@@ -84,11 +80,17 @@ header nav {
   font-family: 'HSBombaram3.0_Regular', sans-serif;
 }
 
-.sign_in, .sign_out {
+.sign_up, .sign_in, .my_page, .sign_out {
+  font-size: 16px;
+  padding: 8px 20px;
+  margin: 0 5px;
+}
+
+.sign_in {
   display: inline-block;
   text-align: center;
   align-content: center;
-  width: 100px;
+  width: 120px;
   height: 50px;
   border: 1px solid #775A45;
   border-radius: 50px;
@@ -96,16 +98,37 @@ header nav {
   padding-bottom: 5px;
   background-color: #775A45;
   color: white;
+  &:hover {
+    background-color: darken(#775A45, 10%);
+  }
+}
+.sign_out {
+  width: 120px;
+  height: 50px;
+  border: 1px solid #775A45;
+  border-radius: 50px;
+  margin: 0px 10px 0px 10px;
+  padding-bottom: 5px;
+  background-color: #775A45;
+  color: white;
+  &:hover {
+    background-color: darken(#775A45, 10%);
+  }
 }
 
 .sign_up, .my_page {
   display: inline-block;
   text-align: center;
   align-content: center;
-  width: 100px;
-  height: 70px;
+  width: 120px;
+  height: 50px;
   color: #775A45;
   margin: 0px 10px 0px 10px;
+  border-radius: 50px;
+  border: 1px solid #775A45;
+  &:hover {
+    background-color: darken(#DEDEDE, 10%);
+  }
 }
 
 .header-nav-link {

@@ -1,21 +1,62 @@
-// import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setToken, clearToken } from '../../redux/actions/AuthActions';
+import { loginUser } from '../../contexts/authorization/AuthorizationApi';
 
-// function useAuth() {
-//   const [isAuthenticated, setIsAuthenticated] = useState(false);
+// const TOKEN_EXPIRATION_TIME = 10 * 60 * 1000; // 10분을 밀리초로 변환
+const TOKEN_EXPIRATION_TIME = 60 * 60 * 1000; // 60분을 밀리초로 변환
 
-//   useEffect(() => {
-//     // 인증 상태를 확인하는 로직을 여기에 추가
-//     const token = localStorage.getItem('token');
-//     // console.log(token);
-//     if (token) {
-//       setIsAuthenticated(true);
-//     }
-//     else {
-//       setIsAuthenticated(false);
-//     }
-//   }, []);
+export const useAuth = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const dispatch = useDispatch();
 
-//   return isAuthenticated;
-// }
+  const setAuthToken = (token) => {
+    const expirationTime = new Date().getTime() + TOKEN_EXPIRATION_TIME;
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('tokenExpiration', expirationTime.toString());
+    dispatch(setToken(token));
+  };
 
-// export default useAuth;
+  const getAuthToken = () => {
+    const token = sessionStorage.getItem('token');
+    const expiration = sessionStorage.getItem('tokenExpiration');
+    
+    if (!token || !expiration) {
+      return null;
+    }
+
+    if (new Date().getTime() > parseInt(expiration)) {
+      // 토큰이 만료되었으면 제거
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('tokenExpiration');
+      dispatch(clearToken());
+      return null;
+    }
+
+    return token;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      const token = await loginUser(email, password);
+      setAuthToken(token);
+      console.log('저장된 토큰:', token);
+    } catch (err) {
+      setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+    }
+  };
+
+  return {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    error,
+    handleSubmit,
+    getAuthToken
+  };
+};

@@ -1,41 +1,35 @@
-import React, { createContext } from 'react';
 import axios from 'axios';
 
-export const AuthorizationApi = createContext();
+const API_BASE_URL = 'http://localhost:9000/api/nagnae/users';
 
-export const AuthorizationProvider = ({ children }) => {
+export const loginUser = async (email, password) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/login/test`, 
+      { email, password }, 
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+    
+    const fullToken = response.headers['authorization'];
+    if (!fullToken) {
+      throw new Error('토큰이 응답에 없습니다.');
+    }
+    
+    const token = fullToken.split(' ')[1]; // "Bearer" 제거
+    return token;
+  } catch (error) {
+    console.error('로그인 실패:', error.response?.data || error.message);
+    throw error;
+  }
+};
 
+export const setAuthToken = (token) => {
+  sessionStorage.setItem('token', token);
+};
 
+export const getAuthToken = () => {
+  return sessionStorage.getItem('token');
+};
 
-  
-    const AuthorizationData = async (UserVo) => {
-        try {
-          console.log('Sending request with data:', UserVo);
-          const AuthorizationResponse = await axios.post('http://localhost:9000/api/nagnae/users/login', 
-            UserVo,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
-          console.log('Received response:', AuthorizationResponse.data);
-          return AuthorizationResponse.data;
-        } catch (error) {
-          console.error('Error:', error);
-          if (error.response) {
-            console.error('Response data:', error.response.data);
-            console.error('Response status:', error.response.status);
-            console.error('Response headers:', error.response.headers);
-          }
-          throw error;
-        }
-      };
-
-  return (
-    <AuthorizationProvider.Provider value={{ AuthorizationData }}>
-        {children}
-    </AuthorizationProvider.Provider>
-  );
-  
+export const removeAuthToken = () => {
+  sessionStorage.removeItem('token');
 };

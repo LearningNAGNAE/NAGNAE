@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 // import fetchData from '../contexts/apiService'; // fetchData 함수 가져오기
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/actions/AuthActions';
 
 function Header() {
   // const isAuthenticated = useAuth();
@@ -15,51 +17,15 @@ function Header() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     // 인증된 경우에만 fetchData 함수 호출
-  //     fetchData()
-  //       .then(data => {
-  //         setData(data);
-  //         setLoading(false);
-  //       })
-  //       .catch(error => {
-  //         setError(error.message);
-  //         setLoading(false);
-  //       });
-  //   } else {
-  //     setLoading(false);
-  //     setError('User not authenticated');
-  //   }
-  // }, [isAuthenticated]);
-
-  // if (loading) return <div>Loading...</div>;
-  // if (error) return <div>Error: {error}</div>;
-
-
-
-
-
-
-
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.auth.token);
+  
+  const handleLogout = () => {
+    dispatch(logout());
+    // 필요한 경우 여기에 추가 로직 (예: 홈 페이지로 리다이렉트)
+  };
   
   return (
-    // <div>
-
-    //   <Link to={'/'}>Home</Link>
-    //   <Link to={'/ContactPage'}>ContactPage</Link>
-    //   <Link to={'/AboutPage'}>AboutPage</Link>
-
-
-    //   {/* 데이터를 사용하는 UI 구현 */}
-    //   <ul>
-    //     {data.map(item => (
-    //       <li key={item.id}>{item.name}</li>
-    //     ))}
-    //   </ul>
-
-      
-    // </div>
     <header className="nagnae_header">
       <div className='header-content' 
           onMouseEnter={showNavLink}>
@@ -68,8 +34,17 @@ function Header() {
           <a className='logo' href='/'>NAGNAE</a>
         </div>
         <nav>
-          <Link className='sign_up' to="/SignPage?type=signup">Sign Up</Link>
-          <Link className='sign_in' to="/SignPage?type=signin">Sign in</Link>
+          {token ? (
+            <>
+              <Link className='my_page' to="/My_Page">My Page</Link>
+              <button className='sign_out' onClick={handleLogout}>Sign Out</button>
+            </>
+          ) : (
+            <>
+              <Link className='sign_up' to="/SignPage?type=signup">Sign Up</Link>
+              <Link className='sign_in' to="/SignPage?type=signin">Sign In</Link>
+            </>
+          )}
         </nav>
       </div>
       <div 
