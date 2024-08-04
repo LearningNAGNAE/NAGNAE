@@ -2,8 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
-import ContactPage from './pages/ContactPage';
-import AboutPage from './pages/AboutPage';
 import SignPage from './pages/SignPage';
 import ChatBotPage from './pages/ChatBotPage';
 import BoardPage from './pages/BoardPage';
@@ -27,8 +25,6 @@ function App() {
               <Route path="/ChatBotPage" element={<ChatBotPage />} />
               <Route path="/SignPage" element={<SignPage />} />
               <Route path="/BoardPage" element={<BoardPage />} />
-              <Route path="/ContactPage" element={<ContactPage />} />
-              <Route path="/AboutPage" element={<AboutPage />} />
               <Route path="/StudyPage" element={<StudyPage />} />
               {/* <Route path="/LoginTestPage" element={<LoginTestPage />} /> */}
             </Routes>
