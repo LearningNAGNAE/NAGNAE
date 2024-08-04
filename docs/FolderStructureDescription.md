@@ -31,8 +31,7 @@ my-react-app/
 │   │   │   └── authActions.js
 │   │   ├── reducers/     // 리듀서 정의
 │   │   │   └── authReducer.js
-│   │   ├── store.js      // Redux 스토어 설정
-│   │   └── types.js      // 액션 타입 정의
+│   │   └── store.js      // Redux 스토어 설정
 │   ├── App.js            // 루트 컴포넌트
 │   ├── index.js          // 엔트리 포인트
 │   └── setupTests.js     // 테스트 설정 파일
