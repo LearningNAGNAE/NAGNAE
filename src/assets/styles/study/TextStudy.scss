@@ -1,0 +1,133 @@
+.text-study {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #FAF7F5;
+    border-radius: 10px;
+    font-family: 'HSBombaram3.0_Thin', sans-serif;
+  
+    h1, p, input, select, button {
+        font-family: 'HSBombaram3.0_Thin', sans-serif;
+    }
+
+    h1 {
+      color: #4A4A4A;
+      margin-bottom: 20px;
+      font-size: 48px;
+    }
+  
+    .category-selector {
+      display: flex;
+      width: 100%;
+      margin-bottom: 20px;
+  
+      select {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #8B7355;
+        border-radius: 5px 0 0 5px;
+        background-color: #8B7355;
+        color: white;
+      }
+  
+      .refresh-button {
+        padding: 10px;
+        background-color: #EF8354;
+        border: none;
+        border-radius: 0 5px 5px 0;
+        color: white;
+        cursor: pointer;
+      }
+    }
+  
+    .sentence-display {
+      width: 100%;
+      padding: 15px;
+      background-color: white;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+  
+      p {
+        margin: 5px 0;
+      }
+  
+      .audio-button {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+      }
+    }
+  
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 20px;
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        color: white;
+        cursor: pointer;
+      }
+  
+      .record-button {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #EF8354;
+        border: none;
+        border-radius: 25px;
+        color: white;
+        cursor: pointer;
+    
+        .record-icon {
+          margin-right: 10px;
+        }
+      }
+  
+      .send-button {
+        padding: 10px;
+        background-color: #8B7355;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    
+        .send-icon {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  
+    .user-input-section {
+      width: 100%;
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px;
+  
+      p {
+        margin-bottom: 10px;
+      }
+  
+      input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #E0E0E0;
+        border-radius: 5px;
+      }
+    }
+
+    .window-send-icon {
+        width: 25px;
+        height: 25px;
+    }
+  }
+  
