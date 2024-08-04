@@ -20,6 +20,7 @@ const TextStudy = () => {
   const handleRefresh = () => {
     if (selectedCategory) {
       setShowSentence(true);
+      setShowUserInput(false); // Your Sentence 컴포넌트를 숨깁니다.
     }
   };
 
@@ -30,6 +31,8 @@ const TextStudy = () => {
   return (
     <div className="text-study">
       <h1>Learning Korean to Text</h1>
+      <h2>Look and Read the sentence!</h2>
+      <br/>
       
       <div className="category-selector">
         <select 
@@ -63,19 +66,19 @@ const TextStudy = () => {
               <img src={sendIcon} alt="Send" className="send-icon" />
             </button>
           </div>
-
-          {showUserInput && (
-            <div className="user-input-section">
-              <p>Your Sentence:</p>
-              <input 
-                type="text" 
-                value={userSentence} 
-                onChange={(e) => setUserSentence(e.target.value)}
-                placeholder="우리는 새로운 고객과 계약을 체결했습니다."
-              />
-            </div>
-          )}
         </>
+      )}
+
+      {showUserInput && (
+        <div className="user-input-section">
+          <p>Your Sentence:</p>
+          <input 
+            type="text" 
+            value={userSentence} 
+            onChange={(e) => setUserSentence(e.target.value)}
+            placeholder="우리는 새로운 고객과 계약을 체결했습니다."
+          />
+        </div>
       )}
     </div>
   );

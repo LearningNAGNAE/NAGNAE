@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import TextStudy from '../components/study/TextStudy';
+import ImageStudy from '../components/study/ImageStudy';
 import StudySideBar from '../components/study/StudySideBar';
 import '../assets/styles/study/StudyPage.scss';
 
@@ -14,7 +15,7 @@ function StudyPage() {
             case 'text':
                 return <TextStudy />;
             case 'image':
-                return <div>Image Study (Not implemented yet)</div>;
+                return <ImageStudy />;
             default:
                 return <TextStudy />;
         }

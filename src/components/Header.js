@@ -80,6 +80,7 @@ function Header() {
         <Link to="/ChatBotPage">ChatBot</Link>
         <Link to="/BoardPage">Board</Link>
         <Link to="/StudyPage">Study</Link>
+        <Link to="">Game</Link>
       </div>
     </header>
   );
