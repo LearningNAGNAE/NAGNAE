@@ -1,10 +1,11 @@
 import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:9000/api/nagnae/users';
+import store from '../../redux/Store';
+// const API_BASE_URL = 'http://localhost:9000/api/nagnae/users';
+const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
 export const loginUser = async (email, password) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/login/test`, 
+    const response = await axios.post(`${SpringbaseUrl}/api/nagnae/users/login/test`, 
       { email, password }, 
       { headers: { 'Content-Type': 'application/json' } }
     );
