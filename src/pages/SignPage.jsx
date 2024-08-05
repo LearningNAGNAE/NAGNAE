@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom';
 import SignUp from '../components/login/SignUp';
-import SignIn from '../components/login/SignIn';
+import Login from '../components/login/SignIn';
 
 function SignPage() {
   const location = useLocation();
@@ -12,7 +12,7 @@ function SignPage() {
     <div className="login-wrap">
       <div className="login-contents">
         <div>
-          {type === 'signup' ? <SignUp /> : <SignIn />}
+          {type === 'signup' ? <SignUp /> : <Login />}
         </div>
       </div>
     </div>
