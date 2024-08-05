@@ -28,6 +28,7 @@ function HomePage() {
   });
   const [slideInThreshold, setSlideInThreshold] = useState(null);
   const [showFooter, setShowFooter] = useState(false);
+  const [earthScale, setEarthScale] = useState(1);
 
   useEffect(() => {
     const mascot = document.querySelector('.nagnae-mascot-img');
@@ -233,6 +234,10 @@ function HomePage() {
     };
   }, []);
 
+  const handleMascotHover = (isHovering) => {
+    setEarthScale(isHovering ? 1.1 : 1);
+  };
+
   return (
     <article className="contents">
       <section className="screen-all">
@@ -267,7 +272,7 @@ function HomePage() {
       <section className={`screen3 ${scrollPosition > slideInThreshold ? 'slide-in' : ''}`}>
         <div className="slide-in-content">
           <div className='screen3-all' ref={linkAllRef}> 
-            <img src= {Earth} alt='earth' className='earth-img' onClick={() => setShowFooter(!showFooter)}/>
+            <img src= {Earth} alt='earth' className='earth-img' onClick={() => setShowFooter(!showFooter)} style={{ transform: `scale(${earthScale})`, transition: 'transform 0.3s ease' }}/>
             <a href='https://www.youtube.com/channel/UC0ePoqlReJuWcP1PVSkto6A' className='youtube-container'>
               <img src={YouTubeLogoImg} alt='youtube_logo_img' className='youtube-logo-img' />
               <img src= {YouTubeBackImg} alt='youtube_back_img' className='link-back-img-common youtube-back-img' />
@@ -284,7 +289,11 @@ function HomePage() {
               <img src={AppStoreLogoImg} alt='appstore_logo_img' className='appstore-logo-img' />
               <img src= {AppStoreBackImg} alt='appstore_back_img' className='link-back-img-common appstore-back-img' />
             </a>
-            <div class="mascot-container">
+            <div
+              class="mascot-container"
+              onClick={() => setShowFooter(!showFooter)} 
+              onMouseEnter={() => handleMascotHover(true)}
+              onMouseLeave={() => handleMascotHover(false)}>
               <img src={NagnaeMascot} alt='nagnae_mascot' className='nagnae-mascot-img' />
               <div class="speech-bubble">Hello! I am the “NAGNAE” mascot, NangNangYee!</div>
             </div>
