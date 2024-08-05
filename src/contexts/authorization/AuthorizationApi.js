@@ -5,7 +5,7 @@ const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
 export const loginUser = async (email, password) => {
   try {
-    const response = await axios.post(`${SpringbaseUrl}/api/nagnae/users/login/test`, 
+    const response = await axios.post(`${SpringbaseUrl}/users/login/test`, 
       { email, password }, 
       { headers: { 'Content-Type': 'application/json' } }
     );

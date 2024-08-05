@@ -1,5 +1,7 @@
 import React, { createContext } from 'react';
 import axios from 'axios';
+import store from '../../redux/Store';
+const PythonbaseUrl = store.getState().url.PythonbaseUrl;
 
 export const ChatStudyApi = createContext();
 
@@ -8,7 +10,7 @@ export const ChatStudyProvider = ({ children }) => {
     const StudyChatBotData = async (text) => {
         try {
           console.log('Sending request with data:', text);
-          const StudyChatbotResponse = await axios.post('http://localhost:8000/study', 
+          const StudyChatbotResponse = await axios.post(`${PythonbaseUrl}/study`, 
             text,
             {
               headers: {
