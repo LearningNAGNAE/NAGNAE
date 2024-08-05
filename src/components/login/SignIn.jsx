@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../hooks/authorization/useAuth';
-import '../../assets/styles/login/_signIn.scss';
+import '../../assets/styles/style.scss';
 
 function SignIn() {
   const { email, setEmail, password, setPassword, error, handleSubmit } = useAuth();
