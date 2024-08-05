@@ -27,6 +27,7 @@ function HomePage() {
     height: window.innerHeight
   });
   const [slideInThreshold, setSlideInThreshold] = useState(null);
+  const [showFooter, setShowFooter] = useState(false);
 
   useEffect(() => {
     const mascot = document.querySelector('.nagnae-mascot-img');
@@ -133,26 +134,25 @@ function HomePage() {
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
-
-      // 3번째 섹션에 도달했을 때 이미지 애니메이션 시작
+  
       if (linkAllRef.current) {
-        const images = linkAllRef.current.querySelectorAll('img','a');
-        if (scrollPosition > slideInThreshold  && !hasAnimated) {
-          images.forEach((img, index) => {
+        const images = linkAllRef.current.querySelectorAll('img, a');
+        if (scrollPosition > slideInThreshold && !hasAnimated) {
+          images.forEach((el, index) => {
             setTimeout(() => {
-              img.classList.add('animate');
+              el.classList.add('animate');
             }, index * 400);
           });
           setHasAnimated(true);
-        } else if (scrollPosition < slideInThreshold  && hasAnimated) {
-          images.forEach((img) => {
-            img.classList.remove('animate');
+        } else if (scrollPosition < slideInThreshold && hasAnimated) {
+          images.forEach((el) => {
+            el.classList.remove('animate');
           });
           setHasAnimated(false);
         }
       }
     };
-    
+  
     const handleWheel = (e) => {
       e.preventDefault();
       const slowFactor = 3;
@@ -161,15 +161,19 @@ function HomePage() {
       setScrollPosition(Math.max(0, newPosition));
       window.scrollTo(0, newPosition);
     };
-
+  
+    // Initial check for the animation state based on initial scroll position
+    handleScroll();
+  
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('wheel', handleWheel, { passive: false });
-
+  
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [scrollPosition,hasAnimated,slideInThreshold]);
+  }, [scrollPosition, hasAnimated, slideInThreshold]);
+  
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -262,8 +266,8 @@ function HomePage() {
       </section>
       <section className={`screen3 ${scrollPosition > slideInThreshold ? 'slide-in' : ''}`}>
         <div className="slide-in-content">
-          <div className='link-all' ref={linkAllRef}> 
-            <img src= {Earth} alt='earth' className='earth-img' />
+          <div className='screen3-all' ref={linkAllRef}> 
+            <img src= {Earth} alt='earth' className='earth-img' onClick={() => setShowFooter(!showFooter)}/>
             <a href='https://www.youtube.com/channel/UC0ePoqlReJuWcP1PVSkto6A' className='youtube-container'>
               <img src={YouTubeLogoImg} alt='youtube_logo_img' className='youtube-logo-img' />
               <img src= {YouTubeBackImg} alt='youtube_back_img' className='link-back-img-common youtube-back-img' />
@@ -282,8 +286,32 @@ function HomePage() {
             </a>
             <div class="mascot-container">
               <img src={NagnaeMascot} alt='nagnae_mascot' className='nagnae-mascot-img' />
-              <div class="speech-bubble">여기에 말풍선 내용을 넣으세요!</div>
+              <div class="speech-bubble">Hello! I am the “NAGNAE” mascot, NangNangYee!</div>
             </div>
+            {showFooter && (
+              <footer className='main-footer'>
+                <div className='footer-wrap'>
+                  <div className='footer-detail-box'>
+                    <div className='first-detail'>
+                      <span>Privacy Statement</span>
+                      <span>Terms of Use</span>
+                    </div>
+                    <div className='second-detail'>
+                      <div className='s-introduce'>
+                        <span>Coporation NAGNAE</span>
+                        <span>CEO : Hyun Su Jung</span>
+                      </div>
+                      <div className='s-introduce'>
+                        <span>010-2728-7526</span>
+                      </div>
+                    </div>
+                    <div className='third-detail'>
+                      <span>20 Teheran-ro 5-gil, Gangnam-gu, Seoul</span>
+                    </div>
+                  </div>
+                </div>
+              </footer>
+            )}
           </div>
         </div>
       </section>

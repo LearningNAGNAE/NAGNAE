@@ -77,6 +77,7 @@ body {
     font-family: 'HSBombaram3.0_세로쓰기전용_Vertical_Regular', sans-serif;
     text-shadow: 0.625vw 0.3125vw 0px rgba(186, 159, 139, 100);
     animation: pulseText 3s infinite alternate;
+    margin-bottom: 0px;
 }
 
 .start-btn {
@@ -167,11 +168,22 @@ img {
     margin-top: 30px;
 }
 
-.link-all {
+.screen3-all {
     display: flex;
-    width: 90%;
+    width: 100%;
     align-items: center;
     position: relative;
+}
+
+.screen3-all img {
+    opacity: 0;
+    transform: translateY(40%);
+    transition: opacity 1s, transform 1.5s;
+}
+
+.screen3-all img.animate {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .link-back-img-common {
@@ -179,11 +191,18 @@ img {
     position: absolute;
 }
 
-.earth-img {
+.screen3-all img.earth-img {
     width: 100%;
     height: auto;
     position: absolute;
     top: 518px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+
+.screen3-all img.earth-img:hover {
+    transform: scale(1.1);
 }
 
 .youtube-back-img {
@@ -265,20 +284,9 @@ img {
 .nagnae-mascot-img {
     width: 25%;
     left: 36%;
-    top: 240px;
-    height: 500px;
+    top: 350px;
+    height: 300px;
     position: absolute;
-}
-
-.link-all img {
-    opacity: 0;
-    transform: translateY(40%);
-    transition: opacity 1.5s, transform 1.5s;
-}
-
-.link-all img.animate {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 .mascot-container {
@@ -288,13 +296,13 @@ img {
   
 .speech-bubble {
     position: absolute;
-    background-color: white;
+    background-color: #F5DEB3;
     border: 2px solid #775A45;
     border-radius: 10px;
     padding: 10px;
-    max-width: 200px;
-    top: 300px;
-    left: 50%;
+    max-width: 15%;
+    top: 40vh;
+    left: 35vw;
     transform: translateX(-50%);
     opacity: 0;
     visibility: hidden;
@@ -302,20 +310,51 @@ img {
 }
   
 .speech-bubble::after {
-    content: '';
+    content: "";
     position: absolute;
+    width: 20px;  /* 꼬리의 너비 */
+    height: 20px; /* 꼬리의 높이 */
+    background-color: #775A45; /* 말풍선과 같은 색상 */
     bottom: -10px;
-    left: 50%;
-    border-width: 10px 10px 0;
-    border-style: solid;
-    border-color: #775A45 transparent;
-    transform: translateX(-50%);
+    left: 100%;
+    transform: translateX(-50%) rotate(-45deg);
+    clip-path: path('M0 0 Q 10 10, 20 0 L 12 20 Z');
 }
   
 .nagnae-mascot-img:hover + .speech-bubble,
 .speech-bubble:hover {
     opacity: 1;
     visibility: visible;
+}
+
+.main-footer {
+    position: absolute;
+    top: 670px;
+    left: 0;
+    max-width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+  }
+
+@media (max-width: 937px) {
+    .speech-bubble {
+        position: absolute;
+        background-color: #F5DEB3;
+        border: 2px solid #775A45;
+        border-radius: 10px;
+        padding: 10px;
+        max-width: 25%;
+        top: 42vh;
+        left: 31vw;
+        transform: translateX(-50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+    }
 }
 
 @media (max-width: 920px) {
@@ -363,6 +402,62 @@ img {
     }
 }
 
+@media (max-width: 880px) {
+    .youtube-logo-img {
+        max-height: 30px;
+        top: 205px;
+    }
+
+    .instagram-logo-img{
+        max-height: 50px; 
+        top: 165px;
+    }
+
+    .googleplay-logo-img {
+        max-height: 50px; 
+        top: 198px;
+    }
+
+    .appstore-logo-img {
+        max-height: 33px; 
+        top: 173px;
+    }
+}
+
+@media (max-width: 703px) {
+    .speech-bubble {
+        position: absolute;
+        background-color: #F5DEB3;
+        border: 2px solid #775A45;
+        border-radius: 10px;
+        padding: 10px;
+        max-width: 30%;
+        top: 45vh;
+        left: 25vw;
+        transform: translateX(-50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+    }
+}
+
+@media (max-width: 585px) {
+    .speech-bubble {
+        position: absolute;
+        background-color: #F5DEB3;
+        border: 2px solid #775A45;
+        border-radius: 10px;
+        padding: 10px;
+        max-width: 30%;
+        top: 43vh;
+        left: 23vw;
+        transform: translateX(-50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+    }
+}
+
 @media (max-width: 566px) {
     .contents {
         height: 2200px;
@@ -405,28 +500,6 @@ img {
     }
 }
 
-@media (max-width: 880px) {
-    .youtube-logo-img {
-        max-height: 30px;
-        top: 200px;
-    }
-
-    .instagram-logo-img{
-        max-height: 50px; 
-        top: 160px;
-    }
-
-    .googleplay-logo-img {
-        max-height: 50px; 
-        top: 195px;
-    }
-
-    .appstore-logo-img {
-        max-height: 33px; 
-        top: 168px;
-    }
-}
-
 #webgl {
     position: fixed;
     top: 0;
@@ -435,6 +508,17 @@ img {
     height: 100vh;
     z-index: 0;
 }
+
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
 @keyframes slideInFromLeft {
     0% {
