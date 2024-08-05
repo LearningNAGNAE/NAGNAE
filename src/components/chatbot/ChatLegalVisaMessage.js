@@ -7,14 +7,11 @@ function ChatLegalVisaMessage({ message }) {
   const formatText = (text) => {
     if (typeof text !== 'string') return JSON.stringify(text);
 
-    // 텍스트를 줄바꿈 문자를 기준으로 분리하여 배열로 만듦
     const lines = text.split('\n');
 
     return lines.map((line, lineIndex) => {
-      // 각 줄을 '**'로 둘러싸인 부분을 기준으로 분리
       const parts = line.split(/(\*\*.*?\*\*)/g);
       const formattedLine = parts.map((part, partIndex) => {
-        // '**'로 시작하고 끝나는 부분을 <strong> 태그로 감싸기
         if (part.startsWith('**') && part.endsWith('**')) {
           return <strong key={`${lineIndex}-${partIndex}`}>{part.slice(2, -2)}</strong>;
         }
@@ -22,7 +19,6 @@ function ChatLegalVisaMessage({ message }) {
       });
 
       return (
-        // 각 줄을 React Fragment로 감싸고, 마지막 줄이 아니면 <br /> 추가
         <React.Fragment key={lineIndex}>
           {formattedLine}
           {lineIndex < lines.length - 1 && <br />}
@@ -43,9 +39,9 @@ function ChatLegalVisaMessage({ message }) {
   };
 
   const botIconStyle = {
-    width: '55px',  // 원하는 크기로 조정
-    height: '55px', // 원하는 크기로 조정
-    objectFit: 'contain', // 이미지 비율 유지
+    width: '55px',
+    height: '55px',
+    objectFit: 'contain',
   };
 
   return (
@@ -61,7 +57,20 @@ function ChatLegalVisaMessage({ message }) {
         />
       )}
       <div className={`message ${message.isUser ? 'user' : 'bot'}`}>
-        {formatText(message.text)}
+        {message.image && (
+          <div className="message-image-container">
+            <img src={message.image} alt="Uploaded" className="message-image" />
+          </div>
+        )}
+        {message.isLoading ? (
+          <div className="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        ) : (
+          message.text && formatText(message.text)
+        )}
       </div>
     </div>
   );
