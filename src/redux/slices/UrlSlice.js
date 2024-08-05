@@ -14,8 +14,8 @@ const urlSlice = createSlice({
       state.SpringbaseUrl = action.payload;
     },
     setPythonBaseUrl: (state, action) => {
-        state.PythonbaseUrl = action.payload;
-      }
+      state.PythonbaseUrl = action.payload;
+    }
   }
 });
 
