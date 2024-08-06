@@ -46,7 +46,7 @@ export const useAuth = () => {
       setAuthToken(token);
       console.log('저장된 토큰:', token);
     } catch (err) {
-      setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+      setError('Login failed. Please check your email and password.');
     }
   };
 
