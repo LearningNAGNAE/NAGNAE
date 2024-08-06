@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { setToken, clearToken } from '../../redux/actions/AuthActions';
 import { loginUser } from '../../contexts/authorization/AuthorizationApi';
 
-// const TOKEN_EXPIRATION_TIME = 10 * 60 * 1000; // 10분을 밀리초로 변환
 const TOKEN_EXPIRATION_TIME = 60 * 60 * 1000; // 60분을 밀리초로 변환
 
 export const useAuth = () => {
@@ -42,11 +41,13 @@ export const useAuth = () => {
     e.preventDefault();
     setError('');
     try {
-      const token = await loginUser(email, password);
+      const { token, userData } = await loginUser(email, password);
       setAuthToken(token);
+      sessionStorage.setItem('userData', JSON.stringify(userData)); // 사용자 데이터 저장
       console.log('저장된 토큰:', token);
+      console.log('저장된 사용자 데이터:', userData);
     } catch (err) {
-      setError('Login failed. Please check your email and password.');
+      setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
     }
   };
 

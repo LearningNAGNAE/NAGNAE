@@ -7,26 +7,33 @@ import '../../assets/styles/style.scss';
 const SignIn = () => {
   const { email, setEmail, password, setPassword, error, handleSubmit, rememberMe, setRememberMe } = useAuth();
 
-  const onFinish = () => {
-    handleSubmit();
+  const onFinish = (values) => {
+    // values 객체에 폼 데이터가 포함되어 있습니다
+    handleSubmit({ preventDefault: () => {} }); // 이벤트 객체를 모방합니다
   };
 
   return (
     <ConfigProvider>
       <div className="login-page">
         <div className="login-container">
-          <Form className="login-form" onFinish={onFinish}>
+          <Form 
+            className="login-form" 
+            onFinish={onFinish}
+            initialValues={{ email, password, remember: rememberMe }}
+          >
             <h2 className="login-title">Sign In</h2>
             {error && <Alert message={error} type="error" className="error-message" />}
             <Form.Item
               name="email"
-              rules={[{ required: true, message: 'Please input your Email!' }]}
+              rules={[
+                { required: true, message: 'Please input your Email!' },
+                { type: 'email', message: 'Please enter a valid email!' }
+              ]}
             >
               <Input
                 prefix={<UserOutlined />}
                 type="email"
                 placeholder="Email"
-                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Item>
@@ -38,17 +45,13 @@ const SignIn = () => {
                 prefix={<LockOutlined />}
                 type="password"
                 placeholder="Password"
-                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item name="remember" valuePropName="checked">
               <Row justify="space-between">
                 <Col>
-                  <Checkbox
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                  >
+                  <Checkbox onChange={(e) => setRememberMe(e.target.checked)}>
                     Remember me
                   </Checkbox>
                 </Col>

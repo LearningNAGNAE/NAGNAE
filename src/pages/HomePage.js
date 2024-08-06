@@ -290,12 +290,12 @@ function HomePage() {
               <img src= {AppStoreBackImg} alt='appstore_back_img' className='link-back-img-common appstore-back-img' />
             </a>
             <div
-              class="mascot-container"
+              className="mascot-container"
               onClick={() => setShowFooter(!showFooter)} 
               onMouseEnter={() => handleMascotHover(true)}
               onMouseLeave={() => handleMascotHover(false)}>
               <img src={NagnaeMascot} alt='nagnae_mascot' className='nagnae-mascot-img' />
-              <div class="speech-bubble">Hello! I am the “NAGNAE” mascot, NangNangYee!</div>
+              <div className="speech-bubble">Hello! I am the “NAGNAE” mascot, NangNangYee!</div>
             </div>
             {showFooter && (
               <footer className='main-footer'>

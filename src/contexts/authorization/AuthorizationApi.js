@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../../redux/Store';
-// const API_BASE_URL = 'http://localhost:9000/api/nagnae/users';
+
 const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
 export const loginUser = async (email, password) => {
@@ -16,7 +16,12 @@ export const loginUser = async (email, password) => {
     }
     
     const token = fullToken.split(' ')[1]; // "Bearer" 제거
-    return token;
+
+    // 응답 데이터와 함께 저장
+    const userData = response.data.apiData;
+    sessionStorage.setItem('userData', JSON.stringify(userData));
+
+    return { token, userData };
   } catch (error) {
     console.error('로그인 실패:', error.response?.data || error.message);
     throw error;
