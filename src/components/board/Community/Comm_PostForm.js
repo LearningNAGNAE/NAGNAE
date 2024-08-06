@@ -1,32 +1,35 @@
-// src/components/PostForm.js
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { PostFormProvider } from '../../../contexts/board/Board_Comm_PostFormApi.js';
+import { usePostFormContext } from '../../../contexts/board/Board_Comm_PostFormApi.js';
 import '../../../assets/styles/board/Community/Comm_PostForm.scss';
 
-function Comm_PostForm({ onSubmit }) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit({ title, content, date: new Date().toISOString().split('T')[0], hits: 0 });
-    setTitle('');
-    setContent('');
-  };
+function PostFormContent() {
+  const { title, setTitle, content, setContent, handleSubmit } = usePostFormContext();
 
   return (
     <div className="comm-form-container">
       <div className='comm-form-wrap'>
         <h1 className='comm_h1'>Community</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className='comm-input-box'>
             <div className="comm-input-group">
               <label className='comm-write-title' htmlFor="comm-title">title</label>
-              <input id="comm-title" type="text" />
+              <input 
+                id="comm-title" 
+                type="text" 
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
             
             <div className="comm-input-group">
-              <textarea placeholder='글쓰기 에디터 api 시간나면...' id="comm-content" />
+              <textarea 
+                placeholder='글쓰기 에디터 api 시간나면...' 
+                id="comm-content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
             </div>
           </div>
           <div className='comm-list-write-btn'>
@@ -36,6 +39,14 @@ function Comm_PostForm({ onSubmit }) {
         </form>
       </div>
     </div>
+  );
+}
+
+function Comm_PostForm() {
+  return (
+    <PostFormProvider>
+      <PostFormContent />
+    </PostFormProvider>
   );
 }
 
