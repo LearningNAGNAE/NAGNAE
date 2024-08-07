@@ -36,7 +36,7 @@ function ChatStudyWindow() {
               onRecordingComplete={(blob) => console.log('Recording completed', blob)}
               onAudioSend={(data) => console.log('Audio data', data)}
             />
-            {/* <div>test: ============={userData.apiData.userName}</div> */}
+            {/* <div>test: ============={userData.userName}</div> */}
             <input 
               className='botinput'
               type="text" 
