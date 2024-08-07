@@ -12,7 +12,7 @@ function ChatStudyWindow() {
   const messagesContainerRef = useScrollToBottom([messages]);
   const { input, setInput, handleSubmit, handleKeyPress } = useMessageInput(sendMessage);
 
-  const userData = JSON.parse(sessionStorage.getItem('userData'));
+  // const userData = JSON.parse(sessionStorage.getItem('userData'));
 
   return (
     <div className="chat-window">
@@ -36,7 +36,7 @@ function ChatStudyWindow() {
               onRecordingComplete={(blob) => console.log('Recording completed', blob)}
               onAudioSend={(data) => console.log('Audio data', data)}
             />
-            <div>test: ============={userData.apiData.userName}</div>
+            {/* <div>test: ============={userData.apiData.userName}</div> */}
             <input 
               className='botinput'
               type="text" 
