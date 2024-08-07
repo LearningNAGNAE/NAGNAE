@@ -18,7 +18,7 @@ export const loginUser = async (email, password) => {
     const token = fullToken.split(' ')[1]; // "Bearer" 제거
 
     // 응답 데이터와 함께 저장
-    const userData = response.data.apiData;
+    const userData = response.data.data;
     sessionStorage.setItem('userData', JSON.stringify(userData));
 
     return { token, userData };
