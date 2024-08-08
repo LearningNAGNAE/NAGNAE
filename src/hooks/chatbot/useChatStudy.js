@@ -6,6 +6,7 @@ export const useChatStudy = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { StudyChatBotData } = useContext(ChatStudyApi);
+  const userData = JSON.parse(sessionStorage.getItem('userData'));
 
   const sendMessage = async (text) => {
     setLoading(true);
@@ -13,8 +14,11 @@ export const useChatStudy = () => {
     setMessages(prev => [...prev, { text, isUser: true }]);
     
     try {
-      const response = await StudyChatBotData({ input: text });
-      setMessages(prev => [...prev, { text: response.result, isUser: false }]);
+      const response = await StudyChatBotData({
+        input: text,
+        session_id: String(userData.apiData.userID)
+      });
+      setMessages(prev => [...prev, { text: response.response, isUser: false }]);
     } catch (error) {
       setError(error);
     } finally {
