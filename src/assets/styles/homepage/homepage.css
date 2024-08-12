@@ -341,6 +341,15 @@ img {
     animation: fadeIn 0.5s forwards;
   }
 
+#webgl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+}
+
 @media (max-width: 937px) {
     .speech-bubble {
         position: absolute;
@@ -499,15 +508,6 @@ img {
         height: 2200px;
         width: 100vw;
     }
-}
-
-#webgl {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
 }
 
 @keyframes fadeIn {
