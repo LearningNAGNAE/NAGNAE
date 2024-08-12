@@ -24,13 +24,14 @@ const SignIn = () => {
             <h2 className="login-title">Sign In</h2>
             {error && <Alert message={error} type="error" className="error-message" />}
             <Form.Item
-              name="email"
+              className="email"
               rules={[
                 { required: true, message: 'Please input your Email!' },
                 { type: 'email', message: 'Please enter a valid email!' }
               ]}
             >
               <Input
+                className='login-email-input'
                 prefix={<UserOutlined />}
                 type="email"
                 placeholder="Email"
@@ -38,17 +39,18 @@ const SignIn = () => {
               />
             </Form.Item>
             <Form.Item
-              name="password"
+              className="password"
               rules={[{ required: true, message: 'Please input your Password!' }]}
             >
               <Input
+                className='login-password-input'
                 prefix={<LockOutlined />}
                 type="password"
                 placeholder="Password"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Item>
-            <Form.Item name="remember" valuePropName="checked">
+            <Form.Item className="remember" valuePropName="checked">
               <Row justify="space-between">
                 <Col>
                   <Checkbox onChange={(e) => setRememberMe(e.target.checked)}>
@@ -63,8 +65,16 @@ const SignIn = () => {
               </Row>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" className="login-form-button">
-                Sign In
+              <Row>
+                <Button type="primary" htmlType="submit" className="login-form-button">
+                  Sign In
+                </Button>
+              </Row>
+                
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" className="google-login-form-button">
+                Google Login
               </Button>
             </Form.Item>
           </Form>
