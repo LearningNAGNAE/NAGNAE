@@ -5,7 +5,7 @@ import '../../assets/styles/board/BoardMain.scss';
 function BoardMain() {
   const sampleData = [
     { no: 15679, title: "Help Me Plz...", writer: "BingSoooo", date: "2024.07.30", hits: 2151 },
-    { no: 15679, title: "Help Me Plz...", writer: "BingSoooo", date: "2024.07.30", hits: 2151 },
+    { no: 15679, title: "Help Me Plz...", writer: "YoungSoooo", date: "2024.07.30", hits: 2151 },
     { no: 15679, title: "Help Me Plz...", writer: "BingSoooo", date: "2024.07.30", hits: 2151 },
     { no: 15679, title: "Help Me Plz...", writer: "BingSoooo", date: "2024.07.30", hits: 2151 },
   ];

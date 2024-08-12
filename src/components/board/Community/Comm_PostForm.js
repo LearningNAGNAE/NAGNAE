@@ -1,11 +1,17 @@
-import React from 'react';
+// Comm_PostForm.js
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { PostFormProvider } from '../../../contexts/board/Board_Comm_PostFormApi.js';
-import { usePostFormContext } from '../../../contexts/board/Board_Comm_PostFormApi.js';
+import { PostFormProvider, usePostFormContext } from '../../../hooks/board/useBoardComm_PostForm.js';
 import '../../../assets/styles/board/Community/Comm_PostForm.scss';
+import Editor from '../BoardQuillEditor.js';
+import 'react-quill/dist/quill.snow.css';
+
 
 function PostFormContent() {
   const { title, setTitle, content, setContent, handleSubmit } = usePostFormContext();
+  const quillRef = useRef(null);
+
+  
 
   return (
     <div className="comm-form-container">
@@ -18,17 +24,19 @@ function PostFormContent() {
               <input 
                 id="comm-title" 
                 type="text" 
+                theme="snow"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
             
             <div className="comm-input-group">
-              <textarea 
-                placeholder='글쓰기 에디터 api 시간나면...' 
-                id="comm-content"
+              <Editor 
+              ref={quillRef}
+                className='quill-editor'
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
+                onChange={setContent}
+                placeholder='내용을 입력하세요...'
               />
             </div>
           </div>

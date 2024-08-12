@@ -1,9 +1,8 @@
 .comm-form-container {
     margin: 0 auto;
-    background-color: #FAF7F5;
     border-radius: 10px;
     .comm-form-wrap{
-        max-width: 1024px;
+        max-width: 1224px;
         .comm_h1 {
             font-family: 'HSBombaram3.0_Thin', sans-serif;
             font-size: 40px;
@@ -11,7 +10,6 @@
             color: #775A45;
         }
         .comm-input-box{
-            border-bottom: 1px solid #775A45;
             .comm-input-group {
                 display: flex;
                 margin-bottom: 15px;
@@ -29,14 +27,15 @@
                 }
             
                 #comm-title, #comm-content {
-                    width: 100%;
+                    width: 1124px;
                     padding: 10px;
                     border: 1px solid #775A45;
                     border-radius: 10px;
                 }
             
-                #comm-content {
-                    height: 350px;
+                .quill-editor {
+                    width: 1224px;
+                    height: 353px;
                     resize: vertical;
                 }
             }

@@ -1,32 +1,16 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { createContext, useContext } from 'react';
+import { usePostForm } from '../../contexts/board/Board_Comm_PostFormApi';
 
-export const usePostForm = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const navigate = useNavigate();
+const PostFormContext = createContext();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:9000/board/freeboardwrite', {
-        title,
-        content,
-        userid: 1
-      });
-      console.log('Post created:', response.data);
-      navigate('/BoardPage?type=Comm_PostList');
-    } catch (error) {
-      console.error('Error creating post:', error);
-    }
-  };
+export const usePostFormContext = () => useContext(PostFormContext);
 
-  return {
-    title,
-    setTitle,
-    content,
-    setContent,
-    handleSubmit
-  };
+export const PostFormProvider = ({ children }) => {
+  const postFormHook = usePostForm();
+
+  return (
+    <PostFormContext.Provider value={postFormHook}>
+      {children}
+    </PostFormContext.Provider>
+  );
 };

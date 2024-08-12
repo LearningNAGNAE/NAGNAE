@@ -13,6 +13,7 @@ import InstagramLogoImg from '../assets/images/link_instagram_logo.png';
 import GooglePlayLogoImg from '../assets/images/link_googleplay_logo.png';
 import AppStoreLogoImg from '../assets/images/link_appstore_logo.png';
 import Earth from '../assets/images/22222.png';
+import { Link } from 'react-router-dom';
 
 
 function HomePage() {
@@ -245,7 +246,7 @@ function HomePage() {
           <div className="simple-introduce-box">
             <p className="si-1">A warm companion for those starting a new life in Korea</p>
             <p className="si-2">NAGNAE</p>
-            <a href="/chatbotpage" className="start-btn">▶ START</a>
+            <Link to="/chatbotpage" className="start-btn">▶ START</Link>
           </div>
         </div>
       </section>
