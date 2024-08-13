@@ -1,6 +1,6 @@
 // SignUp.js
 import React from 'react';
-import { useSignUpForm } from '../../hooks/login/useSignUpForm';
+import { useSignUpForm } from '../../hooks/authorization/useSignUpForm';
 
 function SignUp() {
   const { formData, previewUrl, handleChange, handleFileChange, handleSubmit } = useSignUpForm();
