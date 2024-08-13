@@ -7,10 +7,10 @@ export function useSignUpForm() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    user_name: '',
-    nationality: '',
-    hp: '',
-    profilePicture: null 
+    username: '',
+    nationlity: '',
+    userhp: '',
+    fileno: null
   });
   const [previewUrl, setPreviewUrl] = useState(null);
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export function useSignUpForm() {
     if (file) {
       setFormData(prevState => ({
         ...prevState,
-        profilePicture: file
+        fileno: file
       }));
       
       const reader = new FileReader();
@@ -51,7 +51,7 @@ export function useSignUpForm() {
       const signUpInfo = await signUp(formData);
 
       console.log('회원가입 정보:', signUpInfo);
-      navigate(-2);
+      navigate('/SignPage?type=signin');
     } catch (err) {
       setError('빈 칸이 있습니다. 확인해주세요');
     }

@@ -4,9 +4,10 @@ import store from '../../redux/Store';
 const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
 export const signUp = async (formData) => {
+  console.log(formData, "fdsgfsdgsfdghdfojiu");
   try {
     const response = await axios.post(`${SpringbaseUrl}/users/sign-up`, 
-      { formData }, 
+      formData,
       { headers: { 'Content-Type': 'application/json' } }
     );
     

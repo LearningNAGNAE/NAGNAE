@@ -36,9 +36,9 @@ function SignUp() {
           <div className="input-group">
             <input
               type="text"
-              className="user_name"
+              className="username"
               placeholder="NAME"
-              value={formData.user_name}
+              value={formData.username}
               onChange={handleChange}
             />
           </div>
@@ -58,9 +58,9 @@ function SignUp() {
           <div className="input-group">
             <input
               type="text"
-              className="nationality"
-              placeholder="NATIONALITY"
-              value={formData.nationality}
+              className="nationlity"
+              placeholder="NATIONLITY"
+              value={formData.nationlity}
               onChange={handleChange}
             />
           </div>
@@ -69,9 +69,9 @@ function SignUp() {
           <div className="input-group">
             <input
               type="tel"
-              className="hp"
+              className="userhp"
               placeholder="HP"
-              value={formData.hp}
+              value={formData.userhp}
               onChange={handleChange}
             />
           </div>
