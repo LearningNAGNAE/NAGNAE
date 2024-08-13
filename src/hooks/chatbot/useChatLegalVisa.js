@@ -1,15 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useChatLegalVisaApi } from '../../contexts/chatbot/ChatLegalVisaApi';
+import { v4 as uuidv4 } from 'uuid';
 
 export const useChatLegalVisa = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [sessionId, setSessionId] = useState('');
+  const sessionIdRef = useRef(localStorage.getItem('chatSessionId') || uuidv4());
+  const isNewSessionRef = useRef(true);
   const { LegalVisaChatBotData, describeImage } = useChatLegalVisaApi();
 
   useEffect(() => {
-    setSessionId(Math.random().toString(36).substring(7));
+    localStorage.setItem('chatSessionId', sessionIdRef.current);
   }, []);
 
   const sendMessage = useCallback(async (messageText) => {
@@ -22,7 +24,7 @@ export const useChatLegalVisa = () => {
       setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
 
       try {
-        const response = await LegalVisaChatBotData(messageText, sessionId);
+        const response = await LegalVisaChatBotData(messageText, sessionIdRef.current, isNewSessionRef.current);
         setMessages(prevMessages => 
           prevMessages.map(msg => 
             msg.id === loadingMessage.id 
@@ -35,13 +37,14 @@ export const useChatLegalVisa = () => {
               : msg
           )
         );
+        isNewSessionRef.current = false;  // 첫 메시지 이후로는 새 세션이 아님
       } catch (error) {
         console.error('Error sending message:', error);
         setError(error);
         setMessages(prevMessages => 
           prevMessages.map(msg => 
             msg.id === loadingMessage.id 
-              ? { ...msg, isLoading: false, text: "Sorry, there was an error processing your message." }
+              ? { ...msg, isLoading: false, text: "Sorry, there was an error processing your message. Please try again." }
               : msg
           )
         );
@@ -49,7 +52,14 @@ export const useChatLegalVisa = () => {
         setLoading(false);
       }
     }
-  }, [LegalVisaChatBotData, sessionId]);
+  }, [LegalVisaChatBotData]);
+
+  const resetSession = useCallback(() => {
+    sessionIdRef.current = uuidv4();
+    isNewSessionRef.current = true;
+    localStorage.setItem('chatSessionId', sessionIdRef.current);
+    setMessages([]);
+  }, []);
 
   const sendImage = useCallback(async (imageFile) => {
     setLoading(true);
@@ -68,7 +78,7 @@ export const useChatLegalVisa = () => {
     } catch (error) {
       console.error('Error sending image:', error);
       setError(error);
-      let errorMessage = "Sorry, there was an error processing your image.";
+      let errorMessage = "Sorry, there was an error processing your image. Please try again.";
       if (error.response && error.response.data) {
         errorMessage += ` Details: ${error.response.data.detail || JSON.stringify(error.response.data)}`;
       }
@@ -82,5 +92,5 @@ export const useChatLegalVisa = () => {
     }
   }, [describeImage]);
 
-  return { messages, loading, error, sendMessage, sendImage };
+  return { messages, loading, error, sendMessage, sendImage, resetSession };
 };

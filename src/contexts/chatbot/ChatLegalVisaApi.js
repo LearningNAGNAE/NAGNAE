@@ -7,17 +7,24 @@ const ChatLegalVisaApiContext = createContext(null);
 export const ChatLegalVisaProvider = ({ children }) => {
   const PythonbaseUrl = store.getState().url.PythonbaseUrl;
 
-  const LegalVisaChatBotData = async (text, sessionId) => {
+  const LegalVisaChatBotData = async (text, sessionId, isNewSession) => {
     const userData = JSON.parse(sessionStorage.getItem('userData'));
     try {
-      console.log('Sending request with data:', { question: text, userNo: userData.apiData.user_No, categoryNo: 1, sessionId });
+      console.log('Sending request with data:', { 
+        question: text, 
+        userNo: userData.apiData.userno, 
+        categoryNo: 1, 
+        session_id: sessionId,
+        is_new_session: isNewSession
+      });
       const response = await axios.post(
         `${PythonbaseUrl}/law`,
         { 
           question: text, 
-          userNo: userData.apiData.user_NO, 
+          userNo: userData.apiData.userno, 
           categoryNo: 1,
-          session_id: sessionId
+          session_id: sessionId,
+          is_new_session: isNewSession
         },
         {
           headers: {
@@ -33,8 +40,14 @@ export const ChatLegalVisaProvider = ({ children }) => {
         console.error('Response data:', error.response.data);
         console.error('Response status:', error.response.status);
         console.error('Response headers:', error.response.headers);
+        throw new Error(`Server error: ${error.response.data.detail || 'Unknown error'}`);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+        throw new Error('No response received from server');
+      } else {
+        console.error('Error setting up request:', error.message);
+        throw error;
       }
-      throw error;
     }
   };
 
