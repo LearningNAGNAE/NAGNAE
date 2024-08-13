@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setToken, clearToken } from '../../redux/actions/AuthActions';
 import { loginUser } from '../../contexts/authorization/AuthorizationApi';
+import { useNavigate } from 'react-router-dom';
 
 const TOKEN_EXPIRATION_TIME = 60 * 60 * 1000; // 60분을 밀리초로 변환
 
@@ -10,6 +11,7 @@ export const useAuth = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const setAuthToken = (token) => {
     const expirationTime = new Date().getTime() + TOKEN_EXPIRATION_TIME;
@@ -46,6 +48,7 @@ export const useAuth = () => {
       sessionStorage.setItem('userData', JSON.stringify(userData)); // 사용자 데이터 저장
       console.log('저장된 토큰:', token);
       console.log('저장된 사용자 데이터:', userData);
+      navigate(-2);
     } catch (err) {
       setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
     }

@@ -5,7 +5,7 @@ const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
 export const loginUser = async (email, password) => {
   try {
-    const response = await axios.post(`${SpringbaseUrl}/users/login/test`, 
+    const response = await axios.post(`${SpringbaseUrl}/users/login`, 
       { email, password }, 
       { headers: { 'Content-Type': 'application/json' } }
     );
@@ -17,6 +17,7 @@ export const loginUser = async (email, password) => {
     
     const token = fullToken.split(' ')[1]; // "Bearer" 제거
 
+    
     // 응답 데이터와 함께 저장
     const userData = response.data;
     sessionStorage.setItem('userData', JSON.stringify(userData));
