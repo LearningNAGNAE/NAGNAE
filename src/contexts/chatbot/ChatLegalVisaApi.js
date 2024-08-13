@@ -7,12 +7,18 @@ const ChatLegalVisaApiContext = createContext(null);
 export const ChatLegalVisaProvider = ({ children }) => {
   const PythonbaseUrl = store.getState().url.PythonbaseUrl;
 
-  const LegalVisaChatBotData = async (text) => {
+  const LegalVisaChatBotData = async (text, sessionId) => {
+    const userData = JSON.parse(sessionStorage.getItem('userData'));
     try {
-      console.log('Sending request with data:', text);
+      console.log('Sending request with data:', { question: text, userNo: userData.apiData.user_No, categoryNo: 1, sessionId });
       const response = await axios.post(
         `${PythonbaseUrl}/law`,
-        text,
+        { 
+          question: text, 
+          userNo: userData.apiData.user_NO, 
+          categoryNo: 1,
+          session_id: sessionId
+        },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -62,16 +68,16 @@ export const ChatLegalVisaProvider = ({ children }) => {
   const value = { LegalVisaChatBotData, describeImage, PythonbaseUrl };
 
   return (
-    <ChatLegalVisaApiContext.Provider value={{ LegalVisaChatBotData, describeImage, PythonbaseUrl }}>
+    <ChatLegalVisaApiContext.Provider value={value}>
       {children}
     </ChatLegalVisaApiContext.Provider>
   );
 };
 
 export const useChatLegalVisaApi = () => {
-    const context = useContext(ChatLegalVisaApiContext);
-    if (context === null) {
-      throw new Error('useChatLegalVisaApi must be used within a ChatLegalVisaProvider');
-    }
-    return context;
-  };
+  const context = useContext(ChatLegalVisaApiContext);
+  if (context === null) {
+    throw new Error('useChatLegalVisaApi must be used within a ChatLegalVisaProvider');
+  }
+  return context;
+};

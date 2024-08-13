@@ -22,10 +22,7 @@ export const useChatLegalVisa = () => {
       setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
 
       try {
-        const response = await LegalVisaChatBotData({
-          question: messageText,
-          session_id: sessionId
-        });
+        const response = await LegalVisaChatBotData(messageText, sessionId);
         setMessages(prevMessages => 
           prevMessages.map(msg => 
             msg.id === loadingMessage.id 
