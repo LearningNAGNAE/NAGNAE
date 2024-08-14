@@ -53,12 +53,14 @@ function Find_Modal() {
   const handleFindId = (e) => {
     e.preventDefault();
     console.log('Find ID with:', findIdData);
+    alert('ID: luuu');
     // ID 찾기 로직 구현
   };
 
   const handleFindPw = (e) => {
     e.preventDefault();
     console.log('Find PW with:', findPwData);
+    alert('PW: 3213');
     // 비밀번호 찾기 로직 구현
   };
   /* find id/pw // */

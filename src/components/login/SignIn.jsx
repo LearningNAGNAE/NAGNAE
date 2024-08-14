@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ConfigProvider, Form, Input, Button, Alert, Checkbox, Row, Col } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useAuth } from '../../hooks/authorization/useAuth';
 import '../../assets/styles/style.scss';
+import FindModal from './FindModal';
 
 const SignIn = () => {
   const { email, setEmail, password, setPassword, error, handleSubmit, rememberMe, setRememberMe } = useAuth();
+
+  // 모달 표시 여부를 관리하는 상태 변수
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleModalOpen = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
 
   const onFinish = (values) => {
     // values 객체에 폼 데이터가 포함되어 있습니다
@@ -58,9 +70,7 @@ const SignIn = () => {
                   </Checkbox>
                 </Col>
                 <Col>
-                  <a className="login-form-forgot" href="/find-account">
-                    Find ID / PW
-                  </a>
+                  <FindModal />
                 </Col>
               </Row>
             </Form.Item>
@@ -79,6 +89,9 @@ const SignIn = () => {
             </Form.Item>
           </Form>
         </div>
+
+        
+
       </div>
     </ConfigProvider>
   );

@@ -1,10 +1,10 @@
 // SignUp.js
 import React from 'react';
-import { useSignUpForm } from '../../hooks/authorization/useSignUpForm';
+import { useModifyAccountForm } from '../../hooks/authorization/useModifyAccountForm';
 import '../../assets/styles/style.scss';
 
-function SignUp() {
-  const { formData, previewUrl, handleChange, handleFileChange, handleSubmit } = useSignUpForm();
+function ModifyAccount() {
+  const { formData, previewUrl, handleChange, handleFileChange, handleSubmit } = useModifyAccountForm();
 
   return (
     <div className="join-nagnae-container">
@@ -85,4 +85,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default ModifyAccount;
