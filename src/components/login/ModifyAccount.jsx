@@ -8,7 +8,7 @@ function ModifyAccount() {
 
   return (
     <div className="join-nagnae-container">
-      <h1 className='join-title'>JOIN NAGNAE</h1>
+      <h1 className='join-title'>Modify NAGNAE</h1>
       
       <div className="profile-picture">
         <label htmlFor="file-upload" className="picture-placeholder">
@@ -29,7 +29,7 @@ function ModifyAccount() {
               className="email"
               placeholder="EMAIL"
               value={formData.email}
-              onChange={handleChange}
+              disabled
             />
           </div>
         </div>
@@ -40,7 +40,7 @@ function ModifyAccount() {
               className="password"
               placeholder="PASSWORD"
               value={formData.password}
-              onChange={handleChange}
+              disabled
             />
           </div>
         </div>
