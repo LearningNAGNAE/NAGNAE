@@ -11,9 +11,9 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 
-function Find_Modal() {
+function Find_Modal({ isOpen, onClose }) {
   /* modal */
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  // const { isOpen, onOpen, onClose } = useDisclosure()
 
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
@@ -67,14 +67,12 @@ function Find_Modal() {
   return (
     <>
 
-      <button className='find-btn' onClick={onOpen}>Find ID / PW</button>
-
-      <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+        <Modal
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          isOpen={isOpen}
+          onClose={onClose}
+        >
         <ModalOverlay />
         <ModalContent maxWidth='700px'>
           <ModalHeader color="#775A45" backgroundColor="#dddddd">Find ID / PW</ModalHeader>

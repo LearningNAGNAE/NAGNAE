@@ -47,12 +47,6 @@ function ChatMedicalWindowInner() {
       </div>
       <div className='wrap-form-box'>
         <form onSubmit={handleSubmit} className='form-box'>
-          <div className='upload-box'>
-            <label htmlFor="file-upload" className="custom-file-upload">
-              <img src={uploadIcon} alt="Upload" className="window-upload-icon" />
-            </label>
-            <input id="file-upload" type="file" accept="image/*" onChange={handleFileUpload} style={{display: 'none'}}/>
-          </div>
           <div className='modal_input_btn'>
             <Record_Modal 
               onRecordingComplete={handleRecordingComplete}

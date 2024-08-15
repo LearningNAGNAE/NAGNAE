@@ -70,7 +70,7 @@ const SignIn = () => {
                   </Checkbox>
                 </Col>
                 <Col>
-                  <FindModal />
+                  <a className='find-btn' onClick={handleModalOpen}>Find ID / PW</a>
                 </Col>
               </Row>
             </Form.Item>
@@ -90,7 +90,7 @@ const SignIn = () => {
           </Form>
         </div>
 
-        
+        <FindModal isOpen={isModalVisible} onClose={handleModalClose} />
 
       </div>
     </ConfigProvider>
