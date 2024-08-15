@@ -1,25 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import sendIcon from '../../assets/images/send.png';
-import sampleImage from '../../assets/images/an_office_compony_1.png';
 import '../../assets/styles/study/ImageStudy.scss';
+import store from '../../redux/Store';
 
 const ImageStudy = () => {
+  const SpringbaseUrl = store.getState().url.SpringbaseUrl;
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showImage, setShowImage] = useState(false);
   const [userSentence, setUserSentence] = useState('');
   const [showAnalysis, setShowAnalysis] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [currentImage, setCurrentImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
-  const categories = [
-    'an office/company',
-    'Shopping',
-    'a restaurant/cafe',
-    'banking/finance',
-    'an emergency situation'
-  ];
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (currentImage) {
+      importImage(currentImage.fileSaveName);
+    }
+  }, [currentImage]);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${SpringbaseUrl}/study/category`);
+      if (response.data.code === "200") {
+        setCategories(response.data.data.studyCategoryList);
+      }
+    } catch (error) {
+      console.error('카테고리를 가져오는 중 오류 발생:', error);
+    }
+  };
+
+  const fetchRandomImage = async (categoryNo) => {
+    try {
+      const response = await axios.get(`${SpringbaseUrl}/study/image/${categoryNo}`);
+      if (response.data.code === "200") {
+        const images = response.data.data.studyImageList;
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        setCurrentImage(randomImage);
+        setShowImage(true);
+      }
+    } catch (error) {
+      console.error('이미지를 가져오는 중 오류 발생:', error);
+    }
+  };
+
+  const importImage = async (filename) => {
+    try {
+      const image = await import(`../../assets/images/study/${filename}`);
+      setImageUrl(image.default);
+    } catch (error) {
+      console.error('이미지를 불러오는 중 오류 발생:', error);
+      setImageUrl(null);
+    }
+  };
 
   const handleRefresh = () => {
     if (selectedCategory) {
-      setShowImage(true);
+      fetchRandomImage(selectedCategory);
       setShowAnalysis(false);
     }
   };
@@ -30,8 +72,8 @@ const ImageStudy = () => {
 
   return (
     <div className="image-study">
-      <h1>Learning Korean to Image</h1>
-      <h2>Loot at the image and Say the appropriate sentence!</h2>
+      <h1>이미지로 한국어 학습하기</h1>
+      <h2>이미지를 보고 알맞은 문장을 말해보세요!</h2>
       <br/>
       
       <div className="category-selector">
@@ -39,29 +81,58 @@ const ImageStudy = () => {
           value={selectedCategory} 
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
-          <option value="">Please choose a category</option>
-          {categories.map((category, index) => (
-            <option key={index} value={category}>{category}</option>
+          <option value="">카테고리를 선택해주세요</option>
+          {categories.map((category) => (
+            <option key={category.categoryNo} value={category.categoryNo}>
+              {category.categoryName}
+            </option>
           ))}
         </select>
         <button className="refresh-button" onClick={handleRefresh}>
-          <img src={sendIcon} alt="Send" className="window-send-icon" />
+          <img src={sendIcon} alt="새로고침" className="window-send-icon" />
         </button>
       </div>
 
-      {showImage && (
+      {showImage && imageUrl && (
         <>
           <div className="image-display">
-            <img src={sampleImage} alt="Sample for the selected category" />
+            <img 
+              src={imageUrl} 
+              alt="선택된 카테고리의 샘플" 
+            />
           </div>
 
           <div className="action-buttons">
             <button className="record-button">
               <span className="record-icon">🎙️</span>
-              Record
+              녹음
             </button>
             <button className="send-button" onClick={handleSend}>
-              <img src={sendIcon} alt="Send" className="send-icon" />
+              <img src={sendIcon} alt="전송" className="send-icon" />
+            </button>
+          </div>
+        </>
+      )}
+
+      {showAnalysis && (
+        <>
+          <div className="user-input-section">
+            <p>입력한 문장:</p>
+            <input 
+              type="text" 
+              value={userSentence} 
+              onChange={(e) => setUserSentence(e.target.value)}
+              placeholder="이미지에 대한 설명을 입력하세요."
+            />
+          </div>
+
+          <div className="action-buttons">
+            <button className="record-button">
+              <span className="record-icon">🎙️</span>
+              녹음
+            </button>
+            <button className="send-button" onClick={handleSend}>
+              <img src={sendIcon} alt="전송" className="send-icon" />
             </button>
           </div>
         </>

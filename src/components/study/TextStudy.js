@@ -1,26 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import sendIcon from '../../assets/images/send.png';
 import '../../assets/styles/study/TextStudy.scss';
+import store from '../../redux/Store';
 
 const TextStudy = () => {
-  const [sentence, setSentence] = useState('우리는 새로운 고객과 계약을 체결했습니다.');
+
+  const SpringbaseUrl = store.getState().url.SpringbaseUrl;
+
+  const [sentence, setSentence] = useState('');
   const [userSentence, setUserSentence] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showSentence, setShowSentence] = useState(false);
   const [showUserInput, setShowUserInput] = useState(false);
+  const [categories, setCategories] = useState([]);
 
-  const categories = [
-    'an office/company',
-    'Shopping',
-    'a restaurant/cafe',
-    'banking/finance',
-    'an emergency situation'
-  ];
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${SpringbaseUrl}/study/category`);
+      if (response.data.code === "200") {
+        setCategories(response.data.data.studyCategoryList);
+      }
+    } catch (error) {
+      console.error('Error retrieving category:', error);
+    }
+  };
+
+  const fetchSentence = async () => {
+    if (!selectedCategory) return;
+
+    try {
+      const response = await axios.get(`${SpringbaseUrl}/study/text/${selectedCategory}`);
+      if (response.data.code === "200") {
+        const sentences = response.data.data.studyTextList;
+        const randomSentence = sentences[Math.floor(Math.random() * sentences.length)];
+        setSentence(randomSentence.text);
+      }
+    } catch (error) {
+      console.error('Error retrieving sentence:', error);
+    }
+  };
 
   const handleRefresh = () => {
     if (selectedCategory) {
+      fetchSentence();
       setShowSentence(true);
-      setShowUserInput(false); // Your Sentence 컴포넌트를 숨깁니다.
+      setShowUserInput(false);
     }
   };
 
@@ -31,7 +60,7 @@ const TextStudy = () => {
   return (
     <div className="text-study">
       <h1>Learning Korean to Text</h1>
-      <h2>Look and Read the sentence!</h2>
+      <h2>Look at the sentences and read them!</h2>
       <br/>
       
       <div className="category-selector">
@@ -40,12 +69,14 @@ const TextStudy = () => {
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
           <option value="">Please choose a category</option>
-          {categories.map((category, index) => (
-            <option key={index} value={category}>{category}</option>
+          {categories.map((category) => (
+            <option key={category.categoryNo} value={category.categoryNo}>
+              {category.categoryName}
+            </option>
           ))}
         </select>
         <button className="refresh-button" onClick={handleRefresh}>
-          <img src={sendIcon} alt="Send" className="window-send-icon" />
+          <img src={sendIcon} alt="send" className="window-send-icon" />
         </button>
       </div>
 
@@ -53,17 +84,16 @@ const TextStudy = () => {
         <>
           <div className="sentence-display">
             <p>{sentence}</p>
-            <p>(We signed a contract with a new client.)</p>
             <button className="audio-button">🔊</button>
           </div>
 
           <div className="action-buttons">
             <button className="record-button">
               <span className="record-icon">🎙️</span>
-              Record
+              record
             </button>
             <button className="send-button" onClick={handleSend}>
-              <img src={sendIcon} alt="Send" className="send-icon" />
+              <img src={sendIcon} alt="send" className="send-icon" />
             </button>
           </div>
         </>
@@ -71,12 +101,12 @@ const TextStudy = () => {
 
       {showUserInput && (
         <div className="user-input-section">
-          <p>Your Sentence:</p>
+          <p>your sentence:</p>
           <input 
             type="text" 
             value={userSentence} 
             onChange={(e) => setUserSentence(e.target.value)}
-            placeholder="우리는 새로운 고객과 계약을 체결했습니다."
+            placeholder={sentence}
           />
         </div>
       )}
