@@ -18,7 +18,7 @@ export const useChatStudy = () => {
         input: text,
         session_id: String(userData.apiData.userID)
       });
-      setMessages(prev => [...prev, { text: response.response, isUser: false }]);
+      setMessages(prev => [...prev, { text: response.answer, isUser: false }]);
     } catch (error) {
       setError(error);
     } finally {

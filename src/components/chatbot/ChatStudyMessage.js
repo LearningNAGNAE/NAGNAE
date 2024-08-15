@@ -8,14 +8,14 @@ function ChatStudyMessage({ message }) {
     if (typeof text === 'string') {
       try {
         const jsonObject = JSON.parse(text);
-        if (jsonObject.output) {
-          text = jsonObject.output;
+        if (jsonObject.answer) {
+          text = jsonObject.answer;
         }
       } catch (e) {
         // JSON 파싱에 실패하면 원래 텍스트를 그대로 사용
       }
-    } else if (typeof text === 'object' && text.output) {
-      text = text.output;
+    } else if (typeof text === 'object' && text.answer) {
+      text = text.answer;
     }
   
     if (typeof text !== 'string') return JSON.stringify(text);
