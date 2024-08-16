@@ -5,7 +5,7 @@ import ChatMessage from './ChatLegalVisaMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
 import uploadIcon from '../../assets/images/free-icon-grab.png';
 import sendIcon from '../../assets/images/send.png';
-import Record_Modal from './Record_Modal';
+import RecordModal from './RecordModal';
 import { ChatLegalVisaProvider } from '../../contexts/chatbot/ChatLegalVisaApi';
 
 function ChatLegalVisaWindowInner() {
@@ -48,7 +48,7 @@ function ChatLegalVisaWindowInner() {
       <div className='wrap-form-box'>
         <form onSubmit={handleSubmit} className='form-box'>
           <div className='modal_input_btn'>
-            <Record_Modal 
+            <RecordModal 
               onRecordingComplete={handleRecordingComplete}
               onAudioSend={handleAudioSend}
             />

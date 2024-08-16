@@ -3,7 +3,7 @@ import ChatMessage from './ChatJobMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
 import uploadIcon from '../../assets/images/free-icon-grab.png';
 import sendIcon from '../../assets/images/send.png';
-import Record_Modal from '../chatbot/Record_Modal';
+import RecordModal from '../chatbot/RecordModal';
 import axios from 'axios'; // axios를 사용하여 HTTP 요청 전송
 
 function ChatJobWindow() {
@@ -75,7 +75,7 @@ function ChatJobWindow() {
         <form onSubmit={handleSubmit} className='form-box'>
           
           <div className='modal_input_btn'>
-            <Record_Modal 
+            <RecordModal 
               onRecordingComplete={(blob) => console.log('Recording completed', blob)}
               onAudioSend={(data) => console.log('Audio data', data)}
             />

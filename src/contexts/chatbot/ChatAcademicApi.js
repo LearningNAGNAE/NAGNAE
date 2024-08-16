@@ -3,14 +3,14 @@ import axios from 'axios';
 import store from '../../redux/Store';
 const PythonbaseUrl = store.getState().url.PythonbaseUrl;
 
-export const ChatStudyApi = createContext();
+export const ChatAcademicApi = createContext();
 
-export const ChatStudyProvider = ({ children }) => {
+export const ChatAcademicProvider = ({ children }) => {
 
-  const StudyChatBotData = async (data) => {
+  const AcademicChatBotData = async (data) => {
     console.log('Sending request data:', JSON.stringify(data));
     try {
-      const StudyChatbotResponse = await axios.post(`${PythonbaseUrl}/study`, 
+      const AcademicChatbotResponse = await axios.post(`${PythonbaseUrl}/academic`, 
         data,
         {
           headers: {
@@ -18,8 +18,8 @@ export const ChatStudyProvider = ({ children }) => {
           },
         }
       );
-      console.log('Received response:', StudyChatbotResponse.data);
-      return StudyChatbotResponse.data;
+      console.log('Received response:', AcademicChatbotResponse.data);
+      return AcademicChatbotResponse.data;
     } catch (error) {
       console.error('Error:', error);
       if (error.response) {
@@ -31,9 +31,9 @@ export const ChatStudyProvider = ({ children }) => {
     }
   };
   return (
-    <ChatStudyApi.Provider value={{ StudyChatBotData }}>
+    <ChatAcademicApi.Provider value={{ AcademicChatBotData }}>
         {children}
-    </ChatStudyApi.Provider>
+    </ChatAcademicApi.Provider>
   );
   
 };

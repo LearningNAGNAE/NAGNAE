@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useChatStudy } from '../../hooks/chatbot/useChatStudy';
+import React from 'react';
+import { useChatAcademic } from '../../hooks/chatbot/useChatAcademic';
 import { useScrollToBottom, useMessageInput } from '../../hooks/chatbot/useScrollToBottom';
-import ChatStudyMessage from './ChatStudyMessage';
+import ChatAcademicMessage from './ChatAcademicMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
-import uploadIcon from '../../assets/images/free-icon-grab.png';
 import sendIcon from '../../assets/images/send.png';
-import Record_Modal from '../chatbot/Record_Modal';
+import RecordModal from './RecordModal';
 
-function ChatStudyWindow() {
-  const { messages, loading, error, sendMessage } = useChatStudy();
+function ChatAcademicWindow() {
+  const { messages, loading, error, sendMessage } = useChatAcademic();
   const messagesContainerRef = useScrollToBottom([messages]);
   const { input, setInput, handleSubmit, handleKeyPress } = useMessageInput(sendMessage);
 
@@ -18,7 +17,7 @@ function ChatStudyWindow() {
     <div className="chat-window">
       <div className="messages" ref={messagesContainerRef}>
         {messages.map((message, index) => (
-          <ChatStudyMessage key={index} message={message} />
+          <ChatAcademicMessage key={index} message={message} />
         ))}
         {loading && <p>로딩 중...</p>}
         {error && <p>에러 발생: {error.message}</p>}
@@ -26,7 +25,7 @@ function ChatStudyWindow() {
       <div className='wrap-form-box'>
         <form onSubmit={handleSubmit} className='form-box'>
           <div className='modal_input_btn'>
-            <Record_Modal 
+            <RecordModal 
               onRecordingComplete={(blob) => console.log('Recording completed', blob)}
               onAudioSend={(data) => console.log('Audio data', data)}
             />
@@ -49,4 +48,4 @@ function ChatStudyWindow() {
   );
 }
 
-export default ChatStudyWindow;
+export default ChatAcademicWindow;

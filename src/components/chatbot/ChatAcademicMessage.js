@@ -3,7 +3,7 @@ import '../../assets/styles/chatbot/ChatMessage.css';
 import userIcon from '../../assets/images/user.png';
 import botIcon from '../../assets/images/chatbot.png';
 
-function ChatStudyMessage({ message }) {
+function ChatAcademicMessage({ message }) {
   const formatText = (text) => {
     if (typeof text === 'string') {
       try {
@@ -76,4 +76,4 @@ function ChatStudyMessage({ message }) {
   );
 }
 
-export default ChatStudyMessage;
+export default ChatAcademicMessage;

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../assets/styles/chatbot/Record_Modal.scss';
+import '../../assets/styles/chatbot/RecordModal.scss';
 import {
   Modal,
   ModalOverlay,
@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { useRecorder } from '../../hooks/chatbot/useRecorder';
 
-function Record_Modal({ onRecordingComplete, onAudioSend }) {
+function RecordModal({ onRecordingComplete, onAudioSend }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
     isRecording,
@@ -106,4 +106,4 @@ function Record_Modal({ onRecordingComplete, onAudioSend }) {
   )
 }
 
-export default Record_Modal;
+export default RecordModal;
