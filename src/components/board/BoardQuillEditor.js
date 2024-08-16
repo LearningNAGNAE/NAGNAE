@@ -2,6 +2,9 @@ import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css'; // Quill CSS 스타일을 임포트합니다.
 
+
+
+
 const Editor = forwardRef(
   ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
     const containerRef = useRef(null);
@@ -30,17 +33,34 @@ const Editor = forwardRef(
       const editorContainer = container.appendChild(
         container.ownerDocument.createElement('div')
       );
+
+      // CSS 클래스 추가
+      editorContainer.className = 'quill-editor';
+
+      const toolbarOptions = [
+        [{ 'header': [1, 2, false] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        ['video', 'image'],
+        ['clean']
+      ]
       
       const quill = new Quill(editorContainer, {
         theme: 'snow',
         modules: {
-          toolbar: [
-            [{ 'header': [1, 2, false] }],
-            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-            [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-            ['link', 'image'],
-            ['clean']
-          ],
+          toolbar: {
+            container: toolbarOptions,
+            handlers: {
+              link: function (value) {
+                if (value) {
+                  const href = prompt('Enter the URL');
+                  this.quill.format('link', href);
+                } else {
+                  this.quill.format('link', false);
+                }
+              }
+            }
+          }
         }
       });
 

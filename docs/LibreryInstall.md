@@ -13,3 +13,5 @@ npm install redux react-redux redux-thunk
 npm install @reduxjs/toolkit
 
 npm install quill
+
+npm install quill-image-resize
