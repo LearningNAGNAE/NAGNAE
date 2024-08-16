@@ -6,7 +6,6 @@ import SignPage from './pages/SignPage';
 import ChatBotPage from './pages/ChatBotPage';
 import BoardPage from './pages/BoardPage';
 import StudyPage from './pages/StudyPage';
-// 1. import `ChakraProvider` component
 import './assets/styles/global.scss';
 import { ChakraProvider } from '@chakra-ui/react'
 import { Provider } from 'react-redux';
@@ -18,7 +17,7 @@ function App() {
       <ChakraProvider>
         <BrowserRouter>
           <div className="App">
-            <Header  />
+            <Header />
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/ChatBotPage" element={<ChatBotPage />} />
