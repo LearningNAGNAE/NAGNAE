@@ -1,42 +1,20 @@
 import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
-import "../../assets/styles/board/quillstyle.css";
+import 'quill/dist/quill.snow.css'; // Ensure the Quill stylesheet is included
 import ImageResize from 'quill-image-resize';
+import { usePostFormAPI } from '../../contexts/board/Board_Comm_PostFormApi'; // Import the API context
 
+// Register Quill modules
 Quill.register('modules/ImageResize', ImageResize);
 
-function imageHandler() {
-  const input = document.createElement('input');
-  input.setAttribute('type', 'file');
-  input.setAttribute('accept', 'image/*');
-  input.click();
-
-  input.onchange = async () => {
-    const file = input.files[0];
-    
-    // 이미지 업로드 함수 호출
-    const url = await handleImageUpload(file);
-
-    if (url) {
-      // 이미지 URL을 에디터에 삽입
-      const range = this.quill.getSelection();
-      this.quill.insertEmbed(range.index, 'image', url);
-    } else {
-      console.error('Failed to upload image.');
-    }
-  };
-}
-
-// Size와 Font 설정
-const Size = Quill.import("formats/size");
-Size.whitelist = ["small", "medium", "large", "huge"];
+const Size = Quill.import('formats/size');
+Size.whitelist = ['small', 'medium', 'large', 'huge'];
 Quill.register(Size, true);
 
-const Font = Quill.import("attributors/class/font");
-Font.whitelist = ["arial", "buri", "gangwon"];
+const Font = Quill.import('attributors/class/font');
+Font.whitelist = ['arial', 'buri', 'gangwon'];
 Quill.register(Font, true);
 
-// QuillToolbar 컴포넌트
 const QuillToolbar = () => (
   <div id="toolbar">
     <span className="ql-formats">
@@ -95,83 +73,99 @@ const QuillToolbar = () => (
   </div>
 );
 
-const Editor = forwardRef(
-  ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
-    const containerRef = useRef(null);
-    const defaultValueRef = useRef(defaultValue);
-    const onTextChangeRef = useRef(onTextChange);
-    const onSelectionChangeRef = useRef(onSelectionChange);
+const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
+  const containerRef = useRef(null);
+  const defaultValueRef = useRef(defaultValue);
+  const onTextChangeRef = useRef(onTextChange);
+  const onSelectionChangeRef = useRef(onSelectionChange);
+  const { handleImageUpload } = usePostFormAPI(); // Ensure to use the hook correctly
 
-    useLayoutEffect(() => {
-      onTextChangeRef.current = onTextChange;
-      onSelectionChangeRef.current = onSelectionChange;
+  useLayoutEffect(() => {
+    onTextChangeRef.current = onTextChange;
+    onSelectionChangeRef.current = onSelectionChange;
+  }, [onTextChange, onSelectionChange]);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.enable(!readOnly);
+    }
+  }, [ref, readOnly]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const editorContainer = container.appendChild(
+      container.ownerDocument.createElement('div')
+    );
+    editorContainer.className = 'quill-editor';
+
+    const quill = new Quill(editorContainer, {
+      modules: {
+        toolbar: '#toolbar',
+        history: {
+          delay: 1000,
+          maxStack: 500,
+          userOnly: true
+        },
+        ImageResize: {
+          parchment: Quill.import('parchment')
+        }
+      },
+      theme: 'snow'
     });
 
-    useEffect(() => {
-      if (ref.current) {
-        ref.current.enable(!readOnly);
-      }
-    }, [ref, readOnly]);
+    // Register image handler after creating Quill instance
+    quill.getModule('toolbar').addHandler('image', () => {
+      const input = document.createElement('input');
+      input.setAttribute('type', 'file');
+      input.setAttribute('accept', 'image/*');
+      input.click();
 
-    useEffect(() => {
-      const container = containerRef.current;
-      if (!container) return;
+      input.onchange = async () => {
+        const file = input.files[0];
+        const url = await handleImageUpload(file);
 
-      const editorContainer = container.appendChild(
-        container.ownerDocument.createElement('div')
-      );
-      editorContainer.className = 'quill-editor';
-
-      const quill = new Quill(editorContainer, {
-        modules: {
-          toolbar: '#toolbar',
-          history: {
-            delay: 1000,
-            maxStack: 500,
-            userOnly: true
-          },
-          handlers: {
-            image: imageHandler // 이미지 핸들러 추가
-          },    
-          ImageResize: {
-            parchment: Quill.import('parchment')
-          }
-        },
-        theme: 'snow'
-      });
-
-      if (ref) {
-        ref.current = quill;
-      }
-
-      if (defaultValueRef.current) {
-        quill.setContents(defaultValueRef.current);
-      }
-
-      quill.on('text-change', (...args) => {
-        onTextChangeRef.current?.(...args);
-      });
-
-      quill.on('selection-change', (...args) => {
-        onSelectionChangeRef.current?.(...args);
-      });
-
-      return () => {
-        if (ref.current) {
-          ref.current = null;
+        if (url) {
+          const range = quill.getSelection();
+          quill.insertEmbed(range.index, 'image', url);
+        } else {
+          console.error('Failed to upload image.');
         }
-        container.innerHTML = '';
       };
-    }, [ref]);
+    });
 
-    return (
-      <div>
-        <QuillToolbar />
-        <div ref={containerRef}></div>
-      </div>
-    );
-  }
-);
+    if (ref) {
+      ref.current = quill;
+    }
+
+    if (defaultValueRef.current) {
+      quill.setContents(defaultValueRef.current);
+    }
+
+    quill.on('text-change', (...args) => {
+      onTextChangeRef.current?.(...args);
+    });
+
+    quill.on('selection-change', (...args) => {
+      onSelectionChangeRef.current?.(...args);
+    });
+
+    return () => {
+      if (ref.current) {
+        ref.current = null;
+      }
+      container.innerHTML = '';
+    };
+  }, [ref, handleImageUpload]);
+
+  return (
+    <div>
+      <QuillToolbar />
+      <div ref={containerRef}></div>
+    </div>
+  );
+});
 
 Editor.displayName = 'Editor';
 

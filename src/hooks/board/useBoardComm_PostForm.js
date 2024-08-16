@@ -1,4 +1,3 @@
-// usePostForm.js
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePostFormAPI } from '../../contexts/board/Board_Comm_PostFormApi';
