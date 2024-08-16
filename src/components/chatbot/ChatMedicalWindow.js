@@ -3,7 +3,6 @@ import { useChatMedical } from '../../hooks/chatbot/useChatMedical';
 import { useScrollToBottom, useMessageInput } from '../../hooks/chatbot/useScrollToBottom';
 import ChatMessage from './ChatMedicalMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
-import uploadIcon from '../../assets/images/free-icon-grab.png';
 import sendIcon from '../../assets/images/send.png';
 import RecordModal from './RecordModal';
 import { ChatMedicalProvider } from '../../contexts/chatbot/ChatMedicalApi';

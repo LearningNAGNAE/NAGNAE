@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ChatMessage from './ChatJobMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
-import uploadIcon from '../../assets/images/free-icon-grab.png';
 import sendIcon from '../../assets/images/send.png';
 import RecordModal from '../chatbot/RecordModal';
 import axios from 'axios'; // axios를 사용하여 HTTP 요청 전송

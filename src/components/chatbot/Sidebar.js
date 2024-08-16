@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Flex, Box } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Flex } from '@chakra-ui/react'
 import '../../assets/styles/chatbot/Sidebar.css';
 import ChatLegalVisaWindow from '../chatbot/ChatLegalVisaWindow';
 import ChatMedicalWindow from '../chatbot/ChatMedicalWindow';
