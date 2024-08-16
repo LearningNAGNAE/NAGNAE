@@ -66,7 +66,7 @@ const TextStudy = () => {
         const formData = new FormData();
         formData.append('file', audioBlob, 'recording.webm');
         
-        const response = await axios.post(`${PythonbaseUrl}/api/automaticspeechrecognition`, formData, {
+        const response = await axios.post(`${PythonbaseUrl}/speech-to-text`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -93,7 +93,7 @@ const TextStudy = () => {
     setIsPlaying(true);
     try {
       const response = await axios.post(
-        `${PythonbaseUrl}/text-to-speech/`,
+        `${PythonbaseUrl}/text-to-speech`,
         { text: sentence },
         { responseType: 'blob' }
       );
@@ -216,13 +216,8 @@ const TextStudy = () => {
 
       {showUserInput && (
         <div className="user-input-section">
-          <p>your sentence:</p>
-          <input 
-            type="text" 
-            value={userSentence} 
-            onChange={(e) => setUserSentence(e.target.value)}
-            placeholder={sentence}
-          />
+          <p>Your sentence:</p>
+          <p className="user-sentence">{userSentence}</p>
         </div>
       )}
     </div>
