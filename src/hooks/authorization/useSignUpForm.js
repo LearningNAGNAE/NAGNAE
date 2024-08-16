@@ -10,7 +10,7 @@ export function useSignUpForm() {
     username: '',
     nationlity: '',
     userhp: '',
-    fileno: null
+    file: null
   });
   const [previewUrl, setPreviewUrl] = useState(null);
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export function useSignUpForm() {
     if (file) {
       setFormData(prevState => ({
         ...prevState,
-        fileno: file
+        file: file
       }));
       
       const reader = new FileReader();
