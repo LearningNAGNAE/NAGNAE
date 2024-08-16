@@ -7,8 +7,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
-  useDisclosure
+  Button
 } from '@chakra-ui/react'
 
 function Find_Modal({ isOpen, onClose }) {
