@@ -24,7 +24,7 @@ export const useChatMedical = () => {
       setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
 
       try {
-        const response = await MedicalChatBotData(messageText, sessionIdRef.current, isNewSessionRef.current);
+        const response = await MedicalChatBotData(messageText);
         setMessages(prevMessages => 
           prevMessages.map(msg => 
             msg.id === loadingMessage.id 
@@ -32,12 +32,10 @@ export const useChatMedical = () => {
                   ...msg, 
                   isLoading: false, 
                   text: response.answer, 
-                  detectedLanguage: response.detected_language 
                 }
               : msg
           )
         );
-        isNewSessionRef.current = false;  // 첫 메시지 이후로는 새 세션이 아님
       } catch (error) {
         console.error('Error sending message:', error);
         setError(error);

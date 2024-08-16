@@ -7,16 +7,9 @@ const ChatMedicalApiContext = createContext(null);
 export const ChatMedicalProvider = ({ children }) => {
   const PythonbaseUrl = store.getState().url.PythonbaseUrl;
 
-  const MedicalChatBotData = async (text, sessionId, isNewSession) => {
-    const userData = JSON.parse(sessionStorage.getItem('userData'));
+  const MedicalChatBotData = async (text) => {
     try {
-      console.log('Sending request with data:', { 
-        question: text, 
-        userNo: userData.apiData.userno, 
-        categoryNo: 1, 
-        session_id: sessionId,
-        is_new_session: isNewSession
-      });
+      console.log('Sending request with data:', { input: text });
       const response = await axios.post(
         `${PythonbaseUrl}/medical`,
         { 
