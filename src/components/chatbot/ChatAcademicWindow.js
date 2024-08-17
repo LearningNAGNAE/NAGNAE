@@ -39,7 +39,7 @@ function ChatAcademicWindow() {
               placeholder="질문을 입력하세요..."
             />
           </div>
-          <button className='send-btn' type="submit">
+          <button className='send-btn' type="submit" disabled={!input.trim()}>
             <img src={sendIcon} alt="Send" className="window-send-icon" />
           </button>
         </form>

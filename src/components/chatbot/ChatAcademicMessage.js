@@ -70,7 +70,20 @@ function ChatAcademicMessage({ message }) {
         />
       )}
       <div className={`message ${message.isUser ? 'user' : 'bot'}`}>
-        {formatText(message.text)}
+        {message.image && (
+          <div className="message-image-container">
+            <img src={message.image} alt="Uploaded" className="message-image" />
+          </div>
+        )}
+        {message.isLoading ? (
+          <div className="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        ) : (
+          message.text && formatText(message.text)
+        )}
       </div>
     </div>
   );

@@ -2,9 +2,13 @@
 import React from 'react';
 import { useModifyAccountForm } from '../../hooks/authorization/useModifyAccountForm';
 import '../../assets/styles/style.scss';
+// import user_img from '../../assets/images/img/1723902099215a950f7ed-4993-4b93-a8c1-5b57874997ee.png';
 
 function ModifyAccount() {
   const { formData, previewUrl, handleChange, handleFileChange, handleSubmit } = useModifyAccountForm();
+  const userData = JSON.parse(sessionStorage.getItem('userData'))
+  const savenameinfo = userData.apiData.savename;
+  
 
   return (
     <div className="join-nagnae-container">
@@ -16,7 +20,13 @@ function ModifyAccount() {
           {previewUrl ? (
             <img className='user-profile-img' src={previewUrl} alt="Profile preview" />
           ) : (
-            <span>picture</span>
+            (() => {
+              if (savenameinfo != null) {
+                return <img className='user-profile-img' src={require(`../../assets/images/img/${savenameinfo}`)} alt="Profile preview" />;
+              } else {
+                return <span>picture</span>;
+              }
+            })()
           )}
         </label>
       </div>
@@ -40,7 +50,7 @@ function ModifyAccount() {
               className="password"
               placeholder="PASSWORD"
               value={formData.password}
-              disabled
+              onChange={handleChange} 
             />
           </div>
         </div>
@@ -79,7 +89,7 @@ function ModifyAccount() {
           </div>
         </div>
 
-        <button type="submit" className="create-account-btn">Create Account</button>
+        <button type="submit" className="create-account-btn">Modify Account</button>
       </form>
     </div>
   );
