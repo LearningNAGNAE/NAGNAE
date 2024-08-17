@@ -3,10 +3,9 @@ import store from '../../redux/Store';
 
 const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
-export const signUp = async (formData) => {
+export const modifyAccount = async (formData) => {
 
   try {
-
 
     const data = new FormData();
     
@@ -23,16 +22,23 @@ export const signUp = async (formData) => {
     console.log(data.get('file'));
     
 
-    const response = await axios.post(`${SpringbaseUrl}/users/sign-up`, 
+    await axios.put(`${SpringbaseUrl}/users/modify-account`, 
       data,
       { headers: { 'Content-Type': 'multipart/form-data' } }
     );
     
 
+    const loginuserinfo = await axios.post(`${SpringbaseUrl}/users/one-user-info`, 
+      {userno: userInfo.userno},
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+    const newUserData = loginuserinfo.data;
+    sessionStorage.setItem('userData', JSON.stringify(newUserData));
+    
     // 응답 데이터와 함께 저장
-    const signUpData = response.data;
+    const loginuserInfoData = loginuserinfo.data;
 
-    return signUpData;
+    return {loginuserInfoData};
   } catch (error) {
     console.error('빈칸 있음:', error.response?.data || error.message);
     throw error;

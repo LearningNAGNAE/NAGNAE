@@ -1,38 +1,46 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { createContext, useContext, useCallback } from 'react';
 import axios from 'axios';
 import store from '../../redux/Store';
 
-const userData = JSON.parse(sessionStorage.getItem('userData'));
+const PostFormAPIContext = createContext();
 
-export const usePostForm = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const navigate = useNavigate();
+export const usePostFormAPI = () => {
+  return useContext(PostFormAPIContext);
+};
+
+export const PostFormAPIProvider = ({ children }) => {
   const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleImageUpload = useCallback(async (file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const response = await axios.post(`${SpringbaseUrl}/upload-image`, formData);
+      return response.data.url; // 업로드된 이미지의 URL 반환
+    } catch (error) {
+      console.error('Image upload failed:', error);
+      return null;
+    }
+  }, [SpringbaseUrl]);
 
+  const submitPost = useCallback(async (title, htmlContent, userData) => {
     try {
       const response = await axios.post(`${SpringbaseUrl}/board/freeboardwrite`, {
         title,
-        content,
-        userid: userData.apiData.userID
+        content: htmlContent, // HTML 내용을 그대로 전송
+        insertuserno: userData.apiData.userno,
+        modifyuserno: userData.apiData.userno,
       });
-      console.log('Post created:', response.data);
-      // console.log(userData.apiData.userName);
-      navigate('/BoardPage?type=Comm_PostList');
+      return response.data;
     } catch (error) {
       console.error('Error creating post:', error);
+      throw error;
     }
-  };
+  }, [SpringbaseUrl]);
 
-  return {
-    title,
-    setTitle,
-    content,
-    setContent,
-    handleSubmit
-  };
+  return (
+    <PostFormAPIContext.Provider value={{ handleImageUpload, submitPost }}>
+      {children}
+    </PostFormAPIContext.Provider>
+  );
 };

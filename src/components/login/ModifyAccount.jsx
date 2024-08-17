@@ -1,14 +1,18 @@
 // SignUp.js
 import React from 'react';
-import { useSignUpForm } from '../../hooks/authorization/useSignUpForm';
+import { useModifyAccountForm } from '../../hooks/authorization/useModifyAccountForm';
 import '../../assets/styles/style.scss';
+// import user_img from '../../assets/images/img/1723902099215a950f7ed-4993-4b93-a8c1-5b57874997ee.png';
 
-function SignUp() {
-  const { formData, previewUrl, handleChange, handleFileChange, handleSubmit } = useSignUpForm();
+function ModifyAccount() {
+  const { formData, previewUrl, handleChange, handleFileChange, handleSubmit } = useModifyAccountForm();
+  const userData = JSON.parse(sessionStorage.getItem('userData'))
+  const savenameinfo = userData.apiData.savename;
+  
 
   return (
     <div className="join-nagnae-container">
-      <h1 className='join-title'>JOIN NAGNAE</h1>
+      <h1 className='join-title'>Modify NAGNAE</h1>
       
       <div className="profile-picture">
         <label htmlFor="file-upload" className="picture-placeholder">
@@ -16,7 +20,13 @@ function SignUp() {
           {previewUrl ? (
             <img className='user-profile-img' src={previewUrl} alt="Profile preview" />
           ) : (
-            <span>picture</span>
+            (() => {
+              if (savenameinfo != null) {
+                return <img className='user-profile-img' src={require(`../../assets/images/img/${savenameinfo}`)} alt="Profile preview" />;
+              } else {
+                return <span>picture</span>;
+              }
+            })()
           )}
         </label>
       </div>
@@ -29,7 +39,7 @@ function SignUp() {
               className="email"
               placeholder="EMAIL"
               value={formData.email}
-              onChange={handleChange}
+              disabled
             />
           </div>
         </div>
@@ -40,7 +50,7 @@ function SignUp() {
               className="password"
               placeholder="PASSWORD"
               value={formData.password}
-              onChange={handleChange}
+              onChange={handleChange} 
             />
           </div>
         </div>
@@ -79,10 +89,10 @@ function SignUp() {
           </div>
         </div>
 
-        <button type="submit" className="create-account-btn">Create Account</button>
+        <button type="submit" className="create-account-btn">Modify Account</button>
       </form>
     </div>
   );
 }
 
-export default SignUp;
+export default ModifyAccount;

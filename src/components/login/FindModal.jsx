@@ -7,13 +7,12 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
-  useDisclosure
+  Button
 } from '@chakra-ui/react'
 
-function Find_Modal() {
+function Find_Modal({ isOpen, onClose }) {
   /* modal */
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  // const { isOpen, onOpen, onClose } = useDisclosure()
 
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
@@ -53,26 +52,26 @@ function Find_Modal() {
   const handleFindId = (e) => {
     e.preventDefault();
     console.log('Find ID with:', findIdData);
+    alert('ID: luuu');
     // ID 찾기 로직 구현
   };
 
   const handleFindPw = (e) => {
     e.preventDefault();
     console.log('Find PW with:', findPwData);
+    alert('PW: 3213');
     // 비밀번호 찾기 로직 구현
   };
   /* find id/pw // */
   return (
     <>
 
-      <button className='find-btn' onClick={onOpen}>Find ID / PW</button>
-
-      <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+        <Modal
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          isOpen={isOpen}
+          onClose={onClose}
+        >
         <ModalOverlay />
         <ModalContent maxWidth='700px'>
           <ModalHeader color="#775A45" backgroundColor="#dddddd">Find ID / PW</ModalHeader>

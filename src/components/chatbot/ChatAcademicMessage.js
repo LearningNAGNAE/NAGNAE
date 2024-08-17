@@ -3,19 +3,19 @@ import '../../assets/styles/chatbot/ChatMessage.css';
 import userIcon from '../../assets/images/user.png';
 import botIcon from '../../assets/images/chatbot.png';
 
-function ChatStudyMessage({ message }) {
+function ChatAcademicMessage({ message }) {
   const formatText = (text) => {
     if (typeof text === 'string') {
       try {
         const jsonObject = JSON.parse(text);
-        if (jsonObject.output) {
-          text = jsonObject.output;
+        if (jsonObject.answer) {
+          text = jsonObject.answer;
         }
       } catch (e) {
         // JSON 파싱에 실패하면 원래 텍스트를 그대로 사용
       }
-    } else if (typeof text === 'object' && text.output) {
-      text = text.output;
+    } else if (typeof text === 'object' && text.answer) {
+      text = text.answer;
     }
   
     if (typeof text !== 'string') return JSON.stringify(text);
@@ -70,10 +70,23 @@ function ChatStudyMessage({ message }) {
         />
       )}
       <div className={`message ${message.isUser ? 'user' : 'bot'}`}>
-        {formatText(message.text)}
+        {message.image && (
+          <div className="message-image-container">
+            <img src={message.image} alt="Uploaded" className="message-image" />
+          </div>
+        )}
+        {message.isLoading ? (
+          <div className="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        ) : (
+          message.text && formatText(message.text)
+        )}
       </div>
     </div>
   );
 }
 
-export default ChatStudyMessage;
+export default ChatAcademicMessage;

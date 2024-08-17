@@ -1,88 +1,55 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
+import { useChatMedical } from '../../hooks/chatbot/useChatMedical';
+import { useScrollToBottom, useMessageInput } from '../../hooks/chatbot/useScrollToBottom';
 import ChatMessage from './ChatMedicalMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
-import uploadIcon from '../../assets/images/free-icon-grab.png'; // 이미지 파일 경로
-import sendIcon from '../../assets/images/send.png'; // 이미지 파일 경로
-import Record_Modal from '../chatbot/Record_Modal';
-import axios from 'axios';
+import sendIcon from '../../assets/images/send.png';
+import RecordModal from './RecordModal';
+import { ChatMedicalProvider } from '../../contexts/chatbot/ChatMedicalApi';
 
-function ChatMedicalWindow() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const messagesContainerRef = useRef(null); //스크롤
+function ChatMedicalWindowInner() {
+  const { messages, loading, error, sendMessage, sendImage } = useChatMedical();
+  const messagesContainerRef = useScrollToBottom([messages]);
+  const { input, setInput, handleSubmit, handleKeyPress } = useMessageInput(sendMessage);
 
-  // ---스크롤 ---
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const scrollToBottom = () => {
-    if (messagesContainerRef.current) {
-      const { scrollHeight, clientHeight } = messagesContainerRef.current;
-      messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
-    }
+  const handleRecordingComplete = (blob) => {
+    console.log('Recording completed', blob);
+    // TODO: Implement audio processing logic
   };
-  // -------------
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (input.trim()) {
-      const userMessage = { id: messages.length + 1, text: input, isUser: true };
-      setMessages([...messages, userMessage]);
-      setInput('');
+  const handleAudioSend = (data) => {
+    console.log('Audio data', data);
+    // TODO: Implement audio sending logic
+  };
 
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
       try {
-        // 백엔드로 메시지 전송 및 응답 처리
-        const response = await axios.post('http://localhost:8000/medical', {
-          input: input
-        });
-        // 봇 응답 메시지 추가
-        const botMessage = { 
-          id: messages.length + 2, 
-          text: response.data.answer,
-          isUser: false
-        };
-        console.log(response.data);
-        console.log(response.data.answer);
-        console.log(response.data.answer.answer);
-        setMessages(prevMessages => [...prevMessages, botMessage]);
+        await sendImage(file);
       } catch (error) {
-        console.error('Error sending message:', error);
-        // 오류 발생 시 에러 메시지 표시
-        setMessages(prevMessages => [...prevMessages, { 
-          id: messages.length + 2, 
-          text: "Sorry, there was an error processing your request.", 
-          isUser: false 
-        }]);
+        console.error('Error uploading image:', error);
       }
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSubmit(e);
+    } else {
+      console.error('Invalid file type. Please upload an image.');
     }
   };
 
   return (
     <div className="chat-window">
       <div className="messages" ref={messagesContainerRef}>
-        {messages.map(message => (
-          <ChatMessage key={message.id} message={message} />
+        {messages.map((message, index) => (
+          <ChatMessage key={index} message={message} />
         ))}
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error.message}</p>}
       </div>
       <div className='wrap-form-box'>
         <form onSubmit={handleSubmit} className='form-box'>
-          <div className='upload-box'>
-            <label htmlFor="file-upload" className="custom-file-upload">
-              <img src={uploadIcon} alt="Upload" className="window-upload-icon" />
-            </label>
-            <input id="file-upload" type="file" style={{display: 'none'}}/>
-          </div>
           <div className='modal_input_btn'>
-            <Record_Modal 
-              onRecordingComplete={(blob) => console.log('Recording completed', blob)}
-              onAudioSend={(data) => console.log('Audio data', data)}
+            <RecordModal 
+              onRecordingComplete={handleRecordingComplete}
+              onAudioSend={handleAudioSend}
             />
             <input 
               className='botinput'
@@ -93,12 +60,20 @@ function ChatMedicalWindow() {
               placeholder="Type a message..."
             />
           </div>
-          <button className='send-btn' type="submit">
+          <button className='send-btn' type="submit" disabled={!input.trim()}>
             <img src={sendIcon} alt="Send" className="window-send-icon" />
           </button>
         </form>
       </div>
     </div>
+  );
+}
+
+function ChatMedicalWindow() {
+  return (
+    <ChatMedicalProvider>
+      <ChatMedicalWindowInner />
+    </ChatMedicalProvider>
   );
 }
 

@@ -1,11 +1,15 @@
 // useSignUpForm.js
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signUp } from '../../contexts/authorization/SignUpApi';
+import { modifyAccount } from '../../contexts/authorization/ModifyAccountApi';
 
-export function useSignUpForm() {
+export function useModifyAccountForm() {
+  const userData = JSON.parse(sessionStorage.getItem('userData'))
+
   const [formData, setFormData] = useState({
-    email: '',
+    userno: userData.apiData.userno,
+    email: userData.apiData.email,
+    fileno: userData.apiData.fileno,
     password: '',
     username: '',
     nationlity: '',
@@ -48,17 +52,14 @@ export function useSignUpForm() {
     // 여기에 회원가입 로직을 추가하세요
     setError('');
     try {
-      const signUpInfo = await signUp(formData);
+      const ModifyInfo = await modifyAccount(formData);
 
-      console.log('회원가입 정보:', signUpInfo);
-      navigate('/SignPage?type=signin');
+      console.log('회원정보 수정:', ModifyInfo);
+      navigate('/');
     } catch (err) {
       setError('빈 칸이 있습니다. 확인해주세요');
     }
 
-    
-
-    navigate('/SignPage?type=signin');
   };
 
   return { formData, previewUrl, handleChange, handleFileChange, handleSubmit };

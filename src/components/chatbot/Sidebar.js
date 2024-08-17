@@ -1,12 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
-import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Flex, Box } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Flex } from '@chakra-ui/react'
 import '../../assets/styles/chatbot/Sidebar.css';
 import ChatLegalVisaWindow from '../chatbot/ChatLegalVisaWindow';
 import ChatMedicalWindow from '../chatbot/ChatMedicalWindow';
-import ChatStudyWindow from '../chatbot/ChatStudyWindow';
+import ChatAcademicWindow from '../chatbot/ChatAcademicWindow';
 import ChatJobWindow from '../chatbot/ChatJobWindow';
-import { ChatStudyProvider } from '../../contexts/chatbot/ChatStudyApi';
+import { ChatAcademicProvider } from '../../contexts/chatbot/ChatAcademicApi';
 import categoryOneImage from '../../assets/images/category1.png';
 import categoryTwoImage from '../../assets/images/category2.png';
 import categoryThreeImage from '../../assets/images/category3.png';
@@ -118,9 +117,9 @@ function Sidebar() {
                 overflowX="auto"
                 backgroundColor='#BA9F8B'
               >
-                <ChatStudyProvider>
-                  <ChatStudyWindow />
-                </ChatStudyProvider>
+                <ChatAcademicProvider>
+                  <ChatAcademicWindow />
+                </ChatAcademicProvider>
               </TabPanel>
               <TabPanel 
                 display="flex" 

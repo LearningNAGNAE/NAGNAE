@@ -36,7 +36,7 @@ function Header() {
         <nav>
           {token ? (
             <>
-              <Link className='my_page' to="/My_Page">My Page</Link>
+              <Link className='modify_account' to="/SignPage?type=modifyaccount">Modify Account</Link>
               <button className='sign_out' onClick={handleLogout}>Sign Out</button>
             </>
           ) : (
@@ -55,7 +55,6 @@ function Header() {
         <Link to="/ChatBotPage">ChatBot</Link>
         <Link to="/BoardPage">Board</Link>
         <Link to="/StudyPage">Study</Link>
-        <Link to="">Game</Link>
       </div>
     </header>
   );
