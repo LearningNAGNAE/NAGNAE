@@ -4,14 +4,16 @@ import { usePostFormAPI } from '../../contexts/board/Board_Comm_PostFormApi';
 
 export const usePostForm = () => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
   const navigate = useNavigate();
-  const { handleImageUpload, submitPost } = usePostFormAPI();
+  const { submitPost } = usePostFormAPI();
   const userData = JSON.parse(sessionStorage.getItem('userData'));
 
-  const handleSubmit = async (title, htmlContent) => {
+  const handleSubmit = async (title, htmlContent, localImages) => {
     try {
-      await submitPost(title, htmlContent, userData);
+      if (!userData || !userData.apiData) {
+        throw new Error('User data is not available');
+      }
+      await submitPost(title, htmlContent, localImages, userData);
       navigate('/BoardPage?type=Comm_PostList');
     } catch (error) {
       console.error('Error creating post:', error);
@@ -21,9 +23,8 @@ export const usePostForm = () => {
   return {
     title,
     setTitle,
-    content,
-    setContent,
     handleSubmit,
-    handleImageUpload,
   };
 };
+
+

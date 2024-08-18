@@ -1,10 +1,9 @@
 import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
-import 'quill/dist/quill.snow.css'; // Ensure the Quill stylesheet is included
+import 'quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
-import { usePostFormAPI } from '../../contexts/board/Board_Comm_PostFormApi'; // Import the API context
+import '../../assets/styles/board/quillstyle.css';
 
-// Register Quill modules
 Quill.register('modules/ImageResize', ImageResize);
 
 const Size = Quill.import('formats/size');
@@ -17,6 +16,7 @@ Quill.register(Font, true);
 
 const QuillToolbar = () => (
   <div id="toolbar">
+    <div id="toolbar">
     <span className="ql-formats">
       <select className="ql-font" defaultValue="arial">
         <option value="arial">Arial</option>
@@ -71,14 +71,14 @@ const QuillToolbar = () => (
       <button className="ql-clean" />
     </span>
   </div>
+  </div>
 );
 
-const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
+const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionChange, onImageSelect }, ref) => {
   const containerRef = useRef(null);
   const defaultValueRef = useRef(defaultValue);
   const onTextChangeRef = useRef(onTextChange);
   const onSelectionChangeRef = useRef(onSelectionChange);
-  const { handleImageUpload } = usePostFormAPI(); // Ensure to use the hook correctly
 
   useLayoutEffect(() => {
     onTextChangeRef.current = onTextChange;
@@ -115,23 +115,22 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
       theme: 'snow'
     });
 
-    // Register image handler after creating Quill instance
     quill.getModule('toolbar').addHandler('image', () => {
       const input = document.createElement('input');
       input.setAttribute('type', 'file');
       input.setAttribute('accept', 'image/*');
       input.click();
-
-      input.onchange = async () => {
+    
+      input.onchange = () => {
         const file = input.files[0];
-        const url = await handleImageUpload(file);
-
-        if (url) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
           const range = quill.getSelection();
-          quill.insertEmbed(range.index, 'image', url);
-        } else {
-          console.error('Failed to upload image.');
-        }
+          const tempUrl = e.target.result;
+          quill.insertEmbed(range.index, 'image', tempUrl);
+          onImageSelect({ file, tempUrl });
+        };
+        reader.readAsDataURL(file);
       };
     });
 
@@ -157,7 +156,7 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
       }
       container.innerHTML = '';
     };
-  }, [ref, handleImageUpload]);
+  }, [ref, onImageSelect]);
 
   return (
     <div>

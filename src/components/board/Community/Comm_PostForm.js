@@ -1,20 +1,24 @@
-// PostFormContent.js
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { usePostForm } from '../../../hooks/board/useBoardComm_PostForm.js';
 import '../../../assets/styles/board/Community/Comm_PostForm.scss';
-import QuillToolbar from '../BoardQuillCustum.js';
+import Editor from '../../board/BoardQuillCustum.js';
 import 'react-quill/dist/quill.snow.css';
 import { PostFormAPIProvider } from '../../../contexts/board/Board_Comm_PostFormApi.js';
 
 function PostFormContent() {
-  const { title, setTitle, handleSubmit, handleImageUpload } = usePostForm();
+  const { title, setTitle, handleSubmit } = usePostForm();
   const quillRef = useRef(null);
+  const [localImages, setLocalImages] = useState([]);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const quillContent = quillRef.current ? quillRef.current.root.innerHTML : '';
-    handleSubmit(title, quillContent);
+    await handleSubmit(title, quillContent, localImages);
+  };
+
+  const handleImageSelect = (imageInfo) => {
+    setLocalImages(prev => [...prev, imageInfo]);
   };
 
   return (
@@ -34,30 +38,9 @@ function PostFormContent() {
             </div>
             
             <div className="comm-input-group">
-              <QuillToolbar 
+              <Editor 
                 ref={quillRef}
-                modules={{
-                  toolbar: {
-                    container: '#toolbar',
-                    handlers: {
-                      image: () => {
-                        const input = document.createElement('input');
-                        input.setAttribute('type', 'file');
-                        input.setAttribute('accept', 'image/*');
-                        input.click();
-                        input.onchange = async () => {
-                          const file = input.files[0];
-                          const url = await handleImageUpload(file);
-                          if (url) {
-                            const quill = quillRef.current.getEditor();
-                            const range = quill.getSelection(true);
-                            quill.insertEmbed(range.index, 'image', url);
-                          }
-                        };
-                      }
-                    }
-                  }
-                }}
+                onImageSelect={handleImageSelect}
                 placeholder='내용을 입력하세요...'
               />
             </div>
