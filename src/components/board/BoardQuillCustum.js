@@ -1,10 +1,7 @@
 import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
-import ImageResize from 'quill-image-resize';
+import 'quill/dist/quill.snow.css'; // Ensure the Quill stylesheet is included
 import '../../assets/styles/board/quillstyle.css';
-
-Quill.register('modules/ImageResize', ImageResize);
 
 const Size = Quill.import('formats/size');
 Size.whitelist = ['small', 'medium', 'large', 'huge'];
@@ -16,7 +13,6 @@ Quill.register(Font, true);
 
 const QuillToolbar = () => (
   <div id="toolbar">
-    <div id="toolbar">
     <span className="ql-formats">
       <select className="ql-font" defaultValue="arial">
         <option value="arial">Arial</option>
@@ -64,17 +60,15 @@ const QuillToolbar = () => (
     </span>
     <span className="ql-formats">
       <button className="ql-link" />
-      <button className="ql-image" />
       <button className="ql-video" />
     </span>
     <span className="ql-formats">
       <button className="ql-clean" />
     </span>
   </div>
-  </div>
 );
 
-const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionChange, onImageSelect }, ref) => {
+const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
   const containerRef = useRef(null);
   const defaultValueRef = useRef(defaultValue);
   const onTextChangeRef = useRef(onTextChange);
@@ -108,30 +102,8 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
           maxStack: 500,
           userOnly: true
         },
-        ImageResize: {
-          parchment: Quill.import('parchment')
-        }
       },
       theme: 'snow'
-    });
-
-    quill.getModule('toolbar').addHandler('image', () => {
-      const input = document.createElement('input');
-      input.setAttribute('type', 'file');
-      input.setAttribute('accept', 'image/*');
-      input.click();
-    
-      input.onchange = () => {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const range = quill.getSelection();
-          const tempUrl = e.target.result;
-          quill.insertEmbed(range.index, 'image', tempUrl);
-          onImageSelect({ file, tempUrl });
-        };
-        reader.readAsDataURL(file);
-      };
     });
 
     if (ref) {
@@ -156,7 +128,7 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
       }
       container.innerHTML = '';
     };
-  }, [ref, onImageSelect]);
+  }, [ref]);
 
   return (
     <div>
