@@ -9,16 +9,11 @@ import { PostFormAPIProvider } from '../../../contexts/board/Board_Comm_PostForm
 function PostFormContent() {
   const { title, setTitle, handleSubmit } = usePostForm();
   const quillRef = useRef(null);
-  const [localImages, setLocalImages] = useState([]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     const quillContent = quillRef.current ? quillRef.current.root.innerHTML : '';
-    await handleSubmit(title, quillContent, localImages);
-  };
-
-  const handleImageSelect = (imageInfo) => {
-    setLocalImages(prev => [...prev, imageInfo]);
+    await handleSubmit(title, quillContent);
   };
 
   return (
@@ -40,7 +35,6 @@ function PostFormContent() {
             <div className="comm-input-group">
               <Editor 
                 ref={quillRef}
-                onImageSelect={handleImageSelect}
                 placeholder='내용을 입력하세요...'
               />
             </div>
