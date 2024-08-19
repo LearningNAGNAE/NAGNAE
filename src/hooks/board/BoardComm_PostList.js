@@ -14,7 +14,6 @@ export const usePostList = (initialPage = 1) => {
       const fetchPosts = async () => {
         try {
           const response = await getPosts(currentPage, searchTerm);
-          console.log("Received data:", response);
           if (response.code === '200' && Array.isArray(response.data.boardList)) {
             setPosts(response.data.boardList);
             setTotalPages(response.data.totalPages);

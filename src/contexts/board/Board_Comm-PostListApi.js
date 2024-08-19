@@ -12,7 +12,6 @@ export const getPosts = async (page = 1, searchTerm = '') => {
         search: searchTerm,
       },
     });
-    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error('Error fetching posts:', error);

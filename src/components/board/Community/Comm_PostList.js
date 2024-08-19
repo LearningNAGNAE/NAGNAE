@@ -5,7 +5,7 @@ import '../../../assets/styles/board/Community/Comm_PostList.scss';
 import { usePostList } from '../../../hooks/board/BoardComm_PostList';
 
 function Comm_PostList({ posts = [], currentPage, totalPages, totalPosts, pageSize, onPageChange, onSearch }) {
-  console.log("Comm_PostList - posts:", posts);
+
   const pageNumbers = [];
 
   for (let i = 1; i <= totalPages; i++) {
@@ -98,10 +98,6 @@ function Comm_PostListMain() {
     onSearch
   } = usePostList(1);  // 1은 초기 페이지 번호입니다
 
-  console.log("Comm_PostListMain - posts:", posts);  // 로그 추가
-  console.log("Comm_PostListMain - totalPages:", totalPages);  // 로그 추가
-  console.log("Comm_PostListMain - totalPages:", totalPosts);  // 로그 추가
-  console.log("Comm_PostListMain - totalPages:", pageSize);  // 로그 추가
 
   return (
     <Comm_PostList
