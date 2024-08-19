@@ -51,3 +51,39 @@ aside {
 .chakra-tabs__tab {
   cursor: pointer;
 }
+
+/*-----------------------------------------------*/
+.recent-ul li {
+  cursor: pointer;
+  padding: 10px;;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+  white-space: nowrap;          /* 텍스트를 한 줄로 표시 */
+  overflow: hidden;             /* 넘치는 텍스트 숨기기 */
+  text-overflow: ellipsis;      /* 넘치는 텍스트는 '...'으로 표시 */
+  box-sizing: border-box;       /* 패딩 포함한 크기 계산 */
+}
+
+.recent-ul li:hover {
+  background-color: #5e4536; /* Darker shade of the main background color */
+  color: #e6e6e6; /* Lighten the text color */
+}
+
+.recent-ul li::after {
+  content: '→';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  color: #e6e6e6; /* Lighten the arrow color */
+  transition: opacity 0.3s ease, right 0.3s ease;
+}
+
+.recent-ul li:hover::after {
+  opacity: 1;
+  right: 15px; /* Slight movement to the right on hover */
+}
+/*-----------------------------------------------*/
+
+

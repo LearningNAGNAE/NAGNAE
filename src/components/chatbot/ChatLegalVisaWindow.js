@@ -1,63 +1,53 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useChatLegalVisa } from '../../hooks/chatbot/useChatLegalVisa';
 import { useScrollToBottom, useMessageInput } from '../../hooks/chatbot/useScrollToBottom';
 import ChatMessage from './ChatLegalVisaMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
 import sendIcon from '../../assets/images/send.png';
 import RecordModal from './RecordModal';
-import { ChatLegalVisaProvider } from '../../contexts/chatbot/ChatLegalVisaApi';
 
-function ChatLegalVisaWindowInner() {
-  const { messages, loading, error, sendMessage, sendImage } = useChatLegalVisa();
+function ChatLegalVisaWindow({ selectedChat }) {
+  const { messages, loading, error, sendMessage, loadChatHistory } = useChatLegalVisa(selectedChat);
   const messagesContainerRef = useScrollToBottom([messages]);
   const { input, setInput, handleSubmit, handleKeyPress } = useMessageInput(sendMessage);
 
-  const handleRecordingComplete = (blob) => {
-    console.log('Recording completed', blob);
-    // TODO: Implement audio processing logic
-  };
-
-  const handleAudioSend = (data) => {
-    console.log('Audio data', data);
-    // TODO: Implement audio sending logic
-  };
-
-  const handleFileUpload = async (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      try {
-        await sendImage(file);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      }
-    } else {
-      console.error('Invalid file type. Please upload an image.');
+  useEffect(() => {
+    if (selectedChat && selectedChat.length > 0 && selectedChat[0].chatHisNo) {
+      loadChatHistory(selectedChat[0].chatHisNo);
     }
+  }, [selectedChat, loadChatHistory]);
+
+  const handleSendMessage = (messageText) => {
+    sendMessage(messageText);
+    setInput('');
   };
 
   return (
     <div className="chat-window">
       <div className="messages" ref={messagesContainerRef}>
         {messages.map((message, index) => (
-          <ChatMessage key={index} message={message} />
+          <ChatMessage key={`msg-${index}`} message={message} />
         ))}
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: {error.message}</p>}
+        {loading && <p>로딩 중...</p>}
+        {error && <p>오류: {error.message}</p>}
       </div>
       <div className='wrap-form-box'>
-        <form onSubmit={handleSubmit} className='form-box'>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          handleSendMessage(input);
+        }} className='form-box'>
           <div className='modal_input_btn'>
-            <RecordModal 
-              onRecordingComplete={handleRecordingComplete}
-              onAudioSend={handleAudioSend}
+            <RecordModal
+              onRecordingComplete={(blob) => console.log('Recording completed', blob)}
+              onAudioSend={(data) => console.log('Audio data', data)}
             />
-            <input 
+            <input
               className='botinput'
-              type="text" 
-              value={input} 
-              onChange={(e) => setInput(e.target.value)} 
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Type a message..."
+              placeholder="메시지를 입력하세요..."
             />
           </div>
           <button className='send-btn' type="submit" disabled={!input.trim()}>
@@ -66,14 +56,6 @@ function ChatLegalVisaWindowInner() {
         </form>
       </div>
     </div>
-  );
-}
-
-function ChatLegalVisaWindow() {
-  return (
-    <ChatLegalVisaProvider>
-      <ChatLegalVisaWindowInner />
-    </ChatLegalVisaProvider>
   );
 }
 

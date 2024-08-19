@@ -14,44 +14,31 @@ export const RecentChatsProvider = ({ children }) => {
     }
 
     return {
-        fetchRecentChats: async (userNo) => {
-            try {
-            const response = await axios.get(`${SpringbaseUrl}/chat-history/recent`, {
-                params: { userNo },
-            });
-            console.log('API response:', response.data); // 응답 로깅
-            return response.data;
-            } catch (error) {
-            console.error('Error fetching recent chats:', error);
-            throw error;
-            }
-        },
+      fetchRecentChats: async (userNo) => {
+        try {
+          const response = await axios.get(`${SpringbaseUrl}/chat-history/recent`, {
+            params: { userNo },
+          });
+          return response.data;
+        } catch (error) {
+          console.error('Error fetching recent chats:', error);
+          throw error;
+        }
+      },
 
-        fetchChatDetails: async (userNo, chatHisNo) => {
-            try {
-              const response = await axios.get(`${SpringbaseUrl}/chat-history/recent-detail`, {
-                params: { userNo, chatHisNo },
-              });
-              console.log('API response:', response.data); // Logging the response
-              return response.data;
-            } catch (error) {
-              console.error('Error fetching chat details:', error);
-              throw error;
-            }
-          },
-    
-          fetchChatsByHistoryNo: async (chatHisNo) => {
-            try {
-              const response = await axios.get(`${SpringbaseUrl}/chat-history/${chatHisNo}`);
-              console.log('API response:', response.data); // Logging the response
-              return response.data;
-            } catch (error) {
-              console.error('Error fetching chats by history number:', error);
-              throw error;
-            }
-          },
-        };
-      }, [SpringbaseUrl]);
+      fetchChatHistory: async (userNo, chatHisNo) => {
+        try {
+          const response = await axios.get(`${SpringbaseUrl}/chat-history/recent-detail`, {
+            params: { userNo, chatHisNo }
+          });
+          return response.data;
+        } catch (error) {
+          console.error('Error fetching chat history:', error);
+          throw error;
+        }
+      },
+    };
+  }, [SpringbaseUrl]);
 
   return (
     <RecentChatsApiContext.Provider value={api}>
