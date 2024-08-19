@@ -8,11 +8,28 @@ export const useChatLegalVisa = () => {
   const [error, setError] = useState(null);
   const sessionIdRef = useRef(localStorage.getItem('chatSessionId') || uuidv4());
   const isNewSessionRef = useRef(true);
-  const { LegalVisaChatBotData, describeImage } = useChatLegalVisaApi();
+  const { LegalVisaChatBotData, describeImage, fetchChatHistory } = useChatLegalVisaApi();
 
   useEffect(() => {
     localStorage.setItem('chatSessionId', sessionIdRef.current);
   }, []);
+
+  useEffect(() => {
+    const loadChatHistory = async () => {
+      try {
+        setLoading(true);
+        const chatHistory = await fetchChatHistory(sessionIdRef.current);
+        setMessages(chatHistory);
+      } catch (err) {
+        console.error('채팅 내역을 불러오는 중 오류 발생:', err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadChatHistory();
+  }, [fetchChatHistory]);
 
   const sendMessage = useCallback(async (messageText) => {
     if (messageText.trim()) {
@@ -37,14 +54,14 @@ export const useChatLegalVisa = () => {
               : msg
           )
         );
-        isNewSessionRef.current = false;  // 첫 메시지 이후로는 새 세션이 아님
+        isNewSessionRef.current = false;
       } catch (error) {
-        console.error('Error sending message:', error);
+        console.error('메시지 전송 중 오류 발생:', error);
         setError(error);
         setMessages(prevMessages => 
           prevMessages.map(msg => 
             msg.id === loadingMessage.id 
-              ? { ...msg, isLoading: false, text: "Sorry, there was an error processing your message. Please try again." }
+              ? { ...msg, isLoading: false, text: "죄송합니다, 메시지 처리 중 오류가 발생했습니다. 다시 시도해 주세요." }
               : msg
           )
         );
@@ -53,13 +70,6 @@ export const useChatLegalVisa = () => {
       }
     }
   }, [LegalVisaChatBotData]);
-
-  const resetSession = useCallback(() => {
-    sessionIdRef.current = uuidv4();
-    isNewSessionRef.current = true;
-    localStorage.setItem('chatSessionId', sessionIdRef.current);
-    setMessages([]);
-  }, []);
 
   const sendImage = useCallback(async (imageFile) => {
     setLoading(true);
@@ -76,15 +86,11 @@ export const useChatLegalVisa = () => {
       };
       setMessages(prevMessages => [...prevMessages, botMessage]);
     } catch (error) {
-      console.error('Error sending image:', error);
+      console.error('이미지 전송 중 오류 발생:', error);
       setError(error);
-      let errorMessage = "Sorry, there was an error processing your image. Please try again.";
-      if (error.response && error.response.data) {
-        errorMessage += ` Details: ${error.response.data.detail || JSON.stringify(error.response.data)}`;
-      }
       setMessages(prevMessages => [...prevMessages, { 
         id: Date.now() + 1, 
-        text: errorMessage, 
+        text: "죄송합니다, 이미지 처리 중 오류가 발생했습니다. 다시 시도해 주세요.", 
         isUser: false 
       }]);
     } finally {
@@ -92,5 +98,20 @@ export const useChatLegalVisa = () => {
     }
   }, [describeImage]);
 
-  return { messages, loading, error, sendMessage, sendImage, resetSession };
+  const resetSession = useCallback(() => {
+    sessionIdRef.current = uuidv4();
+    isNewSessionRef.current = true;
+    localStorage.setItem('chatSessionId', sessionIdRef.current);
+    setMessages([]);
+  }, []);
+
+  return { 
+    messages, 
+    setMessages,
+    loading, 
+    error, 
+    sendMessage, 
+    sendImage, 
+    resetSession 
+  };
 };

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Flex } from '@chakra-ui/react'
 import '../../assets/styles/chatbot/Sidebar.css';
 import ChatLegalVisaWindow from '../chatbot/ChatLegalVisaWindow';
@@ -10,8 +10,25 @@ import categoryOneImage from '../../assets/images/category1.png';
 import categoryTwoImage from '../../assets/images/category2.png';
 import categoryThreeImage from '../../assets/images/category3.png';
 import categoryFourImage from '../../assets/images/category4.png';
+import { useRecentChats } from '../../hooks/chatbot/useRecent';
+import { useNavigate } from 'react-router-dom';
 
 function Sidebar() {
+  const { recentChats, loading, error, selectChat } = useRecentChats();
+  const navigate = useNavigate();
+  const [selectedChat, setSelectedChat] = useState(null);
+
+  const handleChatSelect = async (chat) => {
+    setSelectedChat(chat);
+    await selectChat(chat.chatHisNo);
+    navigate(`/chat/${chat.categoryNo}/${chat.chatHisNo}/chat-history/recent-detail/${chat.userNo}/${chat.chatHisNo}`);
+  };
+
+  const handleViewAll = () => {
+    console.log("View all clicked");
+    navigate('/recent-chats');
+  };
+  
   return (
     <aside>
       <h2 className='category'>Category</h2>
@@ -137,12 +154,27 @@ function Sidebar() {
           </TabPanels>
         </Flex>
       </Tabs>
-      <h2 className='recent'>Recent<button className='view_all'>view all  ---→</button></h2>
-      <ul className='recent-ul'>
-        <li>Liên quan đến Chương trình cấp phép việc làm</li>
-        <li>Liên quan đến Chương trình cấp phép việc làm</li>
-        <li>Liên quan đến Chương trình cấp phép việc làm</li>
-      </ul>
+      <h2 className='recent'>
+        Recent
+        <button className='view_all' onClick={handleViewAll}>
+          view all  ---→
+        </button>
+      </h2>
+      
+      {loading && <p>Loading recent chats...</p>}
+      {error && <p>Error: {error}</p>}
+      
+      {recentChats && recentChats.length > 0 ? (
+        <ul className='recent-ul'>
+          {recentChats.slice(0, 3).map((chat) => (
+            <li key={chat.chatHisNo} onClick={() => handleChatSelect(chat)}>
+              {chat.question}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No recent chats available.</p>
+      )}
     </aside>
   )
 }
