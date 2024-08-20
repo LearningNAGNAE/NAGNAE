@@ -53,6 +53,10 @@ aside {
 }
 
 /*-----------------------------------------------*/
+.recent-ul {
+  height: 179px;
+}
+
 .recent-ul li {
   cursor: pointer;
   padding: 10px;;
@@ -86,4 +90,9 @@ aside {
 }
 /*-----------------------------------------------*/
 
-
+.recent-ul-no {
+  display: flex;
+  height: 179px;
+  justify-content: center;
+  align-items: center;
+}

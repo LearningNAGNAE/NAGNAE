@@ -188,7 +188,10 @@ function Sidebar({ onSelectChat }) {
           ))}
         </ul>
       ) : (
-        <p>최근 채팅 내역이 없습니다.</p>
+        <div className='recent-ul-no'>
+          <p>최근 채팅 내역이 없습니다.</p>
+        </div>
+        
       )}
     </aside>
   );
