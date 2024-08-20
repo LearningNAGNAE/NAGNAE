@@ -1,4 +1,3 @@
-// src/api/postApi.js
 import axios from 'axios';
 import store from '../../redux/Store';
 
@@ -18,3 +17,4 @@ export const getPosts = async (page = 1, searchTerm = '') => {
     throw error;
   }
 };
+
