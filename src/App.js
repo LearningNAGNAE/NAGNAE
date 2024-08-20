@@ -6,6 +6,7 @@ import SignPage from './pages/SignPage';
 import ChatBotPage from './pages/ChatBotPage';
 import BoardPage from './pages/BoardPage';
 import StudyPage from './pages/StudyPage';
+import ChatList from './pages/ChatList';
 import './assets/styles/global.scss';
 import { ChakraProvider } from '@chakra-ui/react'
 import { Provider } from 'react-redux';
@@ -24,6 +25,7 @@ function App() {
               <Route path="/SignPage" element={<SignPage />} />
               <Route path="/BoardPage" element={<BoardPage />} />
               <Route path="/StudyPage" element={<StudyPage />} />
+              <Route path="/ChatList" element={<ChatList />} />
             </Routes>
             <Footer />
           </div>

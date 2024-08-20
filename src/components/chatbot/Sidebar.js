@@ -12,6 +12,7 @@ import categoryTwoImage from '../../assets/images/category2.png';
 import categoryThreeImage from '../../assets/images/category3.png';
 import categoryFourImage from '../../assets/images/category4.png';
 import { useRecentChats } from '../../hooks/chatbot/useRecent';
+import { Link } from 'react-router-dom';
 
 function Sidebar({ onSelectChat }) {
   const { recentChats, loading, error, selectChat, loadRecentChats } = useRecentChats();
@@ -171,9 +172,9 @@ function Sidebar({ onSelectChat }) {
       </Tabs>
       <h2 className='recent'>
         Recent
-        <button className='view_all' onClick={handleViewAll}>
+        <Link className='view_all' to="/ChatList" onClick={handleViewAll}>
           view all  ---→
-        </button>
+        </Link>
       </h2>
      
       {error && <p>오류: {error}</p>}
