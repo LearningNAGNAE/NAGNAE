@@ -172,7 +172,7 @@ function Sidebar({ onSelectChat }) {
       </Tabs>
       <h2 className='recent'>
         Recent
-        <Link className='view_all' to="/ChatList" onClick={handleViewAll}>
+        <Link className='view_all' to="/ChatListPage" onClick={handleViewAll}>
           view all  ---→
         </Link>
       </h2>

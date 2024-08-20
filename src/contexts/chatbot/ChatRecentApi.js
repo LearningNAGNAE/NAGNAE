@@ -39,9 +39,11 @@ export const RecentChatsProvider = ({ children }) => {
       },
       fetchRecentChatAll: async (userNo) => {
         try {
+          console.log('Fetching recent chats for userNo:', userNo); // 디버깅을 위해 추가
           const response = await axios.get(`${SpringbaseUrl}/chat-history/recent-all`, {
-            params: { userNo },
+            params: { userNo }
           });
+          console.log('Response:', response.data); // 디버깅을 위해 추가
           return response.data;
         } catch (error) {
           console.error('Error fetching recent chats:', error);
