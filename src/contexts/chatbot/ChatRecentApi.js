@@ -37,6 +37,17 @@ export const RecentChatsProvider = ({ children }) => {
           throw error;
         }
       },
+      fetchRecentChatAll: async (userNo) => {
+        try {
+          const response = await axios.get(`${SpringbaseUrl}/chat-history/recent-all`, {
+            params: { userNo },
+          });
+          return response.data;
+        } catch (error) {
+          console.error('Error fetching recent chats:', error);
+          throw error;
+        }
+      },
     };
   }, [SpringbaseUrl]);
 
