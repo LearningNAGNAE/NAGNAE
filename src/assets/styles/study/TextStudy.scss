@@ -86,7 +86,7 @@
       cursor: pointer;
 
       &.recording {
-        background-color: #D23B3B; // 녹음 중일 때의 색상
+        background-color: #D23B3B;
       }
 
       .icon {
@@ -98,8 +98,8 @@
     }
 
     .restart-button {
-      background-color: #3DD5F3; // 다시 녹음 버튼의 색상
-      height: 40px; // 높이를 10px 늘림
+      background-color: #3DD5F3;
+      height: 40px;
       display: flex;
       align-items: center;
       padding: 0 10px;
@@ -107,7 +107,7 @@
 
     .send-button {
       padding: 10px;
-      background-color: #EF8354; // 화살표 버튼 색상 변경
+      background-color: #EF8354;
       border: none;
       border-radius: 50%;
       cursor: pointer;
@@ -120,6 +120,11 @@
       .window-send-icon {
         width: 20px;
         height: 20px;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
     }
   }
@@ -138,7 +143,7 @@
       padding: 5px;
       display: flex;
       align-items: center;
-      width: 25%; // 너비를 1/4로 줄임
+      width: 25%;
 
       .audio-player {
         width: 100%;
@@ -152,22 +157,40 @@
     background-color: white;
     border-radius: 10px;
     padding: 15px;
+    margin-bottom: 20px;
 
     p {
       margin-bottom: 10px;
     }
 
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #E0E0E0;
-      border-radius: 5px;
+    .user-sentence {
+      font-weight: bold;
     }
   }
 
-  .window-send-icon {
-    width: 25px;
-    height: 25px;
+  .sentence-analysis {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    width: 100%;
+
+    h2 {
+      color: #4A4A4A;
+      margin-bottom: 10px;
+    }
+
+    p, li {
+      margin-bottom: 10px;
+    }
+
+    ol {
+      padding-left: 20px;
+    }
+
+    ul {
+      padding-left: 40px;
+    }
   }
 
   // 오디오 플레이어 스타일 커스터마이징
@@ -184,5 +207,32 @@
   audio::-webkit-media-controls-time-remaining-display {
     color: #4A4A4A;
     font-family: 'HSBombaram3.0_Thin', sans-serif;
+  }
+
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #EF8354;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    p {
+      margin-top: 10px;
+      color: #4A4A4A;
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 }
