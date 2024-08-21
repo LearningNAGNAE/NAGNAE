@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useBoardComm_PostForm } from '../../../hooks/board/useBoardComm_PostForm';
 import '../../../assets/styles/board/Community/Comm_PostForm.scss';
@@ -9,10 +9,29 @@ import { PostFormAPIProvider } from '../../../contexts/board/Board_Comm_PostForm
 function PostFormContent() {
   const { title, setTitle, handleSubmit, handleImageUpload } = useBoardComm_PostForm();
   const quillRef = useRef(null);
+  const [content, setContent] = useState('');
+
+  useEffect(() => {
+    if (quillRef.current) {
+      const quillContent = quillRef.current.getContents();
+      setContent(JSON.stringify(quillContent));
+    }
+  }, [quillRef.current]);
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (!title.trim()) {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+
     const content = quillRef.current.getContents();
+    if (!content.ops || content.ops.length === 0 || (content.ops.length === 1 && content.ops[0].insert.trim() === '')) {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+
     handleSubmit(title, content);
   };
 

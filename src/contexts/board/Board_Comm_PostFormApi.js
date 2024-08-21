@@ -58,6 +58,9 @@ export const PostFormAPIProvider = ({ children }) => {
   }, [SpringbaseUrl]);
 
   const processContent = async (content) => {
+    if (!content || !content.ops) {
+      throw new Error('Invalid content format');
+    }
     const processedOps = await Promise.all(content.ops.map(async (op) => {
       if (op.insert && typeof op.insert === 'object' && op.insert.image) {
         // 이미지 처리

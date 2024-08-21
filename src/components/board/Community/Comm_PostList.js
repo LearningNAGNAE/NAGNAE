@@ -47,7 +47,7 @@ function Comm_PostList({ posts = [], currentPage, totalPages, totalPosts, pageSi
               <tr key={post.boardno}>
                 <td>{totalPosts - ((currentPage - 1) * pageSize + index)}</td>
                 <td align='left'>
-                  <Link to={{pathname: '/BoardPage',search: '?type=Comm_PostRead',state: {boardno: post.boardno }}}>{post.title}</Link>
+                  <Link to={'/BoardPage?type=Comm_PostRead'} state= {{boardno: post.boardno }}>{post.title}</Link>
                 </td>
                 <td>{post.userName}</td>
                 <td>{post.insertDate}</td>

@@ -8,6 +8,7 @@ export const useBoardComm_PostForm = () => {
   const { submitPost, uploadImage } = usePostFormAPI();
   const userData = JSON.parse(sessionStorage.getItem('userData'));
 
+
   const handleSubmit = async (title, content) => {
     try {
       if (!userData || !userData.apiData) {
