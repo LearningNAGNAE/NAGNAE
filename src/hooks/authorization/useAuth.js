@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setToken, clearToken } from '../../redux/actions/AuthActions';
-import { loginUser } from '../../contexts/authorization/AuthorizationApi';
+import { loginUser, sendTokenToBackend } from '../../contexts/authorization/AuthorizationApi';
 import { useNavigate } from 'react-router-dom';
 
 const TOKEN_EXPIRATION_TIME = 60 * 60 * 1000; // 60분을 밀리초로 변환
@@ -12,6 +12,30 @@ export const useAuth = () => {
   const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // 모달 표시 여부를 관리하는 상태 변수
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleModalOpen = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
+
+  const onFinish = (values) => {
+    // values 객체에 폼 데이터가 포함되어 있습니다
+    handleSubmit({ preventDefault: () => {} }); // 이벤트 객체를 모방합니다
+  };
+
+  const onSuccess = (credentialResponse) => {
+    console.log("Login Success: ", credentialResponse);
+    googlehandleSubmit(credentialResponse.credential);
+  };
+
+  const onFailure = () => {
+    console.log("Login failed");
+  };
 
   const setAuthToken = (token) => {
     const expirationTime = new Date().getTime() + TOKEN_EXPIRATION_TIME;
@@ -54,6 +78,38 @@ export const useAuth = () => {
     }
   };
 
+  const googlehandleSubmit = async (tokenId) => {
+    setError('');
+    try {
+      const { token, userData } = await sendTokenToBackend(tokenId);
+      console.log('Success:', userData);
+      if (userData.apiData.newUser) {
+        // 새 사용자인 경우 추가 정보 입력 페이지로 이동
+        setAuthToken(token);
+        sessionStorage.setItem('userData', JSON.stringify(userData));
+        console.log('저장된 토큰:', token);
+        console.log('저장된 사용자 데이터:', userData);
+        navigate('/SignPage?type=modifyaccount', { state: { email: userData.email, name: userData.name } });
+      } else {
+        // 기존 사용자인 경우 JWT 토큰 저장 및 홈페이지로 이동
+        setAuthToken(token);
+        sessionStorage.setItem('userData', JSON.stringify(userData));
+        console.log('저장된 토큰:', token);
+        console.log('저장된 사용자 데이터:', userData);
+        navigate('/');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      setError('Google 로그인에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
+
+
+
+
+  
+
   return {
     email,
     setEmail,
@@ -61,6 +117,13 @@ export const useAuth = () => {
     setPassword,
     error,
     handleSubmit,
-    getAuthToken
+    getAuthToken,
+    isModalVisible,
+    handleModalOpen,
+    handleModalClose,
+    isModalVisible,
+    onFinish,
+    onSuccess,
+    onFailure
   };
 };

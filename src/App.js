@@ -11,27 +11,30 @@ import './assets/styles/global.scss';
 import { ChakraProvider } from '@chakra-ui/react'
 import { Provider } from 'react-redux';
 import store from './redux/Store';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
   return (
-    <Provider store={store}>
-      <ChakraProvider>
-        <BrowserRouter>
-          <div className="App">
-            <Header />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/ChatBotPage" element={<ChatBotPage />} />
-              <Route path="/SignPage" element={<SignPage />} />
-              <Route path="/BoardPage" element={<BoardPage />} />
-              <Route path="/StudyPage" element={<StudyPage />} />
-              <Route path="/ChatListPage" element={<ChatListPage />} />
-            </Routes>
-            <Footer />
-          </div>
-        </BrowserRouter>
-      </ChakraProvider>
-    </Provider>
+    <GoogleOAuthProvider clientId="548018321247-nvrl8pv5juotgi2m09lvutofv37vjbfh.apps.googleusercontent.com">
+      <Provider store={store}>
+        <ChakraProvider>
+          <BrowserRouter>
+            <div className="App">
+              <Header />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/ChatBotPage" element={<ChatBotPage />} />
+                <Route path="/SignPage" element={<SignPage />} />
+                <Route path="/BoardPage" element={<BoardPage />} />
+                <Route path="/StudyPage" element={<StudyPage />} />
+                <Route path="/ChatListPage" element={<ChatListPage />} />
+              </Routes>
+              <Footer />
+            </div>
+          </BrowserRouter>
+        </ChakraProvider>
+      </Provider>
+    </GoogleOAuthProvider>
   );
 }
 

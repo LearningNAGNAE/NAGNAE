@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/actions/AuthActions';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
   // const isAuthenticated = useAuth();
@@ -16,13 +17,14 @@ function Header() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector(state => state.auth.token);
   
   const handleLogout = () => {
     dispatch(logout());
     // 필요한 경우 여기에 추가 로직 (예: 홈 페이지로 리다이렉트)
+    navigate('/');
   };
   
   return (
