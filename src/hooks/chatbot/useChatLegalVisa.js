@@ -3,7 +3,7 @@ import { useChatLegalVisaApi } from '../../contexts/chatbot/ChatLegalVisaApi';
 import { useRecentChatsApi } from '../../contexts/chatbot/ChatRecentApi';
 import { v4 as uuidv4 } from 'uuid';
 
-export const useChatLegalVisa = (initialSelectedChat) => {
+export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,41 +14,89 @@ export const useChatLegalVisa = (initialSelectedChat) => {
   const recentChatsApi = useRecentChatsApi();
 
   const [currentChatHisNo, setCurrentChatHisNo] = useState(null);
-  const [currentChatHisSeq, setCurrentChatHisSeq] = useState(null);
+  const [isNewSession, setIsNewSession] = useState(true);
 
   const userData = JSON.parse(sessionStorage.getItem('userData'));
 
-  const [isNewSession, setIsNewSession] = useState(true);
+  // 채팅 기록 로드
+  const loadChatHistory = useCallback(async (chatHisNo) => {
+    if (!chatHisNo) {
+      console.error('chatHisNo is undefined');
+      return;
+    }
+    try {
+      setLoading(true);
+      setError(null);
+      const userData = JSON.parse(sessionStorage.getItem('userData'));
+      if (!userData || !userData.apiData || !userData.apiData.userno) {
+        throw new Error('User data not found in session storage');
+      }
+      const userNo = userData.apiData.userno;
+      const response = await recentChatsApi.fetchChatHistory(userNo, chatHisNo);
+      console.log('Loaded chat history:', response);
+      if (response && response.apiData) {
+        const formattedMessages = response.apiData.flatMap(msg => {
+          const messages = [];
+          if (msg.question) {
+            messages.push({
+              id: `q-${msg.chatHisSeq}`,
+              text: msg.question,
+              isUser: true,
+              detectedLanguage: msg.detectedLanguage
+            });
+          }
+          if (msg.answer) {
+            messages.push({
+              id: `a-${msg.chatHisSeq}`,
+              text: msg.answer,
+              isUser: false,
+              detectedLanguage: msg.detectedLanguage
+            });
+          }
+          return messages;
+        });
+        setMessages(formattedMessages);
+      }
+    } catch (err) {
+      console.error('채팅 내역을 불러오는 중 오류 발생:', err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [recentChatsApi]);
 
   useEffect(() => {
-    if (initialSelectedChat && initialSelectedChat.length > 0) {
-      setCurrentChatHisNo(initialSelectedChat[0].chatHisNo);
+    if (initialSelectedChat && initialSelectedChat.chatHisNo) {
+      setCurrentChatHisNo(initialSelectedChat.chatHisNo);
       setIsNewSession(false);
+      loadChatHistory(initialSelectedChat.chatHisNo);
     } else {
+      setMessages([]);
       setCurrentChatHisNo(null);
       setIsNewSession(true);
     }
-  }, [initialSelectedChat]);
+  }, [initialSelectedChat, loadChatHistory]);
 
-  const sendMessage = useCallback(async (messageText, chatHisNo = null) => {
+  // 메시지 전송
+  const sendMessage = useCallback(async (messageText) => {
     if (messageText.trim()) {
       setLoading(true);
       setError(null);
       const userMessage = { id: Date.now(), text: messageText, isUser: true };
       const loadingMessage = { id: Date.now() + 1, isLoading: true, isUser: false };
-     
+      
       setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
 
       try {
         const requestData = {
           question: messageText,
           userNo: userData.apiData.userno,
-          categoryNo: 1,
+          categoryNo: categoryNo,
           session_id: sessionIdRef.current,
           is_new_session: isNewSession,
           chat_his_no: currentChatHisNo
         };
-        console.log("Sending request data:", requestData);  // 디버깅을 위한 로그
+        console.log("Sending request data:", requestData);
         const response = await legalVisaApi.LegalVisaChatBotData(requestData);
 
         setMessages(prevMessages =>
@@ -65,7 +113,6 @@ export const useChatLegalVisa = (initialSelectedChat) => {
         );
         
         setCurrentChatHisNo(response.chatHisNo);
-        setCurrentChatHisSeq(response.chatHisSeq);
         setIsNewSession(false);
 
         isNewSessionRef.current = false;
@@ -84,54 +131,7 @@ export const useChatLegalVisa = (initialSelectedChat) => {
         setLoading(false);
       }
     }
-  }, [legalVisaApi, currentChatHisNo, isNewSession]);
-
-  const loadChatHistory = useCallback(async (chatHisNo) => {
-    if (!chatHisNo) {
-      console.error('chatHisNo is undefined');
-      return;
-    }
-    try {
-      setLoading(true);
-      const userData = JSON.parse(sessionStorage.getItem('userData'));
-      if (!userData || !userData.apiData || !userData.apiData.userno) {
-        throw new Error('User data not found in session storage');
-      }
-      const userNo = userData.apiData.userno;
-      const response = await recentChatsApi.fetchChatHistory(userNo, chatHisNo);
-      if (response && response.apiData) {
-        const formattedMessages = [];
-        let maxSeq = 0;
-        response.apiData.forEach(msg => {
-          if (msg.question) {
-            formattedMessages.push({
-              id: `q-${msg.chatHisSeq}`,
-              text: msg.question,
-              isUser: true,
-              detectedLanguage: msg.detectedLanguage
-            });
-          }
-          if (msg.answer) {
-            formattedMessages.push({
-              id: `a-${msg.chatHisSeq}`,
-              text: msg.answer,
-              isUser: false,
-              detectedLanguage: msg.detectedLanguage
-            });
-          }
-          maxSeq = Math.max(maxSeq, msg.chatHisSeq);
-        });
-        setMessages(formattedMessages);
-        setCurrentChatHisNo(chatHisNo);
-        setCurrentChatHisSeq(maxSeq);
-      }
-    } catch (err) {
-      console.error('채팅 내역을 불러오는 중 오류 발생:', err);
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [recentChatsApi]);
+  }, [legalVisaApi, currentChatHisNo, isNewSession, categoryNo, userData]);
 
   return {
     messages,

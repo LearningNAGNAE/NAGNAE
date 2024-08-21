@@ -25,7 +25,8 @@ export const useRecentAll = () => {
         console.log('API response:', response); // 응답 로깅
         // 응답 구조에 따라 적절히 처리
         const chats = Array.isArray(response.apiData) ? response.apiData : [];
-        setRecentChats(chats);
+        
+        setRecentChats(response.apiData[i].question);
       } catch (err) {
         console.error('Error fetching chats:', err);
         setError(err);
