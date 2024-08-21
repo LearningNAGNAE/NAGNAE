@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useChatLegalVisa } from '../../hooks/chatbot/useChatLegalVisa';
 import { useScrollToBottom, useMessageInput } from '../../hooks/chatbot/useScrollToBottom';
 import ChatMessage from './ChatLegalVisaMessage';
@@ -6,28 +6,27 @@ import '../../assets/styles/chatbot/ChatWindow.css';
 import sendIcon from '../../assets/images/send.png';
 import RecordModal from './RecordModal';
 
-function ChatLegalVisaWindow({ selectedChat }) {
-  const { messages, loading, error, sendMessage, loadChatHistory } = useChatLegalVisa(selectedChat);
+function ChatLegalVisaWindow({ selectedChat, categoryNo, onChatComplete }) {
+  const { messages, loading, error, sendMessage } = useChatLegalVisa(selectedChat, categoryNo);
   const messagesContainerRef = useScrollToBottom([messages]);
-  const { input, setInput, handleSubmit, handleKeyPress } = useMessageInput(sendMessage);
-
-  useEffect(() => {
-    if (selectedChat && selectedChat.length > 0 && selectedChat[0].chatHisNo) {
-      loadChatHistory(selectedChat[0].chatHisNo);
-    }
-  }, [selectedChat, loadChatHistory]);
+  const { input, setInput, handleKeyPress } = useMessageInput(sendMessage);
 
   const handleSendMessage = (messageText) => {
     sendMessage(messageText);
     setInput('');
+    if (onChatComplete) onChatComplete();
   };
 
   return (
     <div className="chat-window">
       <div className="messages" ref={messagesContainerRef}>
-        {messages.map((message, index) => (
-          <ChatMessage key={`msg-${index}`} message={message} />
-        ))}
+        {messages.length > 0 ? (
+          messages.map((message, index) => (
+            <ChatMessage key={`msg-${index}`} message={message} />
+          ))
+        ) : (
+          <p>새로운 대화를 시작하세요.</p>
+        )}
         {loading && <p>로딩 중...</p>}
         {error && <p>오류: {error.message}</p>}
       </div>
