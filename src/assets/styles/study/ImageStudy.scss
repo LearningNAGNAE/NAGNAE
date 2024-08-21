@@ -1,141 +1,163 @@
 .image-study {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #FAF7F5;
-    border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #FAF7F5;
+  border-radius: 10px;
+  font-family: 'HSBombaram3.0_Thin', sans-serif;
+
+  h1, p, input, select, button {
     font-family: 'HSBombaram3.0_Thin', sans-serif;
-  
-    h1, p, input, select, button {
-        font-family: 'HSBombaram3.0_Thin', sans-serif;
+  }
+
+  h1 {
+    color: #4A4A4A;
+    margin-bottom: 20px;
+    font-size: 48px;
+  }
+
+  .category-selector {
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+
+    select {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #8B7355;
+      border-radius: 5px 0 0 5px;
+      background-color: #8B7355;
+      color: white;
     }
 
-    h1 {
-      color: #4A4A4A;
-      margin-bottom: 20px;
-      font-size: 48px;
+    .refresh-button {
+      padding: 10px;
+      background-color: #EF8354;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      color: white;
+      cursor: pointer;
     }
-  
-    .category-selector {
-      display: flex;
-      width: 100%;
-      margin-bottom: 20px;
-  
-      select {
-        flex-grow: 1;
-        padding: 10px;
-        border: 1px solid #8B7355;
-        border-radius: 5px 0 0 5px;
-        background-color: #8B7355;
-        color: white;
-      }
-  
-      .refresh-button {
-        padding: 10px;
-        background-color: #EF8354;
-        border: none;
-        border-radius: 0 5px 5px 0;
-        color: white;
-        cursor: pointer;
-      }
-    }
-  
-    .sentence-display {
-      width: 100%;
-      padding: 15px;
-      background-color: white;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      text-align: center;
-  
-      p {
-        margin: 5px 0;
-      }
-  
-      .audio-button {
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-      }
-    }
-  
-    .action-buttons {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        
-      button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 20px;
-        color: white;
-        cursor: pointer;
-      }
-  
-      .record-button {
-        display: flex;
-        align-items: center;
-        padding: 10px 20px;
-        background-color: #EF8354;
-        border: none;
-        border-radius: 25px;
-        color: white;
-        cursor: pointer;
+  }
+
+  .image-display {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     
-        .record-icon {
-          margin-right: 10px;
-        }
-      }
-  
-      .send-button {
-        padding: 10px;
-        background-color: #8B7355;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    
-        .send-icon {
-          width: 20px;
-          height: 20px;
-        }
-      }
-    }
-  
-    .user-input-section {
-      width: 100%;
-      background-color: white;
-      border-radius: 10px;
-      padding: 15px;
-  
-      p {
-        margin-bottom: 10px;
-      }
-  
-      input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #E0E0E0;
-        border-radius: 5px;
-      }
-    }
-
-    .window-send-icon {
-        width: 25px;
-        height: 25px;
-    }
-
     img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 10px;
+      max-width: 100%;
+      max-height: 500px; // 원하는 최대 높이로 조정
+      width: auto;
+      height: auto;
+      border-radius: 10px;
+      object-fit: contain; // 이미지 비율 유지
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .record-button, .restart-button {
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #EF8354;
+      border: none;
+      border-radius: 25px;
+      color: white;
+      cursor: pointer;
+
+      &.recording {
+        background-color: #D23B3B;
       }
+
+      .icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        fill: currentColor;
+      }
+    }
+
+    .restart-button {
+      background-color: #3DD5F3;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+    }
+
+    .send-button {
+      padding: 10px;
+      background-color: #EF8354;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+
+      .window-send-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  .recording-controls {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    gap: 10px;
+
+    .audio-player-container {
+      flex-grow: 1;
+      background-color: white;
+      border-radius: 25px;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      width: 25%;
+
+      .audio-player {
+        width: 100%;
+        height: 30px;
+      }
+    }
+  }
+
+  .user-input-section {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    .user-sentence {
+      font-weight: bold;
+    }
   }
 
   .sentence-analysis, .nagnae-recommendation {
@@ -144,31 +166,23 @@
     padding: 20px;
     margin-top: 20px;
     width: 100%;
-  
+
     h2 {
       color: #4A4A4A;
       margin-bottom: 10px;
     }
-  
+
     p, li {
       margin-bottom: 10px;
     }
-  
+
     ol {
       padding-left: 20px;
     }
-  
+
     ul {
       padding-left: 40px;
     }
-  }
-  
-  .audio-button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    margin-top: 10px;
   }
 
   .nagnae-recommendation {
@@ -176,12 +190,12 @@
       display: flex;
       align-items: center;
       margin-bottom: 10px;
-  
+
       h2 {
         margin-right: 10px;
         margin-bottom: 0;
       }
-  
+
       .audio-button {
         background: none;
         border: none;
@@ -192,3 +206,42 @@
       }
     }
   }
+
+  // 오디오 플레이어 스타일 커스터마이징
+  audio::-webkit-media-controls-panel {
+    background-color: white;
+  }
+  
+  audio::-webkit-media-controls-play-button {
+    background-color: #EF8354;
+    border-radius: 50%;
+  }
+  
+  audio::-webkit-media-controls-current-time-display,
+  audio::-webkit-media-controls-time-remaining-display {
+    color: #4A4A4A;
+    font-family: 'HSBombaram3.0_Thin', sans-serif;
+  }
+
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #EF8354;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    p {
+      margin-top: 10px;
+      color: #4A4A4A;
+    }
+  }
+}

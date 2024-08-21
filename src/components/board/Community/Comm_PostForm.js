@@ -1,19 +1,19 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { usePostForm } from '../../../hooks/board/useBoardComm_PostForm.js';
+import { useBoardComm_PostForm } from '../../../hooks/board/useBoardComm_PostForm';
 import '../../../assets/styles/board/Community/Comm_PostForm.scss';
 import Editor from '../../board/BoardQuillCustum.js';
 import 'react-quill/dist/quill.snow.css';
 import { PostFormAPIProvider } from '../../../contexts/board/Board_Comm_PostFormApi.js';
 
 function PostFormContent() {
-  const { title, setTitle, handleSubmit } = usePostForm();
+  const { title, setTitle, handleSubmit, handleImageUpload } = useBoardComm_PostForm();
   const quillRef = useRef(null);
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    const quillContent = quillRef.current ? quillRef.current.root.innerHTML : '';
-    await handleSubmit(title, quillContent);
+    const content = quillRef.current.getContents();
+    handleSubmit(title, content);
   };
 
   return (
@@ -36,6 +36,7 @@ function PostFormContent() {
               <Editor 
                 ref={quillRef}
                 placeholder='내용을 입력하세요...'
+                onImageUpload={handleImageUpload}
               />
             </div>
           </div>

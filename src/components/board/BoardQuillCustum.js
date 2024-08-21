@@ -1,7 +1,8 @@
 import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
-import 'quill/dist/quill.snow.css'; // Ensure the Quill stylesheet is included
+import 'quill/dist/quill.snow.css';
 import '../../assets/styles/board/quillstyle.css';
+import { usePostFormAPI } from '../../contexts/board/Board_Comm_PostFormApi';
 
 const Size = Quill.import('formats/size');
 Size.whitelist = ['small', 'medium', 'large', 'huge'];
@@ -60,6 +61,7 @@ const QuillToolbar = () => (
     </span>
     <span className="ql-formats">
       <button className="ql-link" />
+      <button className="ql-image" />
       <button className="ql-video" />
     </span>
     <span className="ql-formats">
@@ -73,6 +75,25 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
   const defaultValueRef = useRef(defaultValue);
   const onTextChangeRef = useRef(onTextChange);
   const onSelectionChangeRef = useRef(onSelectionChange);
+  const { uploadImage } = usePostFormAPI();
+
+  const imageHandler = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      try {
+        const imageUrl = await uploadImage(file);
+        const range = ref.current.getSelection();
+        ref.current.insertEmbed(range.index, 'image', imageUrl);
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
+    };
+  };
 
   useLayoutEffect(() => {
     onTextChangeRef.current = onTextChange;
@@ -96,7 +117,12 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
 
     const quill = new Quill(editorContainer, {
       modules: {
-        toolbar: '#toolbar',
+        toolbar: {
+          container: '#toolbar',
+          handlers: {
+            image: imageHandler
+          }
+        },
         history: {
           delay: 1000,
           maxStack: 500,

@@ -83,7 +83,6 @@ function RecordModal({ onRecordingComplete, onAudioSend }) {
                     <audio src={audioURL} controls className="audio-player" />
                   </>
                 )}
-                
               </div>
 
               <div className='record-text'>

@@ -1,79 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import sendIcon from '../../assets/images/send.png';
+// ImageStudy.js
+import React from 'react';
+import { useImageStudy } from '../../hooks/study/useImageStudy';
+import { ImageStudyProvider } from '../../contexts/study/ImageStudyApi';
 import '../../assets/styles/study/ImageStudy.scss';
-import store from '../../redux/Store';
+import sendIcon from '../../assets/images/send.png';
 
-const ImageStudy = () => {
-  const SpringbaseUrl = store.getState().url.SpringbaseUrl;
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [showImage, setShowImage] = useState(false);
-  const [userSentence, setUserSentence] = useState('');
-  const [showAnalysis, setShowAnalysis] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [currentImage, setCurrentImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    if (currentImage) {
-      importImage(currentImage.fileSaveName);
-    }
-  }, [currentImage]);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(`${SpringbaseUrl}/study/category`);
-      if (response.data.code === "200") {
-        setCategories(response.data.data.studyCategoryList);
-      }
-    } catch (error) {
-      console.error('카테고리를 가져오는 중 오류 발생:', error);
-    }
-  };
-
-  const fetchRandomImage = async (categoryNo) => {
-    try {
-      const response = await axios.get(`${SpringbaseUrl}/study/image/${categoryNo}`);
-      if (response.data.code === "200") {
-        const images = response.data.data.studyImageList;
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-        setCurrentImage(randomImage);
-        setShowImage(true);
-      }
-    } catch (error) {
-      console.error('이미지를 가져오는 중 오류 발생:', error);
-    }
-  };
-
-  const importImage = async (filename) => {
-    try {
-      const image = await import(`../../assets/images/study/${filename}`);
-      setImageUrl(image.default);
-    } catch (error) {
-      console.error('이미지를 불러오는 중 오류 발생:', error);
-      setImageUrl(null);
-    }
-  };
-
-  const handleRefresh = () => {
-    if (selectedCategory) {
-      fetchRandomImage(selectedCategory);
-      setShowAnalysis(false);
-    }
-  };
-
-  const handleSend = () => {
-    setShowAnalysis(true);
-  };
+function ImageStudyInner() {
+  const {
+    categories,
+    selectedCategory,
+    setSelectedCategory,
+    showImage,
+    imageUrl,
+    currentImage,
+    showAnalysis,
+    isPlaying,
+    analysisResult,
+    isLoading,
+    userSentence,
+    audioURL,
+    isRecording,
+    recommendation,
+    handleRefresh,
+    handleSend,
+    handleTextToSpeech,
+    startRecording,
+    stopRecording,
+    restartRecording,
+  } = useImageStudy();
 
   return (
     <div className="image-study">
-      <h1>이미지로 한국어 학습하기</h1>
-      <h2>이미지를 보고 알맞은 문장을 말해보세요!</h2>
+      <h1>Learning Korean to Image</h1>
+      <h2>Look at the image and say the correct sentence!</h2>
+      <h2>Please record within 15 seconds!</h2>
       <br/>
       
       <div className="category-selector">
@@ -81,7 +41,7 @@ const ImageStudy = () => {
           value={selectedCategory} 
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
-          <option value="">카테고리를 선택해주세요</option>
+          <option value="">Select a category</option>
           {categories.map((category) => (
             <option key={category.categoryNo} value={category.categoryNo}>
               {category.categoryName}
@@ -89,100 +49,100 @@ const ImageStudy = () => {
           ))}
         </select>
         <button className="refresh-button" onClick={handleRefresh}>
-          <img src={sendIcon} alt="새로고침" className="window-send-icon" />
+          <img src={sendIcon} alt="send" className="window-send-icon" />
         </button>
       </div>
 
       {showImage && imageUrl && (
         <>
           <div className="image-display">
-            <img 
-              src={imageUrl} 
-              alt="선택된 카테고리의 샘플" 
-            />
+            <img src={imageUrl} alt="Samples of selected categories" />
           </div>
 
           <div className="action-buttons">
-            <button className="record-button">
-              <span className="record-icon">🎙️</span>
-              녹음
-            </button>
-            <button className="send-button" onClick={handleSend}>
-              <img src={sendIcon} alt="전송" className="send-icon" />
-            </button>
+            {!isRecording && !audioURL ? (
+              <button className="record-button" onClick={startRecording}>
+                <svg viewBox="0 0 24 24" className="icon">
+                  <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                  <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                </svg>
+                Record
+              </button>
+            ) : isRecording ? (
+              <button className="record-button recording" onClick={stopRecording}>
+                <svg viewBox="0 0 24 24" className="icon">
+                  <path d="M6 6h12v12H6z"/>
+                </svg>
+                Stop
+              </button>
+            ) : (
+              <div className="recording-controls">
+                <button className="restart-button" onClick={restartRecording}>
+                  <svg viewBox="0 0 24 24" className="icon">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                  </svg>
+                  Re-recording
+                </button>
+                <div className="audio-player-container">
+                  <audio src={audioURL} controls className="audio-player" />
+                </div>
+                <button className="send-button" onClick={handleSend} disabled={isLoading}>
+                  <img src={sendIcon} alt="send" className="window-send-icon" />
+                </button>
+              </div>
+            )}
           </div>
+
+          {audioURL && !showAnalysis && !isLoading && (
+            <p className="instruction">Click the right arrow button to analyze your recorded voice!</p>
+          )}
         </>
       )}
 
-      {showAnalysis && (
-        <>
-          <div className="user-input-section">
-            <p>입력한 문장:</p>
-            <input 
-              type="text" 
-              value={userSentence} 
-              onChange={(e) => setUserSentence(e.target.value)}
-              placeholder="이미지에 대한 설명을 입력하세요."
-            />
-          </div>
-
-          <div className="action-buttons">
-            <button className="record-button">
-              <span className="record-icon">🎙️</span>
-              녹음
-            </button>
-            <button className="send-button" onClick={handleSend}>
-              <img src={sendIcon} alt="전송" className="send-icon" />
-            </button>
-          </div>
-        </>
+      {isLoading && (
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Analyzing your voice...</p>
+        </div>
       )}
 
-      {showAnalysis && (
+      {showAnalysis && !isLoading && (
         <>
           <div className="user-input-section">
-            <p>Your Sentence:</p>
-            <input 
-              type="text" 
-              value={userSentence} 
-              onChange={(e) => setUserSentence(e.target.value)}
-              placeholder="이미지에 대한 설명을 입력하세요."
-            />
+            <p>Your sentence:</p>
+            <p className="user-sentence">{userSentence}</p>
           </div>
 
           <div className="sentence-analysis">
-            <h2>Sentence Analysis:</h2>
-            <p>여성 직원이 회의실에서 동료들 앞에서 차트를 이용해 프레젠테이션을 하고 있습니다.</p>
-            <ol>
-              <li>Evaluation: The description is accurate and concise, capturing the main elements of the image. It effectively conveys the setting (회의실 - meeting room), the main action (프레젠테이션 - presentation), and the use of visual aids (차트 - chart).</li>
-              <li>Sentence structure and coherence: The sentence structure is good, following a logical order. However, it could be improved slightly for better flow and more detailed information. Here are some suggestions:
-                <ul>
-                  <li>Consider mentioning the number of colleagues present.</li>
-                  <li>You could specify the type of chart being used (e.g., bar graph).</li>
-                  <li>The order of information could be rearranged for a more natural flow.</li>
-                </ul>
-              </li>
-              <li>Improved version in English: "In a meeting room, a female employee is giving a presentation using a bar chart to four colleagues seated around a glass table."</li>
-            </ol>
-            <p>This revised version provides more specific details about the scene, including the number of colleagues and the type of chart, while maintaining a concise structure. The order of information now follows a more natural progression from setting to action to details.</p>
-            <p>Overall, the original Korean description was effective, and these suggestions aim to enhance its clarity and informativeness.</p>
+            <h2>Analysis:</h2>
+            <div dangerouslySetInnerHTML={{ __html: analysisResult ? analysisResult.replace(/\n/g, '<br>') : '분석 결과가 없습니다' }} />
           </div>
 
           <div className="nagnae-recommendation">
-            <div className="recommendation-header">
-              <h2>NAGNAE's recommendation</h2>
-              <button className="audio-button">🔊</button>
-            </div>
-            <ol>
-              <li>회의실 창문을 통해 밝은 자연광이 들어와 전문적이고 개방적인 분위기를 조성하고 있습니다.</li>
-              <li>참석자들은 다양한 연령대로 구성되어 있으며, 모두 정장 차림으로 비즈니스 미팅의 중요성을 나타내고 있습니다.</li>
-              <li>테이블 위에는 물병과 유리잔이 놓여있어 장시간의 회의를 위한 준비가 되어 있음을 보여줍니다.</li>
-            </ol>
+            <h2>
+              Recommendation by 'NAGNAE':
+              <button 
+                className="audio-button" 
+                onClick={() => handleTextToSpeech(recommendation)}
+                disabled={isPlaying}
+              >
+                🔊
+              </button>
+            </h2>
+            <p>{recommendation || '추천 사항이 없습니다'}</p>
           </div>
         </>
       )}
     </div>
   );
-};
+}
+
+function ImageStudy() {
+  return (
+    <ImageStudyProvider>
+      <ImageStudyInner />
+    </ImageStudyProvider>
+  );
+}
 
 export default ImageStudy;

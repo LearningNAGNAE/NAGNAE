@@ -12,9 +12,10 @@ import categoryTwoImage from '../../assets/images/category2.png';
 import categoryThreeImage from '../../assets/images/category3.png';
 import categoryFourImage from '../../assets/images/category4.png';
 import { useRecentChats } from '../../hooks/chatbot/useRecent';
+import { Link } from 'react-router-dom';
 
-function Sidebar({ onSelectChat }) {
-  const { recentChats, loading, error, selectChat, loadRecentChats } = useRecentChats();
+function Sidebar({ onSelectChat, initialSelectedChat }) {
+  const { recentChats, error, loadRecentChats } = useRecentChats();
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedChat, setSelectedChat] = useState(null);
 
@@ -22,28 +23,46 @@ function Sidebar({ onSelectChat }) {
     loadRecentChats();
   }, [loadRecentChats]);
 
+  useEffect(() => {
+    if (initialSelectedChat) {
+      console.log('Initial selected chat in Sidebar:', initialSelectedChat);
+      setSelectedChat(initialSelectedChat);
+      setSelectedTab(initialSelectedChat.categoryNo - 1);
+      onSelectChat(initialSelectedChat);
+    }
+  }, [initialSelectedChat, onSelectChat]);
+
   const handleChatSelect = async (chat) => {
     if (chat && chat.chatHisNo) {
-      const selectedChatData = await selectChat(chat.chatHisNo);
-      if (selectedChatData && selectedChatData.apiData) {
-        setSelectedChat(selectedChatData.apiData);
-        onSelectChat(selectedChatData.apiData);
-        setSelectedTab(chat.categoryNo - 1);  // 카테고리에 맞는 탭 선택
-      } else {
-        console.error("선택된 채팅 데이터가 올바르지 않습니다:", selectedChatData);
-      }
+      console.log('Selecting chat:', chat);
+      setSelectedChat(chat);
+      setSelectedTab(chat.categoryNo - 1);
+      onSelectChat(chat);
     }
+  };
+
+  const handleTabChange = (index) => {
+    setSelectedTab(index);
+    setSelectedChat(null); // 새로운 채팅을 시작하기 위해 선택된 채팅을 초기화합니다.
+    onSelectChat(null); // 부모 컴포넌트에 새로운 채팅 시작을 알립니다.
   };
 
   const handleViewAll = () => {
     console.log("View all clicked");
-    // 모든 채팅 내역을 보는 기능 구현
+  };
+
+  const handleNewChat = () => {
+    setSelectedChat(null);
+    onSelectChat(null);
   };
 
   return (
     <aside>
-      <h2 className='category'>Category</h2>
-      <Tabs orientation='vertical' variant='unstyled' index={selectedTab} onChange={(index) => setSelectedTab(index)}>
+      <div className="category-header">
+        <h2 className='category'>Category</h2>
+        <button className='new-chat' onClick={handleNewChat}>+ New</button>
+      </div>
+      <Tabs orientation='vertical' variant='unstyled' index={selectedTab} onChange={handleTabChange}>   
         <Flex direction={["column", "row"]} height={["auto", "300px"]}>
           <TabList width={["100%", "220px"]} marginRight={["0", "50px"]} marginBottom={["20px", "0"]}>
             <Tab 
@@ -88,7 +107,7 @@ function Sidebar({ onSelectChat }) {
               _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
               transition="background-color 0.3s"
             >
-              <img src={categoryThreeImage} alt="Academic" className="image-class" />
+              <img src={categoryFourImage} alt="Academic" className="image-class" />
               Academic Service
             </Tab>
             <Tab 
@@ -103,7 +122,7 @@ function Sidebar({ onSelectChat }) {
               _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
               transition="background-color 0.3s"
             >
-              <img src={categoryFourImage} alt="Employment" className="image-class" />
+              <img src={categoryThreeImage} alt="Employment" className="image-class" />
               Employment Service
             </Tab>
           </TabList>
@@ -120,7 +139,12 @@ function Sidebar({ onSelectChat }) {
               backgroundColor='#BA9F8B'
             >
               <ChatLegalVisaProvider>
-                <ChatLegalVisaWindow selectedChat={selectedChat} onChatComplete={loadRecentChats} />
+                <ChatLegalVisaWindow 
+                  key={selectedChat ? selectedChat.chatHisNo : `new-chat-${selectedTab}`} 
+                  selectedChat={selectedChat} 
+                  categoryNo={selectedTab + 1}
+                  onChatComplete={loadRecentChats} 
+                />
               </ChatLegalVisaProvider>
             </TabPanel>
             <TabPanel 
@@ -171,9 +195,9 @@ function Sidebar({ onSelectChat }) {
       </Tabs>
       <h2 className='recent'>
         Recent
-        <button className='view_all' onClick={handleViewAll}>
+        <Link className='view_all' to="/ChatListPage" onClick={handleViewAll}>
           view all  ---→
-        </button>
+        </Link>
       </h2>
      
       {error && <p>오류: {error}</p>}
@@ -188,7 +212,9 @@ function Sidebar({ onSelectChat }) {
           ))}
         </ul>
       ) : (
-        <p>최근 채팅 내역이 없습니다.</p>
+        <div className='recent-ul-no'>
+          <p>최근 채팅 내역이 없습니다.</p>
+        </div>
       )}
     </aside>
   );
