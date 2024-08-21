@@ -89,7 +89,7 @@ export const useAuth = () => {
         sessionStorage.setItem('userData', JSON.stringify(userData));
         console.log('저장된 토큰:', token);
         console.log('저장된 사용자 데이터:', userData);
-        navigate('/SignPage?type=modifyaccount', { state: { email: userData.email, name: userData.name } });
+        navigate('/');
       } else {
         // 기존 사용자인 경우 JWT 토큰 저장 및 홈페이지로 이동
         setAuthToken(token);

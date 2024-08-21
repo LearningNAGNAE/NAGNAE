@@ -14,19 +14,6 @@ const SignIn = () => {
 
 
 
-
-
-  
-
-  
-
-
-
-
-
-
-
-
   return (
     <ConfigProvider>
       <div className="login-page">

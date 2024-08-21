@@ -22,7 +22,7 @@ function ModifyAccount() {
           ) : (
             (() => {
               if (savenameinfo != null) {
-                return <img className='user-profile-img' src={require(`../../assets/images/img/${savenameinfo}`)} alt="Profile preview" />;
+                return <img className='user-profile-img' src={require(`../../assets/images/profile/${savenameinfo}`)} alt="Profile preview" />;
               } else {
                 return <span>picture</span>;
               }
