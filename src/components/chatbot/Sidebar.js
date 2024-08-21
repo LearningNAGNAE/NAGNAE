@@ -27,7 +27,7 @@ function Sidebar({ onSelectChat, initialSelectedChat }) {
     if (initialSelectedChat) {
       console.log('Initial selected chat in Sidebar:', initialSelectedChat);
       setSelectedChat(initialSelectedChat);
-      setSelectedTab(initialSelectedChat.categoryNo - 1);
+      setSelectedTab(initialSelectedChat.categoryNo - 6);
       onSelectChat(initialSelectedChat);
     }
   }, [initialSelectedChat, onSelectChat]);
@@ -36,7 +36,7 @@ function Sidebar({ onSelectChat, initialSelectedChat }) {
     if (chat && chat.chatHisNo) {
       console.log('Selecting chat:', chat);
       setSelectedChat(chat);
-      setSelectedTab(chat.categoryNo - 1);
+      setSelectedTab(chat.categoryNo - 6);
       onSelectChat(chat);
     }
   };
@@ -142,7 +142,7 @@ function Sidebar({ onSelectChat, initialSelectedChat }) {
                 <ChatLegalVisaWindow 
                   key={selectedChat ? selectedChat.chatHisNo : `new-chat-${selectedTab}`} 
                   selectedChat={selectedChat} 
-                  categoryNo={selectedTab + 1}
+                  categoryNo={selectedTab + 6}
                   onChatComplete={loadRecentChats} 
                 />
               </ChatLegalVisaProvider>
