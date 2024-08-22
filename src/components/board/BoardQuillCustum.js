@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { forwardRef, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import '../../assets/styles/board/quillstyle.css';
@@ -77,7 +77,8 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
   const onSelectionChangeRef = useRef(onSelectionChange);
   const { uploadImage } = usePostFormAPI();
 
-  const imageHandler = () => {
+  // imageHandler를 useCallback으로 래핑하여 의존성 문제를 해결합니다.
+  const imageHandler = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -93,7 +94,7 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
         console.error('Error uploading image:', error);
       }
     };
-  };
+  }, [uploadImage, ref]);
 
   useLayoutEffect(() => {
     onTextChangeRef.current = onTextChange;
@@ -154,7 +155,7 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
       }
       container.innerHTML = '';
     };
-  }, [ref]);
+  }, [ref, imageHandler]);
 
   return (
     <div>
