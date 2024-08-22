@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 const ChatLegalVisaApiContext = createContext(null);
@@ -17,13 +16,21 @@ export const ChatLegalVisaProvider = ({ children }) => {
       LegalVisaChatBotData: async (data) => {
         try {
           console.log("Sending data to backend:", data);
-          const response = await axios.post(`${PythonbaseUrl}/law`, data);
-          return response.data;
+          const response = await fetch(`${PythonbaseUrl}/law`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          return response;
         } catch (error) {
           console.error("Error:", error);
-          if (error.response) {
-            console.error("Response data:", error.response.data);
-          }
           throw error;
         }
       },
