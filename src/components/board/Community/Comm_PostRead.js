@@ -46,7 +46,15 @@ function PostFormRead() {
       </article>
 
       <section className="comm-comments">
-        {/* 여기에 댓글 UI를 추가할 수 있습니다 */}
+        {post.comments && post.comments.map((comment, index) => (
+            <div key={index} className="comm-comment">
+              <div className="comm-comment-img"></div>
+              <div className="comm-commenter-box">
+                <div className="comm-commenter">{comment.userName}</div>
+                <div className="comm-comment-content">{comment.content}</div>
+              </div>
+            </div>
+          ))}
       </section>
 
       <div className="comm-reply-box">
