@@ -3,51 +3,37 @@ import { useChatLegalVisaApi } from '../../contexts/chatbot/ChatLegalVisaApi';
 import { useRecentChatsApi } from '../../contexts/chatbot/ChatRecentApi';
 import { v4 as uuidv4 } from 'uuid';
 
-// Assuming session_chat_mapping is defined or imported here
-const session_chat_mapping = {}; // Replace with actual definition or import
-
 export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const sessionIdRef = useRef(localStorage.getItem('chatSessionId') || uuidv4());
-    const isNewSessionRef = useRef(true);
+    const sessionIdRef = useRef(null);
     const currentChatHisNoRef = useRef(null);
+    const isNewSessionRef = useRef(true);
     const legalVisaApi = useChatLegalVisaApi();
     const recentChatsApi = useRecentChatsApi();
-
-    const [currentChatHisNo, setCurrentChatHisNo] = useState(null);
-    const [isNewSession, setIsNewSession] = useState(true);
+    const loadedChatHistoryRef = useRef(null);
+    const prevInitialSelectedChatRef = useRef(null);
 
     const userData = JSON.parse(sessionStorage.getItem('userData'));
 
-    useEffect(() => {
-        const sessionId = localStorage.getItem('chatSessionId');
-        if (sessionId) {
-            sessionIdRef.current = sessionId;
-        } else {
-            const newSessionId = uuidv4();
-            localStorage.setItem('chatSessionId', newSessionId);
-            sessionIdRef.current = newSessionId;
-        }
+    const generateNewSessionId = useCallback(() => {
+        const newSessionId = uuidv4();
+        sessionIdRef.current = newSessionId;
+        localStorage.setItem('chatSessionId', newSessionId);
+        return newSessionId;
     }, []);
 
     const loadChatHistory = useCallback(async (chatHisNo) => {
-        if (!chatHisNo) {
-            console.error('chatHisNo is undefined');
+        if (!chatHisNo || loadedChatHistoryRef.current === chatHisNo) {
             return;
         }
 
         try {
             setLoading(true);
             setError(null);
-            const userData = JSON.parse(sessionStorage.getItem('userData'));
-            if (!userData || !userData.apiData || !userData.apiData.userno) {
-                throw new Error('User data not found in session storage');
-            }
             const userNo = userData.apiData.userno;
             const response = await recentChatsApi.fetchChatHistory(userNo, chatHisNo);
-            console.log('Loaded chat history:', response);
             if (response && response.apiData) {
                 const formattedMessages = response.apiData.flatMap(msg => {
                     const messages = [];
@@ -70,6 +56,7 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
                     return messages;
                 });
                 setMessages(formattedMessages);
+                loadedChatHistoryRef.current = chatHisNo;
             }
         } catch (err) {
             console.error('채팅 내역을 불러오는 중 오류 발생:', err);
@@ -77,19 +64,31 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
         } finally {
             setLoading(false);
         }
-    }, [recentChatsApi]);
+    }, [recentChatsApi, userData]);
 
     useEffect(() => {
-        if (initialSelectedChat && initialSelectedChat.chatHisNo) {
-            setCurrentChatHisNo(initialSelectedChat.chatHisNo);
-            setIsNewSession(false);
-            loadChatHistory(initialSelectedChat.chatHisNo);
-        } else {
-            setMessages([]);
-            setCurrentChatHisNo(null);
-            setIsNewSession(true);
-        }
-    }, [initialSelectedChat, loadChatHistory]);
+        const handleInitialChat = () => {
+            if (initialSelectedChat?.chatHisNo !== prevInitialSelectedChatRef.current?.chatHisNo) {
+                if (initialSelectedChat && initialSelectedChat.chatHisNo) {
+                    currentChatHisNoRef.current = initialSelectedChat.chatHisNo;
+                    sessionIdRef.current = initialSelectedChat.chatHisNo.toString();
+                    isNewSessionRef.current = false;
+                    if (loadedChatHistoryRef.current !== initialSelectedChat.chatHisNo) {
+                        loadChatHistory(initialSelectedChat.chatHisNo);
+                    }
+                } else {
+                    setMessages([]);
+                    currentChatHisNoRef.current = null;
+                    generateNewSessionId();
+                    isNewSessionRef.current = true;
+                    loadedChatHistoryRef.current = null;
+                }
+                prevInitialSelectedChatRef.current = initialSelectedChat;
+            }
+        };
+
+        handleInitialChat();
+    }, [initialSelectedChat, loadChatHistory, generateNewSessionId]);
 
     const sendMessage = useCallback(async (messageText) => {
         if (messageText.trim()) {
@@ -101,11 +100,8 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
             setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
 
             try {
-                if (!currentChatHisNo && !isNewSession) {
-                    const existingChatHisNo = session_chat_mapping[sessionIdRef.current];
-                    if (existingChatHisNo) {
-                        setCurrentChatHisNo(existingChatHisNo);
-                    }
+                if (!sessionIdRef.current) {
+                    generateNewSessionId();
                 }
 
                 const requestData = {
@@ -113,9 +109,10 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
                     userNo: userData.apiData.userno,
                     categoryNo: categoryNo,
                     session_id: sessionIdRef.current,
-                    is_new_session: isNewSession,
-                    chat_his_no: currentChatHisNo
+                    chat_his_no: currentChatHisNoRef.current,
+                    is_new_session: isNewSessionRef.current
                 };
+
                 console.log("Sending request data:", requestData);
                 const response = await legalVisaApi.LegalVisaChatBotData(requestData);
 
@@ -132,17 +129,16 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
                     )
                 );
 
-                setCurrentChatHisNo(response.chatHisNo);
-                setIsNewSession(false);
-
-                isNewSessionRef.current = false;
-                currentChatHisNoRef.current = response.chatHisNo || currentChatHisNoRef.current;
-
-                // Update session_chat_mapping if needed
-                session_chat_mapping[sessionIdRef.current] = response.chatHisNo;
+                if (response.chatHisNo) {
+                    currentChatHisNoRef.current = response.chatHisNo;
+                    sessionIdRef.current = response.chatHisNo.toString();
+                    isNewSessionRef.current = false;
+                    localStorage.setItem('chatSessionId', sessionIdRef.current);
+                }
 
             } catch (error) {
                 console.error('메시지 전송 중 오류 발생:', error);
+                console.log('Response data:', error.response?.data);
                 setError(error);
                 setMessages(prevMessages =>
                     prevMessages.map(msg =>
@@ -155,7 +151,7 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
                 setLoading(false);
             }
         }
-    }, [legalVisaApi, currentChatHisNo, isNewSession, categoryNo, userData]);
+    }, [legalVisaApi, categoryNo, userData, generateNewSessionId]);
 
     return {
         messages,
