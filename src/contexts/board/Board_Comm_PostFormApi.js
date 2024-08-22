@@ -12,35 +12,6 @@ export const usePostFormAPI = () => {
 export const PostFormAPIProvider = ({ children }) => {
   const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
-  const submitPost = useCallback(async (title, content, userData) => {
-    if (!userData || !userData.apiData) {
-      throw new Error('User data is not available');
-    }
-  
-    try {
-      const processedContent = await processContent(content);
-      const htmlContent = convertToHtml(processedContent); // 새로운 함수
-      const response = await axios.post(`${SpringbaseUrl}/board/freeboardwrite`, {
-        title,
-        content: htmlContent, // HTML 문자열로 변환된 내용
-        insertuserno: userData.apiData.userno,
-        modifyuserno: userData.apiData.userno,
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error creating post:', error);
-      throw error;
-    }
-  }, [SpringbaseUrl]);
-  
-  // Delta 형식을 HTML로 변환하는 함수
-  const convertToHtml = (delta) => {
-    const tempContainer = document.createElement('div');
-    const quill = new Quill(tempContainer);
-    quill.setContents(delta);
-    return quill.root.innerHTML;
-  };
-
   const uploadImage = useCallback(async (file) => {
     try {
       const formData = new FormData();
@@ -52,14 +23,23 @@ export const PostFormAPIProvider = ({ children }) => {
       });
       return response.data.imageUrl;
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('이미지 업로드 중 오류 발생:', error);
       throw error;
     }
   }, [SpringbaseUrl]);
 
-  const processContent = async (content) => {
+  const processImage = useCallback(async (imageData) => {
+    if (imageData.startsWith('data:image')) {
+      // base64 이미지를 서버로 업로드하고 URL을 반환
+      const file = dataURLtoFile(imageData, 'image.png');
+      return await uploadImage(file);
+    }
+    return imageData;  // 이미 URL인 경우 그대로 반환
+  }, [uploadImage]);
+
+  const processContent = useCallback(async (content) => {
     if (!content || !content.ops) {
-      throw new Error('Invalid content format');
+      throw new Error('잘못된 콘텐츠 형식입니다');
     }
     const processedOps = await Promise.all(content.ops.map(async (op) => {
       if (op.insert && typeof op.insert === 'object' && op.insert.image) {
@@ -76,15 +56,35 @@ export const PostFormAPIProvider = ({ children }) => {
     }));
 
     return { ops: processedOps };
-  };
+  }, [processImage]);
 
-  const processImage = async (imageData) => {
-    if (imageData.startsWith('data:image')) {
-      // base64 이미지를 서버로 업로드하고 URL을 반환
-      const file = dataURLtoFile(imageData, 'image.png');
-      return await uploadImage(file);
+  const submitPost = useCallback(async (title, content, userData) => {
+    if (!userData || !userData.apiData) {
+      throw new Error('사용자 데이터가 없습니다');
     }
-    return imageData;  // 이미 URL인 경우 그대로 반환
+  
+    try {
+      const processedContent = await processContent(content);
+      const htmlContent = convertToHtml(processedContent); // 새로운 함수
+      const response = await axios.post(`${SpringbaseUrl}/board/freeboardwrite`, {
+        title,
+        content: htmlContent, // HTML 문자열로 변환된 내용
+        insertuserno: userData.apiData.userno,
+        modifyuserno: userData.apiData.userno,
+      });
+      return response.data;
+    } catch (error) {
+      console.error('게시물 생성 중 오류 발생:', error);
+      throw error;
+    }
+  }, [SpringbaseUrl, processContent]);
+  
+  // Delta 형식을 HTML로 변환하는 함수
+  const convertToHtml = (delta) => {
+    const tempContainer = document.createElement('div');
+    const quill = new Quill(tempContainer);
+    quill.setContents(delta);
+    return quill.root.innerHTML;
   };
 
   const dataURLtoFile = (dataurl, filename) => {

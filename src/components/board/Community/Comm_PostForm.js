@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react'; // useState 제거
 import { Link } from 'react-router-dom';
 import { useBoardComm_PostForm } from '../../../hooks/board/useBoardComm_PostForm';
 import '../../../assets/styles/board/Community/Comm_PostForm.scss';
@@ -9,14 +9,12 @@ import { PostFormAPIProvider } from '../../../contexts/board/Board_Comm_PostForm
 function PostFormContent() {
   const { title, setTitle, handleSubmit, handleImageUpload } = useBoardComm_PostForm();
   const quillRef = useRef(null);
-  const [content, setContent] = useState('');
 
   useEffect(() => {
     if (quillRef.current) {
-      const quillContent = quillRef.current.getContents();
-      setContent(JSON.stringify(quillContent));
+      quillRef.current.getContents(); // quillContent 변수 제거
     }
-  }, [quillRef.current]);
+  }, []); // 빈 배열로 설정하여 초기 렌더링 시에만 실행되도록 설정
 
   const onSubmit = (e) => {
     e.preventDefault();
