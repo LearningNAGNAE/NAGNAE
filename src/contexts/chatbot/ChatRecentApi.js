@@ -14,6 +14,7 @@ export const RecentChatsProvider = ({ children }) => {
     }
 
     return {
+      // 최근 채팅 목록을 가져오는 함수
       fetchRecentChats: async (userNo) => {
         try {
           const response = await axios.get(`${SpringbaseUrl}/chat-history/recent`, {
@@ -21,11 +22,12 @@ export const RecentChatsProvider = ({ children }) => {
           });
           return response.data;
         } catch (error) {
-          console.error('Error fetching recent chats:', error);
+          console.error('최근 채팅 목록 가져오기 오류:', error);
           throw error;
         }
       },
 
+      // 특정 채팅의 상세 내역을 가져오는 함수
       fetchChatHistory: async (userNo, chatHisNo) => {
         try {
           const response = await axios.get(`${SpringbaseUrl}/chat-history/recent-detail`, {
@@ -33,17 +35,19 @@ export const RecentChatsProvider = ({ children }) => {
           });
           return response.data;
         } catch (error) {
-          console.error('Error fetching chat history:', error);
+          console.error('채팅 내역 가져오기 오류:', error);
           throw error;
         }
       },
+
+      // 모든 최근 채팅을 가져오는 함수
       fetchRecentChatAll: async (userNo) => {
         try {
-          console.log('Fetching recent chats for userNo:', userNo); // 디버깅을 위해 추가
+          console.log('Fetching recent chats for user:', userNo);
           const response = await axios.get(`${SpringbaseUrl}/chat-history/recent-all`, {
             params: { userNo }
           });
-          console.log('Response:', response.data); // 디버깅을 위해 추가
+          console.log('Response:', response.data);
           return response.data;
         } catch (error) {
           console.error('Error fetching recent chats:', error);
@@ -63,7 +67,7 @@ export const RecentChatsProvider = ({ children }) => {
 export const useRecentChatsApi = () => {
   const context = useContext(RecentChatsApiContext);
   if (context === undefined) {
-    throw new Error('useRecentChatsApi must be used within a RecentChatsProvider');
+    throw new Error('useRecentChatsApi는 RecentChatsProvider 내에서 사용되어야 합니다');
   }
   return context;
 };

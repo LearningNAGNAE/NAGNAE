@@ -1,10 +1,9 @@
-// src/components/PostList.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../../../assets/styles/board/Community/Comm_PostList.scss';
 import { usePostList } from '../../../hooks/board/BoardComm_PostList';
 
-function Comm_PostList({ posts = [], currentPage, totalPages, totalPosts, pageSize, onPageChange, onSearch }) {
+function CommPostList({ posts = [], currentPage, totalPages, totalPosts, pageSize, onPageChange, onSearch }) {
 
   const pageNumbers = [];
 
@@ -43,11 +42,11 @@ function Comm_PostList({ posts = [], currentPage, totalPages, totalPosts, pageSi
         </thead>
         <tbody className='comm-tbody'>
           {posts.length > 0 ? (
-            posts.map((post,index) => (
+            posts.map((post, index) => (
               <tr key={post.boardno}>
                 <td>{totalPosts - ((currentPage - 1) * pageSize + index)}</td>
                 <td align='left'>
-                  <Link to={{pathname: '/BoardPage',search: '?type=Comm_PostRead',state: {boardno: post.boardno }}}>{post.title}</Link>
+                  <Link to={'/BoardPage?type=Comm_PostRead'} state={{ boardno: post.boardno }}>{post.title}</Link>
                 </td>
                 <td>{post.userName}</td>
                 <td>{post.insertDate}</td>
@@ -87,7 +86,7 @@ function Comm_PostList({ posts = [], currentPage, totalPages, totalPosts, pageSi
   );
 }
 
-function Comm_PostListMain() {
+function CommPostListMain() {
   const {
     posts,
     currentPage,
@@ -98,9 +97,8 @@ function Comm_PostListMain() {
     onSearch
   } = usePostList(1);  // 1은 초기 페이지 번호입니다
 
-
   return (
-    <Comm_PostList
+    <CommPostList
       posts={posts}
       currentPage={currentPage}
       totalPages={totalPages}
@@ -112,4 +110,4 @@ function Comm_PostListMain() {
   );
 }
 
-export default Comm_PostListMain;
+export default CommPostListMain;

@@ -49,10 +49,10 @@ function ChatMedicalMessage({ message }) {
       {message.isUser ? (
         <div className="message-icon user-icon" style={userIconStyle} />
       ) : (
-        <img 
-          src={botIcon} 
-          alt="Bot" 
-          className="message-icon bot-icon" 
+        <img
+          src={botIcon}
+          alt="Bot"
+          className="message-icon bot-icon"
           style={botIconStyle}
         />
       )}

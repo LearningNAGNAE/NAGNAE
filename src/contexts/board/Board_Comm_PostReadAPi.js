@@ -3,27 +3,29 @@ import axios from 'axios';
 import store from '../../redux/Store';
 import { useLocation } from 'react-router-dom';
 
-const PostContext = createContext();
+const PostDetailContext = createContext();
 
-export const usePost = () => {
-  return useContext(PostContext);
+export const usePostDetailContext = () => {
+  return useContext(PostDetailContext);
 };
 
-export const PostProvider = ({ children }) => {
+export const PostDetailProvider = ({ children }) => {
   const SpringbaseUrl = store.getState().url.SpringbaseUrl;
   const location = useLocation();
   const { boardno } = location.state || {};
-
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchPost = useCallback(async () => {
-    if (!boardno) return;
-    setLoading(true);
+    if (!boardno) {
+      return;
+    }
     try {
-      const response = await axios.get(`${SpringbaseUrl}/board/freeboardread/${boardno}`);
-      setPost(response.data);
+      const response = await axios.get(`${SpringbaseUrl}/board/freeboardread`, {
+        params: { boardno }
+      });
+      setPost(response.data.data);
     } catch (error) {
       console.error('Error fetching post:', error);
       setError(error);
@@ -32,14 +34,36 @@ export const PostProvider = ({ children }) => {
     }
   }, [SpringbaseUrl, boardno]);
 
-  const handleDelete = useCallback(async () => {
-    if (!boardno) return;
+  const deletePost = useCallback(async () => {
+    if (!boardno) {
+      return;
+    }
     try {
-      await axios.delete(`${SpringbaseUrl}/board/freeboarddelete/${boardno}`);
-      // Handle post-deletion logic, e.g., redirect to list page
+      await axios.delete(`${SpringbaseUrl}/board/freereaddelete`, {
+        params: { boardno }
+      });
     } catch (error) {
       console.error('Error deleting post:', error);
       setError(error);
+    }
+  }, [SpringbaseUrl, boardno]);
+
+  const postComment = useCallback(async (commentcontent, userData) => {
+    if (!userData || !userData.apiData) {
+      console.error('User data is not available:', userData);
+      throw new Error('User data is not available');
+    }
+    console.log(userData.apiData.userno);
+    try {
+      const response = await axios.post(`${SpringbaseUrl}/board/freeboardcommentwrite`, {
+        content: commentcontent,
+        commenterno: userData.apiData.userno,
+        boardno
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error creating comment:', error);
+      throw error;
     }
   }, [SpringbaseUrl, boardno]);
 
@@ -48,8 +72,8 @@ export const PostProvider = ({ children }) => {
   }, [fetchPost]);
 
   return (
-    <PostContext.Provider value={{ post, loading, error, handleDelete }}>
+    <PostDetailContext.Provider value={{ post, loading, error, fetchPost, deletePost, postComment }}>
       {children}
-    </PostContext.Provider>
+    </PostDetailContext.Provider>
   );
 };

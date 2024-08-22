@@ -1,39 +1,46 @@
-import React, { createContext } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import axios from 'axios';
-import store from '../../redux/Store';
-const PythonbaseUrl = store.getState().url.PythonbaseUrl;
+import { useSelector } from 'react-redux';
 
-export const ChatAcademicApi = createContext();
+const ChatAcademicApiContext = createContext(null);
 
 export const ChatAcademicProvider = ({ children }) => {
+  const PythonbaseUrl = useSelector(state => state.url.PythonbaseUrl);
 
-  const AcademicChatBotData = async (data) => {
-    console.log('Sending request data:', JSON.stringify(data));
-    try {
-      const AcademicChatbotResponse = await axios.post(`${PythonbaseUrl}/academic`, 
-        data,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log('Received response:', AcademicChatbotResponse.data);
-      return AcademicChatbotResponse.data;
-    } catch (error) {
-      console.error('Error:', error);
-      if (error.response) {
-        console.error('Response data:', error.response.data);
-        console.error('Response status:', error.response.status);
-        console.error('Response headers:', error.response.headers);
-      }
-      throw error;
+  const api = useMemo(() => {
+    if (!PythonbaseUrl) {
+      console.error('PythonbaseUrl is not available');
+      return null;
     }
-  };
+
+    return {
+      AcademicChatBotData: async (data) => {
+        try {
+          console.log("Sending data to backend:", data);
+          const response = await axios.post(`${PythonbaseUrl}/academic`, data);
+          return response.data;
+        } catch (error) {
+          console.error("Error:", error);
+          if (error.response) {
+            console.error("Response data:", error.response.data);
+          }
+          throw error;
+        }
+      },
+    };
+  }, [PythonbaseUrl]);
+
   return (
-    <ChatAcademicApi.Provider value={{ AcademicChatBotData }}>
-        {children}
-    </ChatAcademicApi.Provider>
+    <ChatAcademicApiContext.Provider value={api}>
+      {children}
+    </ChatAcademicApiContext.Provider>
   );
-  
+};
+
+export const useChatAcademicApi = () => {
+  const context = useContext(ChatAcademicApiContext);
+  if (context === null) {
+    throw new Error("useChatAcademicApi must be used within a ChatAcademicProvider");
+  }
+  return context;
 };

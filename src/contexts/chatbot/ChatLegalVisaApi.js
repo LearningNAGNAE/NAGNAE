@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 const ChatLegalVisaApiContext = createContext(null);
-const userData = JSON.parse(sessionStorage.getItem('userData'));
 
 export const ChatLegalVisaProvider = ({ children }) => {
   const PythonbaseUrl = useSelector(state => state.url.PythonbaseUrl);
@@ -17,13 +16,13 @@ export const ChatLegalVisaProvider = ({ children }) => {
     return {
       LegalVisaChatBotData: async (data) => {
         try {
-          console.log("Sending data to backend:", data);  // 추가된 로그
+          console.log("Sending data to backend:", data);
           const response = await axios.post(`${PythonbaseUrl}/law`, data);
           return response.data;
         } catch (error) {
           console.error("Error:", error);
           if (error.response) {
-            console.error("Response data:", error.response.data);  // 추가된 로그
+            console.error("Response data:", error.response.data);
           }
           throw error;
         }

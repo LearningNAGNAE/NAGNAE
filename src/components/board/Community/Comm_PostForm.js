@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect } from 'react'; // useState 제거
 import { Link } from 'react-router-dom';
 import { useBoardComm_PostForm } from '../../../hooks/board/useBoardComm_PostForm';
 import '../../../assets/styles/board/Community/Comm_PostForm.scss';
@@ -10,9 +10,26 @@ function PostFormContent() {
   const { title, setTitle, handleSubmit, handleImageUpload } = useBoardComm_PostForm();
   const quillRef = useRef(null);
 
+  useEffect(() => {
+    if (quillRef.current) {
+      quillRef.current.getContents(); // quillContent 변수 제거
+    }
+  }, []); // 빈 배열로 설정하여 초기 렌더링 시에만 실행되도록 설정
+
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (!title.trim()) {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+
     const content = quillRef.current.getContents();
+    if (!content.ops || content.ops.length === 0 || (content.ops.length === 1 && content.ops[0].insert.trim() === '')) {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+
     handleSubmit(title, content);
   };
 

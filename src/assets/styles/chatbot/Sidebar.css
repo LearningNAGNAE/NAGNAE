@@ -8,11 +8,7 @@ aside {
 }
 
 .category {
-  width: 220px;
-  border-bottom: 1px solid white;
   font-size: 20px;
-  margin-top: 20px;
-  padding-bottom: 10px;
 }
 
 .image-class {
@@ -35,6 +31,7 @@ aside {
 .view_all {
   color: white;
   font-size: 15px;
+  padding-top: 5px;
 }
 
 .recent-ul {
@@ -95,4 +92,32 @@ aside {
   height: 179px;
   justify-content: center;
   align-items: center;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 220px;
+  border-bottom: 1px solid white;
+  margin-top: 20px;
+  padding-bottom: 10px;
+}
+
+.category {
+  font-size: 20px;
+  margin: 0; /* Remove default margin */
+}
+
+.new-chat {
+  color: #ffffff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.new-chat:hover {
+  text-decoration: none;
 }
