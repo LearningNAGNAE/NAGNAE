@@ -135,19 +135,19 @@
 }
 
 /* 기본 링크 스타일 */
-a {
-  color: #1a73e8; /* 기본 링크 색상 */
+.job-link {
+  color: #775A45; /* 기본 링크 색상 */
   text-decoration: none; /* 기본적으로 밑줄 제거 */
 }
 
 /* 링크에 마우스를 올렸을 때 스타일 */
-a:hover {
+.job-link:hover {
   color: #d93025; /* 마우스를 올렸을 때 글자 색상 */
   text-decoration: underline; /* 마우스를 올렸을 때 밑줄 표시 */
 }
 
 /* 추가적으로 메시지 안의 링크들을 구분할 수 있는 스타일 */
-.message a {
+.message .job-link {
   font-weight: bold; /* 링크를 굵게 표시 */
 }
 

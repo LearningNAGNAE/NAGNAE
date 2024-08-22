@@ -23,7 +23,7 @@ function ChatJobMessage({ message }) {
         // URL을 링크로 변환
         if (urlPattern.test(part)) {
           return (
-            <a key={`${lineIndex}-${partIndex}`} href={part} target="_blank" rel="noopener noreferrer">
+            <a className = "job-link" key={`${lineIndex}-${partIndex}`} href={part} target="_blank" rel="noopener noreferrer">
               {part}
             </a>
           );
@@ -59,6 +59,8 @@ function ChatJobMessage({ message }) {
     objectFit: 'contain',
   };
 
+  
+
   return (
     <div className={`message-container ${message.isUser ? 'user' : 'bot'}`}>
       {message.isUser ? (
@@ -85,5 +87,6 @@ function ChatJobMessage({ message }) {
     </div>
   );
 }
+
 
 export default ChatJobMessage;
