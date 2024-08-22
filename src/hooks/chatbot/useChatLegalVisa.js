@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { useChatLegalVisaApi } from '../../contexts/chatbot/ChatLegalVisaApi';
 import { useRecentChatsApi } from '../../contexts/chatbot/ChatRecentApi';
 import { v4 as uuidv4 } from 'uuid';
+import DOMPurify from 'dompurify';
 
 export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
     const [messages, setMessages] = useState([]);
@@ -16,6 +17,15 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
     const prevInitialSelectedChatRef = useRef(null);
 
     const userData = JSON.parse(sessionStorage.getItem('userData'));
+    
+
+    const formatText = (text) => {
+        return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    };
+    
+    const sanitizeHTML = (html) => {
+        return DOMPurify.sanitize(html);
+    };
 
     const generateNewSessionId = useCallback(() => {
         const newSessionId = uuidv4();
@@ -95,15 +105,15 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
             setLoading(true);
             setError(null);
             const userMessage = { id: Date.now(), text: messageText, isUser: true };
-            const loadingMessage = { id: Date.now() + 1, isLoading: true, isUser: false };
-
-            setMessages(prevMessages => [...prevMessages, userMessage, loadingMessage]);
-
+            const botMessage = { id: Date.now() + 1, text: '', isUser: false, isLoading: true };
+    
+            setMessages(prevMessages => [...prevMessages, userMessage, botMessage]);
+    
             try {
                 if (!sessionIdRef.current) {
                     generateNewSessionId();
                 }
-
+    
                 const requestData = {
                     question: messageText,
                     userNo: userData.apiData.userno,
@@ -112,38 +122,105 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
                     chat_his_no: currentChatHisNoRef.current,
                     is_new_session: isNewSessionRef.current
                 };
-
+    
                 console.log("Sending request data:", requestData);
                 const response = await legalVisaApi.LegalVisaChatBotData(requestData);
-
+    
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+    
+                let fullResponse = '';
+                let currentParagraph = '';
+                let paragraphs = [];
+                let isNewParagraph = true;
+    
                 setMessages(prevMessages =>
                     prevMessages.map(msg =>
-                        msg.id === loadingMessage.id
-                            ? {
-                                ...msg,
-                                isLoading: false,
-                                text: response.answer,
-                                detectedLanguage: response.detected_language
-                            }
+                        msg.id === botMessage.id
+                            ? { ...msg, isLoading: false, isStreaming: true }
                             : msg
                     )
                 );
-
-                if (response.chatHisNo) {
-                    currentChatHisNoRef.current = response.chatHisNo;
-                    sessionIdRef.current = response.chatHisNo.toString();
-                    isNewSessionRef.current = false;
-                    localStorage.setItem('chatSessionId', sessionIdRef.current);
+    
+                const updateMessage = (text) => {
+                    setMessages(prevMessages =>
+                        prevMessages.map(msg =>
+                            msg.id === botMessage.id
+                                ? { ...msg, text: sanitizeHTML(text) }
+                                : msg
+                        )
+                    );
+                };
+    
+                const formatText = (text) => {
+                    // 중복 적용된 <strong> 태그를 피하기 위해 단락 단위로 변환
+                    return text.replace(/\*\*(.*?)\*\*/g, (match, p1) => {
+                        // 이미 <strong> 태그로 감싸져 있지 않다면, 감싸줍니다.
+                        if (!p1.includes("<strong>")) {
+                            return `<strong>${p1}</strong>`;
+                        }
+                        return p1; // 이미 <strong> 태그로 감싸져 있으면 그대로 반환
+                    });
+                };
+    
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n\n');
+                    
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = JSON.parse(line.slice(6));
+                            
+                            if (data.type === 'content') {
+                                if (isNewParagraph && data.text.trim()) {
+                                    currentParagraph += data.text;
+                                    isNewParagraph = false;
+                                } else {
+                                    currentParagraph += (currentParagraph ? ' ' : '') + data.text;
+                                }
+                                fullResponse = [...paragraphs, currentParagraph].join('\n\n');
+                                updateMessage(formatText(fullResponse));
+                                await new Promise(resolve => setTimeout(resolve, 30));
+                            } else if (data.type === 'newline') {
+                                if (currentParagraph.trim()) {
+                                    paragraphs.push(formatText(currentParagraph.trim()));
+                                    currentParagraph = '';
+                                    isNewParagraph = true;
+                                    fullResponse = paragraphs.join('\n\n');
+                                    updateMessage(fullResponse);
+                                    await new Promise(resolve => setTimeout(resolve, 200));
+                                }
+                            } else if (data.type === 'end') {
+                                if (currentParagraph.trim()) {
+                                    paragraphs.push(formatText(currentParagraph.trim()));
+                                    fullResponse = paragraphs.join('\n\n');
+                                    updateMessage(fullResponse);
+                                }
+                                setMessages(prevMessages =>
+                                    prevMessages.map(msg =>
+                                        msg.id === botMessage.id
+                                            ? { ...msg, isStreaming: false, chatHisNo: data.chatHisNo, chatHisSeq: data.chatHisSeq, detectedLanguage: data.detected_language }
+                                            : msg
+                                    )
+                                );
+                                currentChatHisNoRef.current = data.chatHisNo;
+                                sessionIdRef.current = data.chatHisNo.toString();
+                                isNewSessionRef.current = false;
+                            }
+                        }
+                    }
                 }
-
+    
             } catch (error) {
                 console.error('메시지 전송 중 오류 발생:', error);
-                console.log('Response data:', error.response?.data);
                 setError(error);
                 setMessages(prevMessages =>
                     prevMessages.map(msg =>
-                        msg.id === loadingMessage.id
-                            ? { ...msg, isLoading: false, text: "죄송합니다, 메시지 처리 중 오류가 발생했습니다. 다시 시도해 주세요." }
+                        msg.id === botMessage.id
+                            ? { ...msg, isStreaming: false, isLoading: false, text: "죄송합니다, 메시지 처리 중 오류가 발생했습니다. 다시 시도해 주세요." }
                             : msg
                     )
                 );
@@ -152,6 +229,8 @@ export const useChatLegalVisa = (initialSelectedChat, categoryNo) => {
             }
         }
     }, [legalVisaApi, categoryNo, userData, generateNewSessionId]);
+    
+    
 
     return {
         messages,
