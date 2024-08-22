@@ -15,9 +15,16 @@ export const ChatAcademicProvider = ({ children }) => {
 
     return {
       AcademicChatBotData: async (data) => {
+        console.log(data, "fdsfsdfd");
         try {
           console.log("Sending data to backend:", data);
-          const response = await axios.post(`${PythonbaseUrl}/academic`, data);
+          const response = await axios.post(`${PythonbaseUrl}/academic`, data,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
           return response.data;
         } catch (error) {
           console.error("Error:", error);
