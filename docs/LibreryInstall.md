@@ -18,3 +18,5 @@ npm install quill-image-resize
 npm install quill-image-resize-module --save
 
 npm install @react-oauth/google
+
+npm install dompurify
