@@ -7,6 +7,7 @@ import ChatAcademicWindow from '../chatbot/ChatAcademicWindow';
 import ChatJobWindow from '../chatbot/ChatJobWindow';
 import { ChatAcademicProvider } from '../../contexts/chatbot/ChatAcademicApi';
 import { ChatLegalVisaProvider } from '../../contexts/chatbot/ChatLegalVisaApi';
+import { ChatMedicalProvider } from '../../contexts/chatbot/ChatMedicalApi';
 import categoryOneImage from '../../assets/images/category1.png';
 import categoryTwoImage from '../../assets/images/category2.png';
 import categoryThreeImage from '../../assets/images/category3.png';
@@ -15,7 +16,7 @@ import { useRecentChats } from '../../hooks/chatbot/useRecent';
 import { Link } from 'react-router-dom';
 
 function Sidebar({ onSelectChat, initialSelectedChat }) {
-  const { recentChats, error, loadRecentChats } = useRecentChats();
+  const { recentChats, loadRecentChats } = useRecentChats();
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedChat, setSelectedChat] = useState(null);
 
@@ -158,8 +159,14 @@ function Sidebar({ onSelectChat, initialSelectedChat }) {
               overflowX="auto"
               backgroundColor='#BA9F8B'
             >
-              {/* ChatMedicalProvider */}
-              <ChatMedicalWindow />
+            <ChatMedicalProvider>
+              <ChatMedicalWindow
+                key={selectedChat ? selectedChat.chatHisNo : `new-chat-${selectedTab}`}
+                selectedChat={selectedChat}
+                categoryNo={selectedTab + 6}
+                onChatComplete={loadRecentChats}
+              />
+            </ChatMedicalProvider>
             </TabPanel>
             <TabPanel 
               display="flex" 
@@ -172,9 +179,14 @@ function Sidebar({ onSelectChat, initialSelectedChat }) {
               overflowX="auto"
               backgroundColor='#BA9F8B'
             >
-              <ChatAcademicProvider>
-                <ChatAcademicWindow selectedChat={selectedChat} onChatComplete={loadRecentChats}/>
-              </ChatAcademicProvider>
+            <ChatAcademicProvider>
+              <ChatAcademicWindow
+                key={selectedChat ? selectedChat.chatHisNo : `new-chat-${selectedTab}`}
+                selectedChat={selectedChat}
+                categoryNo={selectedTab + 6}
+                onChatComplete={loadRecentChats}
+              />
+            </ChatAcademicProvider>
             </TabPanel>
             <TabPanel 
               display="flex" 
@@ -199,8 +211,6 @@ function Sidebar({ onSelectChat, initialSelectedChat }) {
           view all  ---→
         </Link>
       </h2>
-     
-      {error && <p>오류: {error}</p>}
      
       {recentChats && recentChats.length > 0 ? (
         <ul className='recent-ul'>
