@@ -24,7 +24,7 @@ export const useImageStudy = () => {
   const { 
     fetchCategories, 
     fetchRandomImage, 
-    sendAudioAndImageForAnalysis,
+    sendAudioForAnalysis,
     textToSpeech 
   } = useImageStudyApi();
 
@@ -46,12 +46,15 @@ export const useImageStudy = () => {
   const handleRefresh = useCallback(() => {
     if (selectedCategory) {
       fetchRandomImage(selectedCategory).then((image) => {
-        setCurrentImage(image);
-        setImageUrl(image.url);
-        setShowImage(true);
-        setShowAnalysis(false);
-        setAudioURL('');
-        setAudioBlob(null);
+        if (image) {
+          setCurrentImage(image);
+          setImageUrl(image.url);
+          setShowImage(true);
+          setShowAnalysis(false);
+          setAudioURL('');
+          setAudioBlob(null);
+          setRecommendation(image.description || '추천 사항이 없습니다');
+        }
       });
     }
   }, [selectedCategory, fetchRandomImage]);
@@ -97,32 +100,40 @@ export const useImageStudy = () => {
   }, [startRecording, cancelOngoingRequest]);
 
   const handleSend = useCallback(async () => {
-    if (audioBlob && currentImage) {
+    if (audioBlob) {
       setIsLoading(true);
       cancelOngoingRequest();
       cancelTokenSourceRef.current = axios.CancelToken.source();
-
+  
       try {
-        const result = await sendAudioAndImageForAnalysis(audioBlob, currentImage, cancelTokenSourceRef.current.token);
+        const result = await sendAudioForAnalysis(audioBlob, cancelTokenSourceRef.current.token);
         setUserSentence(result.transcription);
         setAnalysisResult(result.analysis);
-        setRecommendation(result.recommend || '');
         setShowAnalysis(true);
       } catch (error) {
         if (axios.isCancel(error)) {
           console.log('Request cancelled:', error.message);
         } else {
-          console.error('Audio and image processing errors:', error);
-          alert('Please record within 15 seconds');
+          console.error('Audio processing error:', error);
+          if (error.response) {
+            console.error('Error data:', error.response.data);
+            console.error('Error status:', error.response.status);
+            console.error('Error headers:', error.response.headers);
+          } else if (error.request) {
+            console.error('Error request:', error.request);
+          } else {
+            console.error('Error message:', error.message);
+          }
+          alert(`An error occurred while processing your audio: ${error.message}. Please try again.`);
         }
       } finally {
         setIsLoading(false);
         cancelTokenSourceRef.current = null;
       }
     } else {
-      alert('There is no recorded audio or selected image.');
+      alert('There is no recorded audio. Please record your voice first.');
     }
-  }, [audioBlob, currentImage, sendAudioAndImageForAnalysis, cancelOngoingRequest]);
+  }, [audioBlob, sendAudioForAnalysis, cancelOngoingRequest]);
 
   const handleTextToSpeech = useCallback(async (text) => {
     if (isPlaying || !text) return;

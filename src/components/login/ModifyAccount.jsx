@@ -1,14 +1,11 @@
-// SignUp.js
 import React from 'react';
 import { useModifyAccountForm } from '../../hooks/authorization/useModifyAccountForm';
 import '../../assets/styles/style.scss';
-// import user_img from '../../assets/images/img/1723902099215a950f7ed-4993-4b93-a8c1-5b57874997ee.png';
 
 function ModifyAccount() {
-  const { formData, previewUrl, handleChange, handleFileChange, handleSubmit } = useModifyAccountForm();
+  const { formData, previewUrl, handleChange, handleFileChange, handleSubmit, errors } = useModifyAccountForm();
   const userData = JSON.parse(sessionStorage.getItem('userData'))
   const savenameinfo = userData.apiData.savename;
-  
 
   return (
     <div className="join-nagnae-container">
@@ -52,6 +49,7 @@ function ModifyAccount() {
               value={formData.password}
               onChange={handleChange} 
             />
+            {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
         </div>
         <div className="input-row">
@@ -63,9 +61,9 @@ function ModifyAccount() {
               value={formData.username}
               onChange={handleChange}
             />
+            {errors.username && <span className="error-message">{errors.username}</span>}
           </div>
         </div>
-        
         <div className="input-row">
           <div className="input-group">
             <input
@@ -75,6 +73,7 @@ function ModifyAccount() {
               value={formData.nationlity}
               onChange={handleChange}
             />
+            {errors.nationlity && <span className="error-message">{errors.nationlity}</span>}
           </div>
         </div>
         <div className="input-row">
@@ -86,10 +85,12 @@ function ModifyAccount() {
               value={formData.userhp}
               onChange={handleChange}
             />
+            {errors.userhp && <span className="error-message">{errors.userhp}</span>}
           </div>
         </div>
 
         <button type="submit" className="create-account-btn">Modify Account</button>
+        {errors.form && <span className="error-message">{errors.form}</span>}
       </form>
     </div>
   );

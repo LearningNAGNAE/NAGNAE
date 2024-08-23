@@ -41,7 +41,7 @@ export const usePostList = (initialPage = 1) => {
       setSearchTerm(term);
       setCurrentPage(1); // 검색 시 첫 페이지로 리셋
     };
-  
+
     return {
       posts,
       currentPage,
