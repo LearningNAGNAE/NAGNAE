@@ -7,7 +7,7 @@ import sendIcon from '../../assets/images/send.png';
 import RecordModal from './RecordModal';
 
 function ChatMedicalWindow({ selectedChat, categoryNo, onChatComplete }) {
-  const { messages, loading, error, sendMessage, sendImage } = useChatMedical(selectedChat, categoryNo);
+  const { messages, loading, error, sendMessage } = useChatMedical(selectedChat, categoryNo);
   const messagesContainerRef = useScrollToBottom([messages]);
   const { input, setInput, handleKeyPress } = useMessageInput(sendMessage);
 
@@ -15,20 +15,6 @@ function ChatMedicalWindow({ selectedChat, categoryNo, onChatComplete }) {
     sendMessage(messageText);
     setInput('');
     if (onChatComplete) onChatComplete();
-  };
-
-  const handleFileUpload = async (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      try {
-        await sendImage(file);
-        if (onChatComplete) onChatComplete();
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      }
-    } else {
-      console.error('Invalid file type. Please upload an image.');
-    }
   };
 
   return (
@@ -62,16 +48,6 @@ function ChatMedicalWindow({ selectedChat, categoryNo, onChatComplete }) {
               onKeyDown={handleKeyPress}
               placeholder="메시지를 입력하세요..."
             />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileUpload}
-              style={{ display: 'none' }}
-              id="image-upload"
-            />
-            <label htmlFor="image-upload" className="image-upload-button">
-              이미지 업로드
-            </label>
           </div>
           <button className='send-btn' type="submit" disabled={!input.trim()}>
             <img src={sendIcon} alt="Send" className="window-send-icon" />
