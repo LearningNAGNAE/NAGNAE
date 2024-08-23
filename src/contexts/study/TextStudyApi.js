@@ -40,7 +40,7 @@ export const TextStudyProvider = ({ children }) => {
       const formData = new FormData();
       formData.append('file', audioBlob, 'recording.webm');
       
-      const response = await axios.post(`${PythonbaseUrl}/study-text-analysis`, formData, {
+      const response = await axios.post(`${PythonbaseUrl}/study-analysis`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },

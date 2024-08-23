@@ -47,19 +47,12 @@ export const ImageStudyProvider = ({ children }) => {
     }
   };
 
-  const sendAudioAndImageForAnalysis = async (audioBlob, image, cancelToken) => {
+  const sendAudioForAnalysis = async (audioBlob, cancelToken) => {
     const formData = new FormData();
-    formData.append('audio_file', audioBlob, 'recording.webm');
+    formData.append('file', audioBlob, 'recording.webm');
     
     try {
-      const imageResponse = await fetch(image.url);
-      if (!imageResponse.ok) {
-        throw new Error(`Failed to import image: ${imageResponse.statusText}`);
-      }
-      const imageBlob = await imageResponse.blob();
-      formData.append('image_file', imageBlob, image.fileSaveName);
-
-      const response = await axios.post(`${PythonbaseUrl}/study-image-analysis`, formData, {
+      const response = await axios.post(`${PythonbaseUrl}/study-analysis`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -71,7 +64,7 @@ export const ImageStudyProvider = ({ children }) => {
       }
       throw new Error('No valid data received from server');
     } catch (error) {
-      console.error('Error in sendAudioAndImageForAnalysis:', error);
+      console.error('Error in sendAudioForAnalysis:', error);
       throw error;
     }
   };
@@ -93,7 +86,7 @@ export const ImageStudyProvider = ({ children }) => {
   const value = {
     fetchCategories,
     fetchRandomImage,
-    sendAudioAndImageForAnalysis,
+    sendAudioForAnalysis,
     textToSpeech
   };
 

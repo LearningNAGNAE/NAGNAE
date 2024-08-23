@@ -1,4 +1,3 @@
-// ImageStudy.js
 import React from 'react';
 import { useImageStudy } from '../../hooks/study/useImageStudy';
 import { ImageStudyProvider } from '../../contexts/study/ImageStudyApi';
