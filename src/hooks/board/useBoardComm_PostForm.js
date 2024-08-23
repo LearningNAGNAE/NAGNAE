@@ -43,7 +43,7 @@ export const useBoardComm_PostForm = () => {
     try {
       // Pass the entire userData object, not just userNo
       await submitPost(title, content, userData);
-      // navigate('/BoardPage?type=Comm_PostList');
+      navigate('/BoardPage?type=Comm_PostList');
     } catch (error) {
       console.error('Error creating post:', error);
     }
