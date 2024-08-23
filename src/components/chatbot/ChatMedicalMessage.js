@@ -12,10 +12,10 @@ const formatText = (text) => {
   return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />');
 };
 
-function ChatLawMessage({ message }) {
-  const createMarkup = (html) => {
-    return { __html: DOMPurify.sanitize(html) };
-  };
+const ChatMedicalMessage = ({ message }) => {
+  const createMarkup = (html) => ({
+    __html: DOMPurify.sanitize(html),
+  });
 
   const userIconStyle = {
     backgroundImage: `url(${userIcon})`,
@@ -67,6 +67,6 @@ function ChatLawMessage({ message }) {
       </div>
     </div>
   );
-}
+};
 
-export default ChatLawMessage;
+export default ChatMedicalMessage;

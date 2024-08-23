@@ -34,11 +34,69 @@ export const useChatMedical = (initialSelectedChat, categoryNo) => {
     }, []);
 
     const loadChatHistory = useCallback(async (chatHisNo) => {
-        // ... (기존 코드 유지)
+        if (!chatHisNo || loadedChatHistoryRef.current === chatHisNo) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            setError(null);
+            const userNo = userData.apiData.userno;
+            const response = await recentChatsApi.fetchChatHistory(userNo, chatHisNo);
+            if (response && response.apiData) {
+                const formattedMessages = response.apiData.flatMap(msg => {
+                    const messages = [];
+                    if (msg.question) {
+                        messages.push({
+                            id: `q-${msg.chatHisSeq}`,
+                            text: msg.question,
+                            isUser: true,
+                            detectedLanguage: msg.detectedLanguage
+                        });
+                    }
+                    if (msg.answer) {
+                        messages.push({
+                            id: `a-${msg.chatHisSeq}`,
+                            text: msg.answer,
+                            isUser: false,
+                            detectedLanguage: msg.detectedLanguage
+                        });
+                    }
+                    return messages;
+                });
+                setMessages(formattedMessages);
+                loadedChatHistoryRef.current = chatHisNo;
+            }
+        } catch (err) {
+            console.error('채팅 내역을 불러오는 중 오류 발생:', err);
+            setError(err);
+        } finally {
+            setLoading(false);
+        }
     }, [recentChatsApi, userData]);
 
     useEffect(() => {
-        // ... (기존 코드 유지)
+        const handleInitialChat = () => {
+            if (initialSelectedChat?.chatHisNo !== prevInitialSelectedChatRef.current?.chatHisNo) {
+                if (initialSelectedChat && initialSelectedChat.chatHisNo) {
+                    currentChatHisNoRef.current = initialSelectedChat.chatHisNo;
+                    sessionIdRef.current = initialSelectedChat.chatHisNo.toString();
+                    isNewSessionRef.current = false;
+                    if (loadedChatHistoryRef.current !== initialSelectedChat.chatHisNo) {
+                        loadChatHistory(initialSelectedChat.chatHisNo);
+                    }
+                } else {
+                    setMessages([]);
+                    currentChatHisNoRef.current = null;
+                    generateNewSessionId();
+                    isNewSessionRef.current = true;
+                    loadedChatHistoryRef.current = null;
+                }
+                prevInitialSelectedChatRef.current = initialSelectedChat;
+            }
+        };
+
+        handleInitialChat();
     }, [initialSelectedChat, loadChatHistory, generateNewSessionId]);
 
     const sendMessage = useCallback(async (messageText) => {
