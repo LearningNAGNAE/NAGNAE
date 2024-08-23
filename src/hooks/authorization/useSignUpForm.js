@@ -1,5 +1,5 @@
 // useSignUpForm.js
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signUp } from '../../contexts/authorization/SignUpApi';
 
@@ -14,15 +14,30 @@ export function useSignUpForm() {
   });
   const [previewUrl, setPreviewUrl] = useState(null);
   const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [isInputEditable, setIsInputEditable] = useState(true);
+  const [errors, setErrors] = useState({});
+  const [emailId, setEmailId] = useState('');
+  const [emailDomain, setEmailDomain] = useState('');
 
+  useEffect(() => {
+    // 이메일 아이디와 도메인을 합쳐서 formData의 email 필드에 저장
+    setFormData(prev => ({
+      ...prev,
+      email: emailId && emailDomain ? `${emailId}${emailDomain}` : ''
+    }));
+  }, [emailId, emailDomain]);
 
   const handleChange = (e) => {
-    const { className, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [className]: value
-    }));
+    const { name, value } = e.target;
+    if (name === 'email') {
+      setEmailId(value);
+    } else {
+      setFormData(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+    }
   };
 
   const handleFileChange = (e) => {
@@ -41,25 +56,68 @@ export function useSignUpForm() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    
-    // 여기에 회원가입 로직을 추가하세요
-    setError('');
-    try {
-      const signUpInfo = await signUp(formData);
-
-      console.log('회원가입 정보:', signUpInfo);
-      navigate('/SignPage?type=signin');
-    } catch (err) {
-      setError('빈 칸이 있습니다. 확인해주세요');
-    }
-
-    
-
-    navigate('/SignPage?type=signin');
+  const validateForm = () => {
+    let tempErrors = {};
+    if (!formData.email) tempErrors.email = "이메일을 입력해주세요.";
+    if (!formData.password) tempErrors.password = "비밀번호를 입력해주세요.";
+    if (!formData.username) tempErrors.username = "이름을 입력해주세요.";
+    if (!formData.nationlity) tempErrors.nationlity = "국적을 입력해주세요.";
+    if (!formData.userhp) tempErrors.userhp = "전화번호를 입력해주세요.";
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
   };
 
-  return { formData, previewUrl, handleChange, handleFileChange, handleSubmit };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const signUpInfo = await signUp(formData);
+        console.log('회원가입 정보:', signUpInfo);
+        navigate('/SignPage?type=signin');
+      } catch (err) {
+        setErrors({ form: '회원가입 중 오류가 발생했습니다.' });
+      }
+    }
+  };
+
+  const handleSelectChange = (event) => {
+    const selectedValue = event.target.value;
+    if (selectedValue === 'EnterManually') {
+      setEmailDomain('@');  // 직접 입력 시 '@'를 기본값으로 설정
+      setIsInputEditable(true);
+    } else {
+      setEmailDomain(selectedValue);
+      setIsInputEditable(false);
+    }
+  };
+
+  const handleEmailDomainChange = (event) => {
+    let value = event.target.value;
+    if (!value.startsWith('@')) {
+      value = '@' + value;  // 항상 '@'로 시작하도록 보장
+    }
+    setEmailDomain(value);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  };
+
+  return { 
+    formData, 
+    emailId,
+    emailDomain,
+    previewUrl, 
+    handleChange, 
+    handleFileChange, 
+    handleSubmit,
+    isInputEditable,
+    handleSelectChange,
+    handleEmailDomainChange,
+    handleKeyDown,
+    errors
+  };
 }

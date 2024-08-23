@@ -1,4 +1,3 @@
-// useSignUpForm.js
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { modifyAccount } from '../../contexts/authorization/ModifyAccountApi';
@@ -18,8 +17,7 @@ export function useModifyAccountForm() {
   });
   const [previewUrl, setPreviewUrl] = useState(null);
   const navigate = useNavigate();
-  const [error, setError] = useState('');
-
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { className, value } = e.target;
@@ -45,22 +43,28 @@ export function useModifyAccountForm() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    
-    // 여기에 회원가입 로직을 추가하세요
-    setError('');
-    try {
-      const ModifyInfo = await modifyAccount(formData);
-
-      console.log('회원정보 수정:', ModifyInfo);
-      navigate('/');
-    } catch (err) {
-      setError('빈 칸이 있습니다. 확인해주세요');
-    }
-
+  const validateForm = () => {
+    let tempErrors = {};
+    if (!formData.password) tempErrors.password = "비밀번호를 입력해주세요.";
+    if (!formData.username) tempErrors.username = "이름을 입력해주세요.";
+    if (!formData.nationlity) tempErrors.nationlity = "국적을 입력해주세요.";
+    if (!formData.userhp) tempErrors.userhp = "전화번호를 입력해주세요.";
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
   };
 
-  return { formData, previewUrl, handleChange, handleFileChange, handleSubmit };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const ModifyInfo = await modifyAccount(formData);
+        console.log('회원정보 수정:', ModifyInfo);
+        navigate('/');
+      } catch (err) {
+        setErrors({ form: '회원정보 수정 중 오류가 발생했습니다.' });
+      }
+    }
+  };
+
+  return { formData, previewUrl, handleChange, handleFileChange, handleSubmit, errors };
 }
