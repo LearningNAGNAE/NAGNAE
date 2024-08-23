@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../../assets/styles/board/Community/Comm_PostList.scss';
 import { usePostList } from '../../../hooks/board/BoardComm_PostList';
 
-function CommPostList({ posts = [], currentPage, totalPages, totalPosts, pageSize,handleViewsUp, onPageChange, onSearch }) {
+function CommPostList({ posts = [], currentPage, totalPages, totalPosts, pageSize, onPageChange, onSearch }) {
 
   const pageNumbers = [];
 

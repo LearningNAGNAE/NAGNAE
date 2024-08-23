@@ -1,14 +1,15 @@
-import React from 'react'
+// src/components/board/BoardMain.js
+
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useBoard } from '../../hooks/board/BoardMainHook';
 import '../../assets/styles/board/BoardMain.scss';
 
 function BoardMain() {
-  const sampleData = [
-    { no: 15679, title: "Help Me Plz...", writer: "BingSoooo", date: "2024.07.30", hits: 2151 },
-    { no: 15679, title: "Help Me Plz...", writer: "YoungSoooo", date: "2024.07.30", hits: 2151 },
-    { no: 15679, title: "Help Me Plz...", writer: "BingSoooo", date: "2024.07.30", hits: 2151 },
-    { no: 15679, title: "Help Me Plz...", writer: "BingSoooo", date: "2024.07.30", hits: 2151 },
-  ];
+  const { announcements, communityPosts, loading, error } = useBoard();
+
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div>게시글을 불러오는 중 오류 발생: {error.message}</div>;
 
   const BoardSection = ({ title, data, linkTo }) => (
     <section className="board-main-section">
@@ -27,10 +28,10 @@ function BoardMain() {
           </tr>
         </thead>
         <tbody className='board-main-tbody'>
-          {data.map((item, index) => (
-            <tr key={index}>
+          {data.map((item) => (
+            <tr key={item.no}>
               <td>{item.no}</td>
-              <td>{item.title}</td>
+              <td><Link to={`/post/${item.no}`}>{item.title}</Link></td>
               <td>{item.writer}</td>
               <td>{item.date}</td>
               <td>{item.hits}</td>
@@ -44,22 +45,17 @@ function BoardMain() {
   return (
     <div className="board-main">
       <BoardSection 
-        title="Announcements-(Latest post)" 
-        data={sampleData} 
-        linkTo="/BoardPage?type=Ann_PostList"
+        title="Announcements (Latest posts)" 
+        data={announcements} 
+        linkTo="/announcements"
       />
       <BoardSection 
-        title="Community-(Latest post)" 
-        data={sampleData} 
-        linkTo="/BoardPage?type=Comm_PostList"
-      />
-      <BoardSection 
-        title="Information-(Latest post)" 
-        data={sampleData} 
-        linkTo="/BoardPage?type=Info_PostList"
+        title="Community (Latest posts)" 
+        data={communityPosts} 
+        linkTo="/community"
       />
     </div>
-  )
+  );
 }
 
-export default BoardMain
+export default BoardMain;
