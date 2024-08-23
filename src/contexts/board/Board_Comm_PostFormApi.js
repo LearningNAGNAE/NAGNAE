@@ -30,12 +30,13 @@ export const PostFormAPIProvider = ({ children }) => {
 
   const processImage = useCallback(async (imageData) => {
     if (imageData.startsWith('data:image')) {
-      // base64 이미지를 서버로 업로드하고 URL을 반환
       const file = dataURLtoFile(imageData, 'image.png');
       return await uploadImage(file);
     }
-    return imageData;  // 이미 URL인 경우 그대로 반환
+    return imageData;
   }, [uploadImage]);
+
+  // 중복된 uploadImage 함수 제거
 
   const processContent = useCallback(async (content) => {
     if (!content || !content.ops) {
@@ -43,7 +44,6 @@ export const PostFormAPIProvider = ({ children }) => {
     }
     const processedOps = await Promise.all(content.ops.map(async (op) => {
       if (op.insert && typeof op.insert === 'object' && op.insert.image) {
-        // 이미지 처리
         const imageUrl = await processImage(op.insert.image);
         return {
           ...op,
@@ -65,10 +65,10 @@ export const PostFormAPIProvider = ({ children }) => {
   
     try {
       const processedContent = await processContent(content);
-      const htmlContent = convertToHtml(processedContent); // 새로운 함수
+      const htmlContent = convertToHtml(processedContent);
       const response = await axios.post(`${SpringbaseUrl}/board/freeboardwrite`, {
         title,
-        content: htmlContent, // HTML 문자열로 변환된 내용
+        content: htmlContent,
         insertuserno: userData.apiData.userno,
         modifyuserno: userData.apiData.userno,
       });
@@ -79,7 +79,6 @@ export const PostFormAPIProvider = ({ children }) => {
     }
   }, [SpringbaseUrl, processContent]);
   
-  // Delta 형식을 HTML로 변환하는 함수
   const convertToHtml = (delta) => {
     const tempContainer = document.createElement('div');
     const quill = new Quill(tempContainer);

@@ -1,8 +1,10 @@
-import React, { forwardRef, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
+import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import '../../assets/styles/board/quillstyle.css';
-import { usePostFormAPI } from '../../contexts/board/Board_Comm_PostFormApi';
+// import { usePostFormAPI } from '../../contexts/board/Board_Comm_PostFormApi';
+import { useBoardComm_PostForm } from '../../hooks/board/useBoardComm_PostForm';
+
 
 const Size = Quill.import('formats/size');
 Size.whitelist = ['small', 'medium', 'large', 'huge'];
@@ -75,26 +77,10 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
   const defaultValueRef = useRef(defaultValue);
   const onTextChangeRef = useRef(onTextChange);
   const onSelectionChangeRef = useRef(onSelectionChange);
-  const { uploadImage } = usePostFormAPI();
 
-  // imageHandler를 useCallback으로 래핑하여 의존성 문제를 해결합니다.
-  const imageHandler = useCallback(() => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      const file = input.files[0];
-      try {
-        const imageUrl = await uploadImage(file);
-        const range = ref.current.getSelection();
-        ref.current.insertEmbed(range.index, 'image', imageUrl);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      }
-    };
-  }, [uploadImage, ref]);
+  const quillRef = useRef(null);
+  const { useImageUpload } = useBoardComm_PostForm();
+  const imageHandler = useImageUpload(quillRef);
 
   useLayoutEffect(() => {
     onTextChangeRef.current = onTextChange;
@@ -136,6 +122,8 @@ const Editor = forwardRef(({ readOnly, defaultValue, onTextChange, onSelectionCh
     if (ref) {
       ref.current = quill;
     }
+
+    quillRef.current = quill;
 
     if (defaultValueRef.current) {
       quill.setContents(defaultValueRef.current);
