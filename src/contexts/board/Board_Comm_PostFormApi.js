@@ -12,14 +12,16 @@ export const usePostFormAPI = () => {
 export const PostFormAPIProvider = ({ children }) => {
   const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
-  const uploadImage = useCallback(async (file) => {
+  const uploadImage = useCallback(async (file, userno) => {
     try {
+      console.log(userno);
       const formData = new FormData();
       formData.append('image', file);
       const response = await axios.post(`${SpringbaseUrl}/board/upload-image`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        params: { userno }
       });
       return response.data.imageUrl;
     } catch (error) {
@@ -66,18 +68,33 @@ export const PostFormAPIProvider = ({ children }) => {
     try {
       const processedContent = await processContent(content);
       const htmlContent = convertToHtml(processedContent);
-      const response = await axios.post(`${SpringbaseUrl}/board/freeboardwrite`, {
+      
+      // 이미지 URL들을 추출
+      const imageUrls = extractImageUrls(htmlContent);
+      
+      const postData = {
         title,
         content: htmlContent,
         insertuserno: userData.apiData.userno,
         modifyuserno: userData.apiData.userno,
-      });
+        imageUrls: imageUrls // 추출된 이미지 URL들을 함께 전송
+      };
+  
+      const response = await axios.post(`${SpringbaseUrl}/board/freeboardwrite`, postData);
       return response.data;
     } catch (error) {
       console.error('게시물 생성 중 오류 발생:', error);
       throw error;
     }
   }, [SpringbaseUrl, processContent]);
+  
+  // HTML 내용에서 이미지 URL을 추출하는 함수
+  const extractImageUrls = (htmlContent) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    const images = doc.getElementsByTagName('img');
+    return Array.from(images).map(img => img.src);
+  };
   
   const convertToHtml = (delta) => {
     const tempContainer = document.createElement('div');
