@@ -1,13 +1,23 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../../../assets/styles/board/Community/Comm_PostRead.scss';
 import { usePostDetail } from '../../../hooks/board/BoardComm_PostRead';
 import HtmlViewer from '../HtmlViewer';
 import { PostDetailProvider } from '../../../contexts/board/Board_Comm_PostReadAPi';
 
 function PostFormRead() {
-  const { postId } = useParams(); // postId 가져오기
-  const { post, loading, error, commentContent, setCommentContent, handleDelete, handleComment } = usePostDetail(postId);
+  const { 
+    post, 
+    loading, 
+    error, 
+    commentContent, 
+    commentList,
+    userData,
+    setCommentContent, 
+    handleDelete, 
+    handleComment 
+  } = usePostDetail();
+
 
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>게시글을 불러오는 중 오류 발생: {error.message}</div>;
@@ -15,13 +25,15 @@ function PostFormRead() {
   return (
     <div className="comm-commouncements">
       <div className='comm-header'>
-        <h1 className='comm_h1'>공지사항</h1>
+        <h1 className='comm_h1'>Community</h1>
         <div className="comm-header-buttons">
           <Link className='comm-list' to="/BoardPage?type=Comm_PostList">목록</Link>
-          <button className="comm-delete" onClick={handleDelete}>삭제</button>
+          <Link className='comm-modify' to="/BoardPage?type=Comm_PostList">수정</Link>
+          {userData.apiData && post && Number(userData.apiData.userno) === Number(post.insertuserno) && (
+            <button className="comm-delete" onClick={handleDelete}>삭제</button>
+          )}
         </div>
       </div>
-
       <article className='comm-article-box'>
         <div className='comm-article-header'>
           <div className="comm-article-meta">
@@ -44,19 +56,17 @@ function PostFormRead() {
           <HtmlViewer html={post.content} />
         </div>
       </article>
-
       <section className="comm-comments">
-        {post.comments && post.comments.map((comment, index) => (
-            <div key={index} className="comm-comment">
-              <div className="comm-comment-img"></div>
-              <div className="comm-commenter-box">
-                <div className="comm-commenter">{comment.userName}</div>
-                <div className="comm-comment-content">{comment.content}</div>
-              </div>
+        {Array.isArray(commentList) && commentList.map((comment, index) => (
+          <div key={index} className="comm-comment">
+            <div className="comm-comment-img"></div>
+            <div className="comm-commenter-box">
+              <div className="comm-commenter">{comment.username}</div>
+              <div className="comm-comment-content">{comment.content}</div>
             </div>
-          ))}
+          </div>
+        ))}
       </section>
-
       <div className="comm-reply-box">
         <div className='comm-reply-img'></div>
         <input

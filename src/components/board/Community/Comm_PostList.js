@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../../assets/styles/board/Community/Comm_PostList.scss';
 import { usePostList } from '../../../hooks/board/BoardComm_PostList';
 
-function CommPostList({ posts = [], currentPage, totalPages, totalPosts, pageSize, onPageChange, onSearch }) {
+function CommPostList({ posts = [], currentPage, totalPages, totalPosts, pageSize,handleViewsUp, onPageChange, onSearch }) {
 
   const pageNumbers = [];
 
@@ -31,12 +31,19 @@ function CommPostList({ posts = [], currentPage, totalPages, totalPosts, pageSiz
       </div>
 
       <table className="comm-post-list">
+        <colgroup>
+          <col style={{width: '10%'}} />
+          <col style={{width: 'auto'}} />
+          <col style={{width: '15%'}} />
+          <col style={{width: '15%'}} />
+          <col style={{width: '10%'}} />
+        </colgroup>
         <thead className='comm-thead'>
           <tr>
             <th>no</th>
             <th>title</th>
-            <th>writer</th>
-            <th>date</th>
+            <th className='boardwriterdatewidth'>writer</th>
+            <th className='boardwriterdatewidth'>date</th>
             <th>hits</th>
           </tr>
         </thead>
@@ -48,8 +55,8 @@ function CommPostList({ posts = [], currentPage, totalPages, totalPosts, pageSiz
                 <td align='left'>
                   <Link to={'/BoardPage?type=Comm_PostRead'} state={{ boardno: post.boardno }}>{post.title}</Link>
                 </td>
-                <td>{post.userName}</td>
-                <td>{post.insertDate}</td>
+                <td className='boardwriterdatewidth'>{post.userName}</td>
+                <td className='boardwriterdatewidth'>{post.insertDate}</td>
                 <td>{post.views}</td>
               </tr>
             ))
@@ -93,6 +100,7 @@ function CommPostListMain() {
     totalPages,
     totalPosts,
     pageSize,
+    handleViewsUp,
     onPageChange,
     onSearch
   } = usePostList(1);  // 1은 초기 페이지 번호입니다
@@ -104,6 +112,7 @@ function CommPostListMain() {
       totalPages={totalPages}
       totalPosts={totalPosts}
       pageSize={pageSize}
+      handleViewsUp={handleViewsUp}
       onPageChange={onPageChange}
       onSearch={onSearch}
     />

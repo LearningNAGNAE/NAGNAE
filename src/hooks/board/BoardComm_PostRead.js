@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePostDetailContext } from '../../contexts/board/Board_Comm_PostReadAPi';
+import { useLocation } from 'react-router-dom';
 
-export const usePostDetail = (postId) => {
-  const { post, loading, error, fetchPost, deletePost, postComment } = usePostDetailContext(); 
+export const usePostDetail = () => {
+  const { post, loading, error, fetchPost, deletePost, postComment, getCommentList } = usePostDetailContext();
   const [commentContent, setCommentContent] = useState('');
+  const [commentList, setCommentList] = useState([]);
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const boardno = location.state?.boardno || null;
 
   useEffect(() => {
     const storedUserData = sessionStorage.getItem('userData');
@@ -17,38 +21,59 @@ export const usePostDetail = (postId) => {
     }
   }, []);
 
-  useEffect(() => {
-    fetchPost(postId);
-  }, [postId, fetchPost]);
-
-  const handleDelete = async () => {
-    try {
-      await deletePost(postId);
-      navigate('/BoardPage?type=Comm_PostList');
-    } catch (err) {
-      console.error('Error deleting post:', err);
-    }
-  };
-
-  const handleComment = async () => {
-    try {
-      if (!userData || !userData.apiData) {
-        throw new Error('User data is not available');
+  const fetchComments = useCallback(async () => {
+    if (boardno) {
+      try {
+        const response = await getCommentList(boardno);
+        setCommentList(response.data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
       }
-      await postComment(commentContent, userData);
-      navigate('/BoardPage?type=Comm_PostList');
-    } catch (error) {
-      console.error('Error creating comment:', error);
     }
-  };
+  }, [boardno, getCommentList]);
+
+  useEffect(() => {
+    if (boardno) {
+      fetchPost(boardno);
+      fetchComments();
+    }
+  }, [boardno, fetchPost, fetchComments]);
+
+
+  const handleDelete = useCallback(async () => {
+    if (boardno) {
+      try {
+        await deletePost(boardno);
+        navigate('/BoardPage?type=Comm_PostList');
+      } catch (err) {
+        console.error('Error deleting post:', err);
+      }
+    }
+  }, [boardno, deletePost, navigate]);
+
+  const handleComment = useCallback(async () => {
+    if (boardno && userData?.apiData) {
+      try {
+        await postComment(commentContent, userData, boardno);
+        setCommentContent('');
+        await fetchComments();
+      } catch (error) {
+        console.error('Error creating comment:', error);
+      }
+    } else {
+      console.error('User data is not available or boardno is missing');
+    }
+  }, [boardno, commentContent, fetchComments, postComment, userData]);
 
   return { 
     post, 
     loading, 
     error, 
-    commentContent, 
+    commentContent,
+    commentList,
+    userData,
     setCommentContent, 
     handleDelete, 
-    handleComment 
+    handleComment
   };
 };
