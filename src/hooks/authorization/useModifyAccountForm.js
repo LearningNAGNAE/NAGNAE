@@ -10,21 +10,27 @@ export function useModifyAccountForm() {
     email: userData.apiData.email,
     fileno: userData.apiData.fileno,
     password: '',
-    username: '',
-    nationlity: '',
-    userhp: '',
+    username: userData.apiData.username,
+    nationlity: userData.apiData.nationlity,
+    userhp: userData.apiData.userhp,
     file: null
   });
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [previewUrl, setPreviewUrl] = useState(null);
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { className, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [className]: value
-    }));
+    const trimmedValue = value.replace(/\s/g, ''); // 공백 제거
+    if (className === 'passwordConfirm') {
+      setPasswordConfirm(trimmedValue);
+    } else {
+      setFormData(prevState => ({
+        ...prevState,
+        [className]: trimmedValue
+      }));
+    }
   };
 
   const handleFileChange = (e) => {
@@ -45,7 +51,9 @@ export function useModifyAccountForm() {
 
   const validateForm = () => {
     let tempErrors = {};
-    if (!formData.password) tempErrors.password = "비밀번호를 입력해주세요.";
+    if (formData.password && formData.password !== passwordConfirm) {
+      tempErrors.passwordConfirm = "비밀번호가 일치하지 않습니다.";
+    }
     if (!formData.username) tempErrors.username = "이름을 입력해주세요.";
     if (!formData.nationlity) tempErrors.nationlity = "국적을 입력해주세요.";
     if (!formData.userhp) tempErrors.userhp = "전화번호를 입력해주세요.";
@@ -66,5 +74,5 @@ export function useModifyAccountForm() {
     }
   };
 
-  return { formData, previewUrl, handleChange, handleFileChange, handleSubmit, errors };
+  return { formData, passwordConfirm, previewUrl, handleChange, handleFileChange, handleSubmit, errors };
 }

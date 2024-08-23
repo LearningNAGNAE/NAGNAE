@@ -15,7 +15,10 @@ function SignUp() {
     handleSelectChange,
     handleEmailDomainChange,
     handleKeyDown,
-    errors
+    errors,
+    handleIdCheck,
+    passwordConfirm,
+    isEmailVerified
   } = useSignUpForm();
 
   return (
@@ -44,6 +47,7 @@ function SignUp() {
               value={emailId}
               onChange={handleChange}
             />
+            
             <div>
               <input
                 className='email-selectbox-text'
@@ -56,13 +60,22 @@ function SignUp() {
               />
               <select id="email-select" onChange={handleSelectChange}>
                 <option value="">주소를 선택하세요.</option>
-                <option value="@naver.com">@naver.com</option>
-                <option value="@gmail.com">@gmail.com</option>
-                <option value="@nate.com">@nate.com</option>
+                <option value="@naver.com">naver.com</option>
+                <option value="@gmail.com">gmail.com</option>
+                <option value="@nate.com">nate.com</option>
                 <option value="EnterManually">Enter Manually</option>
               </select>
             </div>
             {errors.email && <span className="error-message">{errors.email}</span>}
+            <div className='id-check-box'>
+              <button 
+                type="button"
+                className={`id-check-btn ${isEmailVerified ? 'verified' : ''}`}
+                onClick={handleIdCheck}
+              >
+                {isEmailVerified ? '확인 완료' : '중복 확인'}
+              </button>
+            </div>
           </div>
         </div>
         <div className="input-row">
@@ -75,6 +88,18 @@ function SignUp() {
               onChange={handleChange}
             />
             {errors.password && <span className="error-message">{errors.password}</span>}
+          </div>
+        </div>
+        <div className="input-row">
+          <div className="input-group">
+            <input
+              type="password"
+              name="passwordConfirm"
+              placeholder="PASSWORD CHECK"
+              value={passwordConfirm}
+              onChange={handleChange}
+            />
+            {errors.passwordConfirm && <span className="error-message">{errors.passwordConfirm}</span>}
           </div>
         </div>
         <div className="input-row">

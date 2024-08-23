@@ -4,9 +4,7 @@ import store from '../../redux/Store';
 const SpringbaseUrl = store.getState().url.SpringbaseUrl;
 
 export const signUp = async (formData) => {
-
   try {
-
 
     const data = new FormData();
     
@@ -37,9 +35,19 @@ export const signUp = async (formData) => {
     console.error('빈칸 있음:', error.response?.data || error.message);
     throw error;
   }
-
-
-
   
 };
 
+
+export const checkIdDuplicate = async (email) => {
+  const response = await axios.post(`${SpringbaseUrl}/users/email-check`,
+    {email: email}, 
+    { headers: { 'Content-Type': 'application/json' } }
+);
+  
+  
+  // 응답 데이터와 함께 저장
+  const email_check = response.data.apiData;
+
+  return email_check;
+};

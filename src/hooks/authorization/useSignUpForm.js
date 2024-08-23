@@ -1,7 +1,7 @@
 // useSignUpForm.js
 import { useState, useEffect  } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signUp } from '../../contexts/authorization/SignUpApi';
+import { signUp, checkIdDuplicate } from '../../contexts/authorization/SignUpApi';
 
 export function useSignUpForm() {
   const [formData, setFormData] = useState({
@@ -12,13 +12,19 @@ export function useSignUpForm() {
     userhp: '',
     file: null
   });
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [previewUrl, setPreviewUrl] = useState(null);
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState('');
   const [isInputEditable, setIsInputEditable] = useState(true);
   const [errors, setErrors] = useState({});
   const [emailId, setEmailId] = useState('');
   const [emailDomain, setEmailDomain] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+
+  // 이메일 입력 필드가 변경될 때마다 isEmailVerified를 false로 설정
+  useEffect(() => {
+    setIsEmailVerified(false);
+  }, [emailId, emailDomain]);
 
   useEffect(() => {
     // 이메일 아이디와 도메인을 합쳐서 formData의 email 필드에 저장
@@ -31,11 +37,19 @@ export function useSignUpForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'email') {
-      setEmailId(value);
+      // 영문자와 숫자만 허용하는 정규표현식
+      const emailIdRegex = /^[a-zA-Z0-9]*$/;
+      if (emailIdRegex.test(value)) {
+        setEmailId(value);
+      }
+    } else if (name === 'passwordConfirm') {
+      setPasswordConfirm(value.replace(/\s/g, ''));
     } else {
+      // 공백을 제거한 값
+      const trimmedValue = value.replace(/\s/g, '');
       setFormData(prevState => ({
         ...prevState,
-        [name]: value
+        [name]: trimmedValue
       }));
     }
   };
@@ -56,10 +70,33 @@ export function useSignUpForm() {
     }
   };
 
+  const handleEmailDomainChange = (event) => {
+    let value = event.target.value;
+    // '@'로 시작하지 않으면 추가
+    if (!value.startsWith('@')) {
+      value = '@' + value;
+    }
+    // '@' 이후의 문자열만 정규식으로 검사
+    const domainPart = value.slice(1);
+    // 영문자, 숫자, '.'만 허용하는 정규식
+    const domainRegex = /^[a-z0-9.]*$/;
+    // '..'이 포함되어 있는지 확인
+    const noDotDotRegex = /\.{2,}/;
+    if (domainRegex.test(domainPart) && !noDotDotRegex.test(domainPart)) {
+      setEmailDomain(value);
+    }
+  };
+  
   const validateForm = () => {
     let tempErrors = {};
-    if (!formData.email) tempErrors.email = "이메일을 입력해주세요.";
+    if (!emailId) tempErrors.email = "이메일 아이디를 입력해주세요.";
+    if (!emailDomain) tempErrors.email = "이메일 도메인을 선택하거나 입력해주세요.";
+    if (!/^[a-zA-Z0-9]+$/.test(emailId)) tempErrors.email = "이메일 아이디는 영문자와 숫자만 사용할 수 있습니다.";
+    if (!/^@[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+$/.test(emailDomain)) tempErrors.email = "유효하지 않은 이메일 도메인입니다.";
+    if (!isEmailVerified) tempErrors.email = "이메일 중복 확인을 해주세요.";
     if (!formData.password) tempErrors.password = "비밀번호를 입력해주세요.";
+    if (!passwordConfirm) tempErrors.passwordConfirm = "비밀번호 확인을 입력해주세요.";
+    if (formData.password !== passwordConfirm) tempErrors.passwordConfirm = "비밀번호가 일치하지 않습니다.";
     if (!formData.username) tempErrors.username = "이름을 입력해주세요.";
     if (!formData.nationlity) tempErrors.nationlity = "국적을 입력해주세요.";
     if (!formData.userhp) tempErrors.userhp = "전화번호를 입력해주세요.";
@@ -92,13 +129,34 @@ export function useSignUpForm() {
     }
   };
 
-  const handleEmailDomainChange = (event) => {
-    let value = event.target.value;
-    if (!value.startsWith('@')) {
-      value = '@' + value;  // 항상 '@'로 시작하도록 보장
+  const handleIdCheck = async (e) => {
+    e.preventDefault();
+    console.log("ID 중복확인:", formData.email);
+    
+    if (!formData.email) {
+      setErrors({ email: '이메일을 입력해주세요.' });
+      return;
     }
-    setEmailDomain(value);
+  
+    try {
+      const isAvailable = await checkIdDuplicate(formData.email);
+      if (!isAvailable) {
+        console.log("사용 가능한 이메일입니다.");
+        setErrors({ email: '사용 가능합니다.' });
+        setIsEmailVerified(true);  // 이메일 확인 완료
+      } else {
+        console.log("이미 사용 중인 이메일입니다.");
+        setErrors({ email: '이미 사용 중인 이메일입니다.' });
+        setIsEmailVerified(false);  // 이메일 확인 실패
+      }
+    } catch (err) {
+      console.error("ID 중복 확인 중 오류 발생:", err);
+      setErrors({ email: 'ID 중복 확인 중 오류가 발생했습니다.' });
+      setIsEmailVerified(false);  // 오류 발생 시 확인 실패
+    }
   };
+
+  
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -118,6 +176,9 @@ export function useSignUpForm() {
     handleSelectChange,
     handleEmailDomainChange,
     handleKeyDown,
-    errors
+    errors,
+    handleIdCheck,
+    passwordConfirm,
+    isEmailVerified
   };
 }

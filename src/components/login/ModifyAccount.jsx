@@ -3,7 +3,7 @@ import { useModifyAccountForm } from '../../hooks/authorization/useModifyAccount
 import '../../assets/styles/style.scss';
 
 function ModifyAccount() {
-  const { formData, previewUrl, handleChange, handleFileChange, handleSubmit, errors } = useModifyAccountForm();
+  const { formData, passwordConfirm, previewUrl, handleChange, handleFileChange, handleSubmit, errors } = useModifyAccountForm();
   const userData = JSON.parse(sessionStorage.getItem('userData'))
   const savenameinfo = userData.apiData.savename;
 
@@ -49,7 +49,18 @@ function ModifyAccount() {
               value={formData.password}
               onChange={handleChange} 
             />
-            {errors.password && <span className="error-message">{errors.password}</span>}
+          </div>
+        </div>
+        <div className="input-row">
+          <div className="input-group">
+            <input
+              type="password"
+              className="passwordConfirm"
+              placeholder="PASSWORD CONFIRM"
+              value={passwordConfirm}
+              onChange={handleChange} 
+            />
+            {errors.passwordConfirm && <span className="error-message">{errors.passwordConfirm}</span>}
           </div>
         </div>
         <div className="input-row">
