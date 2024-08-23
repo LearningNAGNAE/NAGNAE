@@ -52,53 +52,65 @@
 
 
     .join-form-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      
         .input-row {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 15px;
+          width: 100%;
+      
+          .input-group {
+            width: 100%;
             display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-
-            .input-group {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-
-                input {
-                    width: 80%;
-                    padding: 10px;
-                    border: none;
-                    border-radius: 50px;
-                    background-color: #f2e8e1;
-                    font-size: 20px;
-                }
-
-                .error-message {
-                    color: #ff0000;
-                    font-size: 14px;
-                    margin-top: 5px;
-                    width: 80%;
-                    text-align: left;
-                }
+            flex-direction: column;
+            align-items: center;
+      
+            input {
+              width: 80%;
+              padding: 10px;
+              border: none;
+              border-radius: 50px;
+              background-color: #f2e8e1;
+              font-size: 20px;
             }
+      
+            .error-message {
+              color: #ff0000;
+              font-size: 14px;
+              margin-top: 5px;
+              width: 80%;
+              text-align: left;
+            }
+          }
         }
+      
         .create-account-btn {
-            width: 70%;
-            height: 60px;
-            padding: 10px;
-            border-radius: 50px;
-            background-color: #8c7a6b;
-            color: white;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 25px;
-            font-weight: 600;
+          width: 70%;
+          height: 60px;
+          padding: 10px;
+          border-radius: 50px;
+          background-color: #8c7a6b;
+          color: white;
+          cursor: pointer;
+          margin-top: 20px;
+          font-size: 25px;
+          font-weight: 600;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
-        .error-message {
-            color: #ff0000;
-            font-size: 14px;
-            margin-top: 10px;
+      
+        .form-error-message {
+          color: #ff0000;
+          font-size: 14px;
+          margin-top: 10px;
+          width: 100%;
+          text-align: center;
         }
-    }
+      }
 }
   
 /* 반응형 디자인을 위한 미디어 쿼리 */

@@ -73,7 +73,7 @@ function SignUp() {
                 className={`id-check-btn ${isEmailVerified ? 'verified' : ''}`}
                 onClick={handleIdCheck}
               >
-                {isEmailVerified ? '확인 완료' : '중복 확인'}
+                {isEmailVerified ? '중복 확인' : '중복 확인'}
               </button>
             </div>
           </div>

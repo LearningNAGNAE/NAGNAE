@@ -101,7 +101,7 @@ function ModifyAccount() {
         </div>
 
         <button type="submit" className="create-account-btn">Modify Account</button>
-        {errors.form && <span className="error-message">{errors.form}</span>}
+        {errors.form && <span className="form-error-message">{errors.form}</span>}
       </form>
     </div>
   );
