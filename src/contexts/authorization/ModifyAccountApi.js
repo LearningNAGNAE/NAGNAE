@@ -2,9 +2,9 @@ import axios from 'axios';
 import store from '../../redux/Store';
 
 const SpringbaseUrl = store.getState().url.SpringbaseUrl;
-const token = sessionStorage.getItem('token')
 
 export const modifyAccount = async (formData) => {
+  const token = sessionStorage.getItem('token')
 
   try {
 
@@ -26,8 +26,9 @@ export const modifyAccount = async (formData) => {
       data,
       { headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` } }
     );
-    
-
+    console.log("=======================");
+    console.log(token);
+    console.log("=======================");
     const loginuserinfo = await axios.post(`${SpringbaseUrl}/users/one-user-info`, 
       {userno: userInfo.userno},
       { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` } }

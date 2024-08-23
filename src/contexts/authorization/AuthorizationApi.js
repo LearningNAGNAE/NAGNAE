@@ -22,11 +22,6 @@ export const loginUser = async (email, password) => {
     const userData = response.data;
     sessionStorage.setItem('userData', JSON.stringify(userData));
 
-    console.log('111=================');
-    // console.log(token);
-    // console.log(userData);
-    console.log(userData);
-    console.log('=================');
 
     return { token, userData };
   } catch (error) {
