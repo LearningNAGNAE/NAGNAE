@@ -6,6 +6,8 @@ import { fetchPosts } from '../../contexts/board/BoardMainApi';
 export const useBoard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [communityPosts, setCommunityPosts] = useState([]);
+  const [totalMainAnnouncementsCount, setTotalMainAnnouncementsCount] = useState(0);
+  const [totalMainCommunityCount, setTotalMainCommunityCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -13,8 +15,10 @@ export const useBoard = () => {
     const loadPosts = async () => {
       try {
         const data = await fetchPosts();
-        setAnnouncements(data.announcements.slice(0, 6)); // 최신 6개
-        setCommunityPosts(data.communityPosts.slice(0, 6)); // 최신 6개
+        setAnnouncements(data.announcements.boardList); // 최신 6개
+        setCommunityPosts(data.communityPosts.boardList); // 최신 6개
+        setTotalMainAnnouncementsCount(data.announcements.totalMainCount);
+        setTotalMainCommunityCount(data.communityPosts.totalMainCount);
       } catch (err) {
         setError(err);
       } finally {
@@ -25,5 +29,5 @@ export const useBoard = () => {
     loadPosts();
   }, []);
 
-  return { announcements, communityPosts, loading, error };
+  return { announcements, communityPosts, totalMainAnnouncementsCount, totalMainCommunityCount, loading, error };
 };

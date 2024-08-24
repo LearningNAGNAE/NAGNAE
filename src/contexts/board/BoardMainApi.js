@@ -9,9 +9,10 @@ export const fetchPosts = async () => {
       axios.get(`${SpringbaseUrl}/board/announcements6`),
       axios.get(`${SpringbaseUrl}/board/community6`)
     ]);
+    console.log(communityPostsResponse.data.data);
     return {
-      announcements: announcementsResponse.data,
-      communityPosts: communityPostsResponse.data
+      announcements: announcementsResponse.data.data,
+      communityPosts: communityPostsResponse.data.data
     };
   } catch (error) {
     throw new Error('Error fetching posts: ' + error.message);
