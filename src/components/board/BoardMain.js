@@ -18,6 +18,13 @@ function BoardMain() {
         <Link to={linkTo} className="see-more">see more</Link>
       </h2>
       <table>
+        <colgroup>
+          <col style={{ width: "10%" }} />
+          <col style={{ width: "auto" }} />
+          <col style={{ width: "15%" }} />
+          <col style={{ width: "15%" }} />
+          <col style={{ width: "10%" }} />
+        </colgroup>
         <thead className='board-main-thead'>
           <tr>
             <th>no</th>

@@ -15,7 +15,6 @@ export const useBoard_PostForm = () => {
     if (!userData || !userData.apiData) {
       throw new Error("User data is not available");
     }
-    console.log("111111111", userData.apiData.userno);
     return userData.apiData.userno;
   }, [userData]);
 
@@ -27,7 +26,7 @@ export const useBoard_PostForm = () => {
           navigate("/BoardPage?type=Comm_PostList");
         }else {
           alert("로그인 후 이용해주세요");
-          navigate("/SignPage");
+          navigate("/SignPage?type=signin");
         }
         
       } catch (error) {

@@ -8,8 +8,7 @@ export const setToken = (token) => ({
 });
 
 export const logout = () => {
-  sessionStorage.removeItem('token');
-  sessionStorage.removeItem('userData');  // sessionStorage에서 토큰 제거
+  sessionStorage.removeItem('token');// sessionStorage에서 토큰 제거
   return { type: LOGOUT };
 };
 
