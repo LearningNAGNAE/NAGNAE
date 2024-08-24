@@ -14,12 +14,10 @@ export const usePostDetail = () => {
   const boardno = location.state?.boardno || null;
 
   useEffect(() => {
-    const storedUserData = sessionStorage.getItem("userData");
-    setUserData(JSON.parse(storedUserData));
+    const storedUserData = JSON.parse(sessionStorage.getItem("userData"));
+    setUserData(storedUserData);
     if (storedUserData && storedUserData.apiData) {
       setUserNo(storedUserData.apiData.userno)
-    } else {
-      console.error("User data is not available in sessionStorage");
     }
   }, []);
 
@@ -63,9 +61,10 @@ export const usePostDetail = () => {
         console.error('Error creating comment:', error);
       }
     } else {
-      console.error('User data is not available or boardno is missing');
+      alert("로그인후 이용해주세요");
+      navigate("/SignPage?type=signin");
     }
-  }, [boardno, commentContent, fetchComments, postComment, userData]);
+  }, [boardno, commentContent, fetchComments, postComment, userData,navigate]);
 
   return { 
     post, 

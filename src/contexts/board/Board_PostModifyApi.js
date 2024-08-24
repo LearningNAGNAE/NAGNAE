@@ -3,16 +3,15 @@ import axios from "axios";
 import store from "../../redux/Store";
 import Quill from "quill";
 
-const PostFormAPIContext = createContext();
+const PostModifyAPIContext = createContext();
 
-export const usePostFormAPI = () => {
-  return useContext(PostFormAPIContext);
+export const usePostModifyAPI = () => {
+  return useContext(PostModifyAPIContext);
 };
 
-export const PostFormAPIProvider = ({ children }) => {
+export const PostModifyAPIProvider = ({ children }) => {
   const SpringbaseUrl = store.getState().url.SpringbaseUrl;
   const [selectedImages, setSelectedImages] = useState([]);
-  const token = sessionStorage.getItem("token");
 
   const uploadImage = useCallback(
     async (file, userno) => {
@@ -75,7 +74,7 @@ export const PostFormAPIProvider = ({ children }) => {
     [processImage]
   );
 
-  const submitPost = useCallback(
+  const updatePost = useCallback(
     async (title, content, userData,categoryno) => {
       if (!userData || !userData.apiData) {
         throw new Error("사용자 데이터가 없습니다");
@@ -93,18 +92,12 @@ export const PostFormAPIProvider = ({ children }) => {
           content: htmlContent,
           insertuserno: userData.apiData.userno,
           modifyuserno: userData.apiData.userno,
-          categoryno,
           imageUrls: imageUrls, // 추출된 이미지 URL들을 함께 전송
         };
 
-        const response = await axios.post(
-          `${SpringbaseUrl}/board/boardwrite`,{
-            postData,
-          
-            headers:{"Content-Type": "application/json; charset=utf-8",
-            Authorization: "Bearer " + token
-            }
-          }
+        const response = await axios.put(
+          `${SpringbaseUrl}/board/boardupdate`,
+          postData
         );
         return response.data;
       } catch (error) {
@@ -112,7 +105,7 @@ export const PostFormAPIProvider = ({ children }) => {
         throw error;
       }
     },
-    [SpringbaseUrl, processContent,token]
+    [SpringbaseUrl, processContent]
   );
 
   // HTML 내용에서 이미지 URL을 추출하는 함수
@@ -147,10 +140,10 @@ export const PostFormAPIProvider = ({ children }) => {
   }, []);
 
   return (
-    <PostFormAPIContext.Provider
-      value={{ submitPost, uploadImage, handleImageSelect }}
+    <PostModifyAPIContext.Provider
+      value={{ updatePost, uploadImage, handleImageSelect }}
     >
       {children}
-    </PostFormAPIContext.Provider>
+    </PostModifyAPIContext.Provider>
   );
 };

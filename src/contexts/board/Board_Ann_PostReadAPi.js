@@ -13,6 +13,7 @@ export const AnnPostDetailProvider = ({ children }) => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const token = sessionStorage.getItem("token");
 
   const incrementViews = useCallback(
     async (boardno) => {
@@ -35,7 +36,7 @@ export const AnnPostDetailProvider = ({ children }) => {
       try {
         await incrementViews(boardno);
         const response = await axios.get(
-          `${SpringbaseUrl}/board/freeboardread`,
+          `${SpringbaseUrl}/board/boardread`,
           {
             params: { boardno },
           }
@@ -56,15 +57,19 @@ export const AnnPostDetailProvider = ({ children }) => {
     async (boardno) => {
       if (!boardno) return;
       try {
-        await axios.delete(`${SpringbaseUrl}/board/freereaddelete`, {
+        await axios.delete(`${SpringbaseUrl}/board/readdelete`, {
           params: { boardno },
-        });
+          headers:{"Content-Type": "application/json; charset=utf-8",
+            Authorization: "Bearer " + token
+            }
+        }
+      );
       } catch (error) {
         console.error("Error deleting post:", error);
         setError(error);
       }
     },
-    [SpringbaseUrl]
+    [SpringbaseUrl,token]
   );
 
   const postComment = useCallback(
@@ -75,12 +80,17 @@ export const AnnPostDetailProvider = ({ children }) => {
       }
       try {
         const response = await axios.post(
-          `${SpringbaseUrl}/board/freeboardcommentwrite`,
+          `${SpringbaseUrl}/board/boardcommentwrite`,
           {
             content: commentcontent,
             commenterno: userData.apiData.userno,
             boardno,
             category_no: 2, // Announcements 카테고리 번호
+          },
+          {
+            headers:{"Content-Type": "application/json; charset=utf-8",
+            Authorization: "Bearer " + token
+            }
           }
         );
         return response.data;
@@ -89,14 +99,14 @@ export const AnnPostDetailProvider = ({ children }) => {
         throw error;
       }
     },
-    [SpringbaseUrl]
+    [SpringbaseUrl,token]
   );
 
   const getCommentList = useCallback(
     async (boardno) => {
       try {
         const response = await axios.get(
-          `${SpringbaseUrl}/board/freeboardcommentlist`,
+          `${SpringbaseUrl}/board/boardcommentlist`,
           {
             params: { boardno },
           }
