@@ -22,7 +22,8 @@ const SignIn = () => {
     isModalVisible, 
     onFinish, 
     onSuccess, 
-    onFailure 
+    onFailure,
+    form
   } = useAuth();
   const navigate = useNavigate();
 
@@ -32,7 +33,8 @@ const SignIn = () => {
     <ConfigProvider>
       <div className="login-page">
         <div className="login-container">
-          <Form 
+          <Form
+            form={form}
             className="login-form" 
             onFinish={onFinish}
             initialValues={{ email, password, remember: rememberMe }}

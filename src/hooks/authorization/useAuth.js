@@ -153,6 +153,7 @@ export const useAuth = () => {
     onSuccess,
     onFailure,
     rememberMe,
-    setRememberMe
+    setRememberMe,
+    form
   };
 };
