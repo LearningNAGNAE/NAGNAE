@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ConfigProvider, Form, Input, Button, Alert, Checkbox, Row, Col } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useAuth } from '../../hooks/authorization/useAuth';
 import '../../assets/styles/style.scss';
 import FindModal from './FindModal';
 import { GoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
-  const { email, setEmail, password, setPassword, error, handleSubmit, rememberMe, setRememberMe, handleModalOpen, handleModalClose, isModalVisible, onFinish, onSuccess, onFailure } = useAuth();
+  const { 
+    email, 
+    setEmail, 
+    password, 
+    setPassword, 
+    error, 
+    handleSubmit, 
+    rememberMe, 
+    setRememberMe, 
+    handleModalOpen, 
+    handleModalClose, 
+    isModalVisible, 
+    onFinish, 
+    onSuccess, 
+    onFailure 
+  } = useAuth();
   const navigate = useNavigate();
 
 
@@ -26,6 +40,7 @@ const SignIn = () => {
             <h2 className="login-title">Sign In</h2>
             {error && <Alert message={error} type="error" className="error-message" />}
             <Form.Item
+              name="email"
               className="email"
               rules={[
                 { required: true, message: 'Please input your Email!' },
@@ -37,10 +52,12 @@ const SignIn = () => {
                 prefix={<UserOutlined />}
                 type="email"
                 placeholder="Email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Item>
             <Form.Item
+              name="password"
               className="password"
               rules={[{ required: true, message: 'Please input your Password!' }]}
             >
@@ -49,13 +66,14 @@ const SignIn = () => {
                 prefix={<LockOutlined />}
                 type="password"
                 placeholder="Password"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Item>
-            <Form.Item className="remember" valuePropName="checked">
+            <Form.Item name="remember" valuePropName="checked" className="remember">
               <Row justify="space-between">
                 <Col>
-                  <Checkbox onChange={(e) => setRememberMe(e.target.checked)}>
+                  <Checkbox checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)}>
                     Remember me
                   </Checkbox>
                 </Col>
@@ -70,24 +88,16 @@ const SignIn = () => {
                   Sign In
                 </Button>
               </Row>
-                
             </Form.Item>
             <Form.Item>
-
-              {/* <Button type="primary" className="google-login-form-button">
-                Google Login
-              </Button> */}
               <GoogleLogin
                 onSuccess={onSuccess}
                 onError={onFailure}
               />
-
             </Form.Item>
           </Form>
         </div>
-
         <FindModal isOpen={isModalVisible} onClose={handleModalClose} />
-
       </div>
     </ConfigProvider>
   );

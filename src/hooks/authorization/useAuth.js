@@ -1,19 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setToken, clearToken } from '../../redux/actions/AuthActions';
 import { loginUser, sendTokenToBackend } from '../../contexts/authorization/AuthorizationApi';
 import { useNavigate } from 'react-router-dom';
+import { Form } from 'antd'; // Form을 import 합니다.
 
 const TOKEN_EXPIRATION_TIME = 60 * 60 * 1000; // 60분을 밀리초로 변환
 
 export const useAuth = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState(() => localStorage.getItem('rememberedEmail') || '');
+  const [password, setPassword] = useState(() => localStorage.getItem('rememberedPassword') || '');
+  const [rememberMe, setRememberMe] = useState(() => {
+    return localStorage.getItem('rememberedEmail') && localStorage.getItem('rememberedPassword');
+  });
   const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // 모달 표시 여부를 관리하는 상태 변수
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm(); // Form 인스턴스를 생성합니다.
+
+  useEffect(() => {
+    if (rememberMe) {
+      localStorage.setItem('rememberedEmail', email);
+      localStorage.setItem('rememberedPassword', password);
+    } else {
+      localStorage.removeItem('rememberedEmail');
+      localStorage.removeItem('rememberedPassword');
+    }
+
+    // Form 초기값 설정
+    form.setFieldsValue({
+      email: email,
+      password: password,
+      remember: rememberMe
+    });
+  }, [rememberMe, email, password, form]);
 
   const handleModalOpen = () => {
     setIsModalVisible(true);
@@ -69,9 +90,16 @@ export const useAuth = () => {
     try {
       const { token, userData } = await loginUser(email, password);
       setAuthToken(token);
-      sessionStorage.setItem('userData', JSON.stringify(userData)); // 사용자 데이터 저장
-      console.log('저장된 토큰:', token);
-      console.log('저장된 사용자 데이터:', userData);
+      sessionStorage.setItem('userData', JSON.stringify(userData));
+
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', email);
+        localStorage.setItem('rememberedPassword', password);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+        localStorage.removeItem('rememberedPassword');
+      }
+
       navigate('/');
     } catch (err) {
       setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
@@ -121,9 +149,10 @@ export const useAuth = () => {
     isModalVisible,
     handleModalOpen,
     handleModalClose,
-    isModalVisible,
     onFinish,
     onSuccess,
-    onFailure
+    onFailure,
+    rememberMe,
+    setRememberMe
   };
 };

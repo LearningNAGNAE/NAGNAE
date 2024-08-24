@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 // import useAuth from '../hooks/useAuth';
 // import fetchData from '../contexts/apiService'; // fetchData 함수 가져오기
 import { Link } from 'react-router-dom';
