@@ -38,7 +38,7 @@ function BoardMain() {
           {data.length > 0 ? 
             (data.map((item, index) => (
               <tr key={item.boardno}>
-                <td>{data2-index}</td>
+                <td className='board-main-tbody-no'>{data2-index}</td>
                 <td><Link to={'/BoardPage?type=Comm_PostRead'} state={{ boardno: item.boardno }}>{item.title}</Link></td>
                 <td className='board-main-tbody-writer'>{item.userName}</td>
                 <td className='board-main-tbody-insertDate'>

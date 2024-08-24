@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getAnnPosts } from "../../contexts/board/Board_Ann_PostListApi";
 
 export const useBoard_Ann_PostList = (initialPage = 1) => {
@@ -8,8 +8,16 @@ export const useBoard_Ann_PostList = (initialPage = 1) => {
   const [totalPosts, setTotalPosts] = useState(0);
   const [pageSize, setPageSize] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const userData = JSON.parse(sessionStorage.getItem("userData"));
-  const userNo = userData.apiData.userno
+  const [userData, setUserData] = useState(null);
+  const [userNo, setUserNo] = useState(null);
+
+  useEffect(() => {
+    const storedUserData = JSON.parse(sessionStorage.getItem("userData"));
+    setUserData(storedUserData);
+    if (storedUserData && storedUserData.apiData) {
+      setUserNo(storedUserData.apiData.userno);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -50,6 +58,7 @@ export const useBoard_Ann_PostList = (initialPage = 1) => {
     totalPosts,
     pageSize,
     userNo,
+    userData,
     onPageChange: handlePageChange,
     onSearch: handleSearch,
   };
