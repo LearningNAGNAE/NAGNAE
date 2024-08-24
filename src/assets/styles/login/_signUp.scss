@@ -63,6 +63,16 @@
                 flex-direction: column;
                 align-items: center;
 
+                .id-check-box {
+                    justify-content: end;
+                    .id-check-btn {
+                        padding: 10px;
+                        border-radius: 50px;
+                        background-color: #8c7a6b;
+                        color: white;
+                        cursor: pointer;
+                    }
+                }
                 input {
                     width: 80%;
                     padding: 10px;
@@ -78,7 +88,7 @@
                     justify-content: space-between;
 
                     input {
-                        width: 60%;
+                        width: 50%;
                         margin-right: 10px;
                     }
                     select {
@@ -93,7 +103,7 @@
                         color: #333;
                         cursor: pointer;
                         outline: none;
-                        width: 35%; /* 원하는 너비로 조정 */
+                        width: 45%; /* 원하는 너비로 조정 */
                       }
                       
                       /* 화살표 아이콘 스타일링 (선택사항) */

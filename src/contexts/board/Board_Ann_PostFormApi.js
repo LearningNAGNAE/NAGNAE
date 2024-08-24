@@ -3,13 +3,13 @@ import axios from "axios";
 import store from "../../redux/Store";
 import Quill from "quill";
 
-const PostFormAPIContext = createContext();
+const AnnPostFormAPIContext = createContext();
 
-export const usePostFormAPI = () => {
-  return useContext(PostFormAPIContext);
+export const useAnnPostFormAPI = () => {
+  return useContext(AnnPostFormAPIContext);
 };
 
-export const PostFormAPIProvider = ({ children }) => {
+export const AnnPostFormAPIProvider = ({ children }) => {
   const SpringbaseUrl = store.getState().url.SpringbaseUrl;
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -37,7 +37,6 @@ export const PostFormAPIProvider = ({ children }) => {
     },
     [SpringbaseUrl]
   );
-
 
   const processImage = useCallback(
     async (imageData) => {
@@ -84,7 +83,6 @@ export const PostFormAPIProvider = ({ children }) => {
         const processedContent = await processContent(content);
         const htmlContent = convertToHtml(processedContent);
 
-        // 이미지 URL들을 추출
         const imageUrls = extractImageUrls(htmlContent);
 
         const postData = {
@@ -92,11 +90,12 @@ export const PostFormAPIProvider = ({ children }) => {
           content: htmlContent,
           insertuserno: userData.apiData.userno,
           modifyuserno: userData.apiData.userno,
-          imageUrls: imageUrls, // 추출된 이미지 URL들을 함께 전송
+          imageUrls: imageUrls,
+          category_no: 2, // Announcements 카테고리 번호
         };
 
         const response = await axios.post(
-          `${SpringbaseUrl}/board/freeboardwrite`,
+          `${SpringbaseUrl}/board/annboardwrite`,
           postData
         );
         return response.data;
@@ -140,10 +139,10 @@ export const PostFormAPIProvider = ({ children }) => {
   }, []);
 
   return (
-    <PostFormAPIContext.Provider
+    <AnnPostFormAPIContext.Provider
       value={{ submitPost, uploadImage, handleImageSelect }}
     >
       {children}
-    </PostFormAPIContext.Provider>
+    </AnnPostFormAPIContext.Provider>
   );
 };

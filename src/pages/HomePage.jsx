@@ -255,16 +255,14 @@ function HomePage() {
           <div ref={fadeRef1} className='main-explanation-1 fade-element'>
             <img src={ExplanationPage1} alt="설명 이미지1" className="main-explanation-1-1"/>
             <span className="main-explanation-1-2">
-              <p className="main-explanation-1-2-big-writing">Provides you with information related to various laws</p>
-              <p className="main-explanation-1-2-small-writing">Did you want to get information about Korean law, but had a hard time because it was written in difficult words? Don't worry anymore. The NAGNAE is with you.
-              NAGNAE provides various languages through AI.</p>
+              <p className="main-explanation-1-2-big-writing">Navigating Korean Law, Visa, and Healthcare Made Easy</p>
+              <p className="main-explanation-1-2-small-writing">NAGNAE provides assistance with Korea's complex legal system, visa procedures, and healthcare system. It explains Korean laws related to foreigners in simple terms and guides you through various visa information and application processes. Additionally, it offers information on how to use the Korean medical system, health insurance for foreigners, and hospital procedures.</p>
             </span>
           </div>
           <div ref={fadeRef2} className="main-explanation-2 fade-element2">
             <span className="main-explanation-2-2">
-              <p className="main-explanation-2-2-big-writing">Provides you with information related to various laws</p>
-              <p className="main-explanation-2-2-small-writing">Did you want to get information about Korean law, but had a hard time because it was written in difficult words? Don't worry anymore. The NAGNAE is with you.
-              NAGNAE provides various languages through AI.</p>
+              <p className="main-explanation-2-2-big-writing">Your Guide to Education and Employment in Korea</p>
+              <p className="main-explanation-2-2-small-writing">NAGNAE provides necessary information for foreigners who want to study or work in Korea. It offers comprehensive guidance on the Korean education system, university admission procedures, and language programs. The AI also explains employment information for foreigners, job search processes, required documents, and the rights and obligations of foreign workers.</p>
             </span>
             <img src={ExplanationPage2} alt="설명 이미지2" className="main-explanation-2-1"/>
           </div>
@@ -300,24 +298,10 @@ function HomePage() {
             </div>
             {showFooter && (
               <footer className='main-footer'>
-                <div className='footer-wrap'>
-                  <div className='footer-detail-box'>
-                    <div className='first-detail'>
-                      <span>Privacy Statement</span>
-                      <span>Terms of Use</span>
-                    </div>
-                    <div className='second-detail'>
-                      <div className='s-introduce'>
-                        <span>Coporation NAGNAE</span>
-                        <span>CEO : Hyun Su Jung</span>
-                      </div>
-                      <div className='s-introduce'>
-                        <span>010-2728-7526</span>
-                      </div>
-                    </div>
-                    <div className='third-detail'>
-                      <span>20 Teheran-ro 5-gil, Gangnam-gu, Seoul</span>
-                    </div>
+                <div className="footer-container">
+                  <div className="footer-content">
+                    <p>2024 NAGNAE. All rights reserved.</p>
+                    <p>hyunsujung3679@gmail.com</p>
                   </div>
                 </div>
               </footer>

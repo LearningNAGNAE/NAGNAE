@@ -12,7 +12,7 @@ const formatText = (text) => {
   return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />');
 };
 
-function ChatMedicalMessage({ message }) {
+function ChatLegalVisaMessage({ message }) {
   const createMarkup = (html) => {
     return { __html: DOMPurify.sanitize(html) };
   };
@@ -69,4 +69,4 @@ function ChatMedicalMessage({ message }) {
   );
 }
 
-export default ChatMedicalMessage;
+export default ChatLegalVisaMessage;

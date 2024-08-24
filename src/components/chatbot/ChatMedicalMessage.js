@@ -2,30 +2,20 @@ import React from 'react';
 import '../../assets/styles/chatbot/ChatMessage.css';
 import userIcon from '../../assets/images/user.png';
 import botIcon from '../../assets/images/chatbot.png';
+import DOMPurify from 'dompurify';
 
-function ChatMedicalMessage({ message }) {
-  const formatText = (text) => {
-    if (typeof text !== 'string') return JSON.stringify(text);
+// 텍스트 포맷팅 함수
+const formatText = (text) => {
+  if (typeof text !== 'string') return text;
 
-    const lines = text.split('\n');
+  // 마크다운 태그를 HTML로 변환
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />');
+};
 
-    return lines.map((line, lineIndex) => {
-      const parts = line.split(/(\*\*.*?\*\*)/g);
-      const formattedLine = parts.map((part, partIndex) => {
-        if (part.startsWith('**') && part.endsWith('**')) {
-          return <strong key={`${lineIndex}-${partIndex}`}>{part.slice(2, -2)}</strong>;
-        }
-        return part;
-      });
-
-      return (
-        <React.Fragment key={lineIndex}>
-          {formattedLine}
-          {lineIndex < lines.length - 1 && <br />}
-        </React.Fragment>
-      );
-    });
-  };
+const ChatMedicalMessage = ({ message }) => {
+  const createMarkup = (html) => ({
+    __html: DOMPurify.sanitize(html),
+  });
 
   const userIconStyle = {
     backgroundImage: `url(${userIcon})`,
@@ -43,6 +33,9 @@ function ChatMedicalMessage({ message }) {
     height: '55px',
     objectFit: 'contain',
   };
+
+  // 스트리밍 중일 때 텍스트 포맷팅
+  const formattedText = formatText(message.text);
 
   return (
     <div className={`message-container ${message.isUser ? 'user' : 'bot'}`}>
@@ -69,11 +62,11 @@ function ChatMedicalMessage({ message }) {
             <span></span>
           </div>
         ) : (
-          message.text && formatText(message.text)
+          <div dangerouslySetInnerHTML={createMarkup(formattedText)} />
         )}
       </div>
     </div>
   );
-}
+};
 
 export default ChatMedicalMessage;
