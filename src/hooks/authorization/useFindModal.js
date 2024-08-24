@@ -1,17 +1,17 @@
 import { useState } from 'react';
+import { sendEmailId, sendEmailPw } from '../../contexts/authorization/FindModalApi';
 
 export const useFindModal = () => {
   const [findIdData, setFindIdData] = useState({
     name: '',
     hp: '',
-    email: '',
-    foreignerNumber: ''
+    send_email: '',
   });
 
   const [findPwData, setFindPwData] = useState({
     id: '',
     hp: '',
-    email: '',
+    send_email: '',
     name: ''
   });
 
@@ -31,18 +31,40 @@ export const useFindModal = () => {
     }));
   };
 
-  const handleFindId = (e) => {
+  const handleFindId = async (e) => {
     e.preventDefault();
-    console.log('Find ID with:', findIdData);
-    alert('ID: luuu');
-    // ID 찾기 로직 구현
+    try {
+      const emailData = {
+        to: findIdData.send_email,
+        subject: 'Your ID Recovery',
+        text: ``,
+        username: findIdData.name,
+        userhp: findIdData.hp
+      };
+      await sendEmailId(emailData);
+      alert('ID recovery email sent successfully!');
+    } catch (error) {
+      alert('Failed to send ID recovery email. Please try again.');
+    }
   };
 
-  const handleFindPw = (e) => {
+  const handleFindPw = async (e) => {
     e.preventDefault();
-    console.log('Find PW with:', findPwData);
-    alert('PW: 3213');
-    // 비밀번호 찾기 로직 구현
+    try {
+      const emailData = {
+        to: findPwData.send_email,
+        subject: 'Your Password Recovery',
+        text: ``,
+        userid: findPwData.id,
+        username: findPwData.name,
+        userhp: findPwData.hp,
+        email: findPwData.send_email,
+      };
+      await sendEmailPw(emailData);
+      alert('Password recovery email sent successfully!');
+    } catch (error) {
+      alert('Failed to send password recovery email. Please try again.');
+    }
   };
 
   return {

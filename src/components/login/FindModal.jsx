@@ -60,19 +60,10 @@ function Find_Modal({ isOpen, onClose }) {
                 </div>
                 <div className="input-group">
                   <input
-                    type="email"
-                    name="email"
+                    type="send_email"
+                    name="send_email"
                     placeholder="Your EMAIL"
-                    value={findIdData.email}
-                    onChange={handleIdChange}
-                  />
-                </div>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    name="foreignerNumber"
-                    placeholder="Your Foreigner registration number"
-                    value={findIdData.foreignerNumber}
+                    value={findIdData.send_email}
                     onChange={handleIdChange}
                   />
                 </div>
@@ -105,10 +96,10 @@ function Find_Modal({ isOpen, onClose }) {
                 </div>
                 <div className="input-group">
                   <input
-                    type="email"
-                    name="email"
+                    type="send_email"
+                    name="send_email"
                     placeholder="Your EMAIL"
-                    value={findPwData.email}
+                    value={findPwData.send_email}
                     onChange={handlePwChange}
                   />
                 </div>
