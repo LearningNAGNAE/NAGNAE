@@ -15,14 +15,16 @@ export const useBoard_Ann_PostRead = () => {
   const [commentContent, setCommentContent] = useState("");
   const [commentList, setCommentList] = useState([]);
   const [userData, setUserData] = useState(null);
+  const [userNo, setUserNo] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const boardno = location.state?.boardno || null;
 
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
-    if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
+    setUserData(JSON.parse(storedUserData));
+    if (storedUserData && storedUserData.apiData) {
+      setUserNo(storedUserData.apiData.userno)
     } else {
       console.error("User data is not available in sessionStorage");
     }
@@ -77,7 +79,7 @@ export const useBoard_Ann_PostRead = () => {
     error,
     commentContent,
     commentList,
-    userData,
+    userNo,
     setCommentContent,
     handleDelete,
     handleComment,

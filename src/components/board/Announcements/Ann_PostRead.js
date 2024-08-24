@@ -12,7 +12,7 @@ function AnnPostFormRead() {
     error,
     commentContent,
     commentList,
-    userData,
+    userNo,
     setCommentContent,
     handleDelete,
     handleComment,
@@ -33,9 +33,9 @@ function AnnPostFormRead() {
           <Link className="ann-modify" to="/BoardPage?type=Ann_PostList">
             수정
           </Link>
-          {userData.apiData &&
+          {userNo &&
             post &&
-            Number(userData.apiData.userno) === Number(post.insertuserno) && (
+            Number(userNo) === Number(post.insertuserno) && (
               <button className="ann-delete" onClick={handleDelete}>
                 삭제
               </button>

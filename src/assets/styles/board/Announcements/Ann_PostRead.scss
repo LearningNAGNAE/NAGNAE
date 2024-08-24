@@ -1,4 +1,5 @@
 .ann-announcements {
+  min-width: 717px;
     margin: 0 auto;
     font-family: Arial, sans-serif;
     
@@ -34,6 +35,7 @@
           }
 
           &.ann-modify {
+            padding: 8px 11px;
             background-color: #A48975;
             color: white;
             &:hover {

@@ -12,7 +12,7 @@ function PostFormRead() {
     error, 
     commentContent, 
     commentList,
-    userData,
+    userNo,
     setCommentContent, 
     handleDelete, 
     handleComment 
@@ -29,7 +29,7 @@ function PostFormRead() {
         <div className="comm-header-buttons">
           <Link className='comm-list' to="/BoardPage?type=Comm_PostList">목록</Link>
           <Link className='comm-modify' to="/BoardPage?type=Comm_PostList">수정</Link>
-          {userData.apiData && post && Number(userData.apiData.userno) === Number(post.insertuserno) && (
+          {userNo && post && Number(userNo) === Number(post.insertuserno) && (
             <button className="comm-delete" onClick={handleDelete}>삭제</button>
           )}
         </div>
@@ -68,7 +68,6 @@ function PostFormRead() {
         ))}
       </section>
       <div className="comm-reply-box">
-        <div className='comm-reply-img'></div>
         <input
           className='comm-reply-input'
           type="text"

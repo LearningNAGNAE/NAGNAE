@@ -10,6 +10,7 @@ function AnnPostList({
   totalPosts,
   pageSize,
   userNo,
+  userData,
   onPageChange,
   onSearch,
 }) {
@@ -132,12 +133,16 @@ function AnnPostList({
         </div>
 
         <div className="write-btn">
-          {userNo === 1 ?(
-            <Link to={"/BoardPage?type=Ann_PostForm"} 
-            state ={{categoryno : 2}}>Write</Link>
+          {userData != null ?
+            (userNo === 1 ?(
+              <Link to={"/BoardPage?type=Ann_PostForm"} 
+              state ={{categoryno : 2}}>Write</Link>
             ):(
               <div></div>
-            )}
+            )):(
+              <div></div>
+            )
+          }
         </div>
       </div>
     </div>
@@ -151,6 +156,8 @@ function AnnPostListMain() {
     totalPages,
     totalPosts,
     pageSize,
+    userNo,
+    userData,
     onPageChange,
     onSearch,
   } = useBoard_Ann_PostList(1); // 1은 초기 페이지 번호입니다
@@ -162,6 +169,8 @@ function AnnPostListMain() {
       totalPages={totalPages}
       totalPosts={totalPosts}
       pageSize={pageSize}
+      userNo={userNo}
+      userData={userData}
       onPageChange={onPageChange}
       onSearch={onSearch}
     />
