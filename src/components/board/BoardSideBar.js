@@ -1,6 +1,6 @@
 // src/components/Sidebar.js
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import '../../assets/styles/board/BoardSideBar.scss';
 import img from '../../assets/images/sam.png';
 import { useBoardCategory } from '../../hooks/board/useBoardCategory';
@@ -21,9 +21,7 @@ function BoardSideBar() {
           <li className={activeCategory === 'Comm_PostList' ? 'active' : ''}>
             <Link to="/BoardPage?type=Comm_PostList">Community</Link>
           </li>
-          <li className={activeCategory === 'Info_PostList' ? 'active' : ''}>
-            <Link to="/BoardPage?type=Info_PostList">Information</Link>
-          </li>
+          
         </ul>
       </nav>
       <img src={img} alt="Egg tart advertisement" />

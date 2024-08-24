@@ -124,7 +124,7 @@ function CommPostList({ posts = [], currentPage, totalPages, totalPosts, pageSiz
         </div>
 
         <div className="write-btn">
-          <Link to="/BoardPage?type=Comm_PostForm">Write</Link>
+          <Link to={"/BoardPage?type=Comm_PostForm"} state ={{categoryno : 1}}>Write</Link>
         </div>
       </div>
     </div>

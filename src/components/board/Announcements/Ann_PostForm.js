@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import "../../../assets/styles/board/Announcements/Ann_PostForm.scss";
 import Editor from "../../board/BoardQuillCustum.js";
 import "react-quill/dist/quill.snow.css";
-import { AnnPostFormAPIProvider } from "../../../contexts/board/Board_Ann_PostFormApi";
-import { useBoard_Ann_PostForm } from "../../../hooks/board/useBoard_Ann_PostForm";
+import { PostFormAPIProvider } from "../../../contexts/board/Board_PostFormApi";
+import { useBoard_PostForm } from "../../../hooks/board/useBoard_PostForm";
 
 function AnnPostFormContent() {
-  const { title, setTitle, handleSubmit, handleImageUpload } =
-    useBoard_Ann_PostForm();
+  const { title, setTitle, handleSubmit, handleImageUpload } =useBoard_PostForm();
   const quillRef = useRef(null);
 
   useEffect(() => {
@@ -80,9 +79,9 @@ function AnnPostFormContent() {
 
 function Ann_PostForm() {
   return (
-    <AnnPostFormAPIProvider>
+    <PostFormAPIProvider>
       <AnnPostFormContent />
-    </AnnPostFormAPIProvider>
+    </PostFormAPIProvider>
   );
 }
 

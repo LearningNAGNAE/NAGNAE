@@ -8,6 +8,8 @@ export const useBoard_Ann_PostList = (initialPage = 1) => {
   const [totalPosts, setTotalPosts] = useState(0);
   const [pageSize, setPageSize] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const userNo = userData.apiData.userno
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -47,6 +49,7 @@ export const useBoard_Ann_PostList = (initialPage = 1) => {
     totalPages,
     totalPosts,
     pageSize,
+    userNo,
     onPageChange: handlePageChange,
     onSearch: handleSearch,
   };

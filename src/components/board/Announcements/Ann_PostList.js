@@ -9,6 +9,7 @@ function AnnPostList({
   totalPages,
   totalPosts,
   pageSize,
+  userNo,
   onPageChange,
   onSearch,
 }) {
@@ -131,7 +132,12 @@ function AnnPostList({
         </div>
 
         <div className="write-btn">
-          <Link to="/BoardPage?type=Ann_PostForm">Write</Link>
+          {userNo === 1 ?(
+            <Link to={"/BoardPage?type=Ann_PostForm"} 
+            state ={{categoryno : 2}}>Write</Link>
+            ):(
+              <div></div>
+            )}
         </div>
       </div>
     </div>
