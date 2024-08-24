@@ -17,7 +17,7 @@
         border-radius: 10px;
         font-size: 36px;
         color: white;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     }
 
     nav {
@@ -31,7 +31,7 @@
             overflow: hidden;
 
             li {
-                font-size: 20px;
+                font-size: 25px;
                 position: relative; // 가상 요소의 기준점
                 transition: all 0.3s ease;
 
@@ -56,7 +56,7 @@
 
                 a {
                     display: block;
-                    padding: 15px;
+                    padding: 25px;
                     text-decoration: none;
                     color: #775A45;
                 }

@@ -75,7 +75,7 @@ export const PostFormAPIProvider = ({ children }) => {
   );
 
   const submitPost = useCallback(
-    async (title, content, userData) => {
+    async (title, content, userData,categoryno) => {
       if (!userData || !userData.apiData) {
         throw new Error("사용자 데이터가 없습니다");
       }
@@ -92,6 +92,7 @@ export const PostFormAPIProvider = ({ children }) => {
           content: htmlContent,
           insertuserno: userData.apiData.userno,
           modifyuserno: userData.apiData.userno,
+          categoryno,
           imageUrls: imageUrls, // 추출된 이미지 URL들을 함께 전송
         };
 

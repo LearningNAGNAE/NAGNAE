@@ -1,14 +1,13 @@
 import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useBoardComm_PostForm } from "../../../hooks/board/useBoardComm_PostForm";
+import { useBoard_PostForm } from "../../../hooks/board/useBoard_PostForm.js";
 import "../../../assets/styles/board/Community/Comm_PostForm.scss";
 import Editor from "../../board/BoardQuillCustum.js";
 import "react-quill/dist/quill.snow.css";
-import { PostFormAPIProvider } from "../../../contexts/board/Board_Comm_PostFormApi.js";
+import { PostFormAPIProvider } from "../../../contexts/board/Board_PostFormApi.js";
 
 function PostFormContent() {
-  const { title, setTitle, handleSubmit, handleImageUpload } =
-    useBoardComm_PostForm();
+  const { title, setTitle, handleSubmit, handleImageUpload } =useBoard_PostForm();
   const quillRef = useRef(null);
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import React, {
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import "../../assets/styles/board/quillstyle.css";
-import { usePostFormAPI } from "../../contexts/board/Board_Comm_PostFormApi";
+import { usePostFormAPI } from "../../contexts/board/Board_PostFormApi";
 
 
 // Import Quill's image resize module

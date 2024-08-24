@@ -9,7 +9,6 @@ export const fetchPosts = async () => {
       axios.get(`${SpringbaseUrl}/board/announcements6`),
       axios.get(`${SpringbaseUrl}/board/community6`)
     ]);
-    console.log(communityPostsResponse.data.data);
     return {
       announcements: announcementsResponse.data.data,
       communityPosts: communityPostsResponse.data.data
