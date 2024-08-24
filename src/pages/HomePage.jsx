@@ -298,24 +298,10 @@ function HomePage() {
             </div>
             {showFooter && (
               <footer className='main-footer'>
-                <div className='footer-wrap'>
-                  <div className='footer-detail-box'>
-                    <div className='first-detail'>
-                      <span>Privacy Statement</span>
-                      <span>Terms of Use</span>
-                    </div>
-                    <div className='second-detail'>
-                      <div className='s-introduce'>
-                        <span>Coporation NAGNAE</span>
-                        <span>CEO : Hyun Su Jung</span>
-                      </div>
-                      <div className='s-introduce'>
-                        <span>010-2728-7526</span>
-                      </div>
-                    </div>
-                    <div className='third-detail'>
-                      <span>20 Teheran-ro 5-gil, Gangnam-gu, Seoul</span>
-                    </div>
+                <div className="footer-container">
+                  <div className="footer-content">
+                    <p>2024 NAGNAE. All rights reserved.</p>
+                    <p>hyunsujung3679@gmail.com</p>
                   </div>
                 </div>
               </footer>

@@ -2,9 +2,10 @@
     font-family: 'HSBombaram3.0_Thin', sans-serif;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f9f5f1;
+    background-color: #ffffff;
   
     .board-main-section {
+      height: 240px;
       margin-bottom: 40px;
   
       h2 {
@@ -73,6 +74,10 @@
                   width: 1px;
                   background-color: #775A45;
                 }
+              }
+              .board-main-tbody-writer,.board-main-tbody-insertDate,
+              .board-main-tbody-views,.board-main-tbody-nopost{
+                text-align: center;
               }
             }
           }

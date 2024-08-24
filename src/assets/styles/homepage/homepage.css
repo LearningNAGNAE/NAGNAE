@@ -332,7 +332,7 @@ img {
 
 .main-footer {
     position: absolute;
-    top: 670px;
+    top: 775px;
     left: 0;
     max-width: 100%;
     background-color: rgba(255, 255, 255, 0.9);
@@ -341,7 +341,8 @@ img {
     transition: opacity 0.3s ease-in-out;
     opacity: 0;
     animation: fadeIn 0.5s forwards;
-  }
+}
+
 
 #webgl {
     position: fixed;
