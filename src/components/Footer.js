@@ -14,7 +14,6 @@ function Footer() {
         <div className="footer-container">
           <div className="footer-content">
             <p>2024 NAGNAE. All rights reserved.</p>
-            <p>010-2728-7526</p>
             <p>hyunsujung3679@gmail.com</p>
           </div>
         </div>

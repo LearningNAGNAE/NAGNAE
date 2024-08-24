@@ -126,11 +126,13 @@ body {
 .main-explanation-1-2-big-writing, .main-explanation-2-2-big-writing {
     font-size: 2.875rem;
     color: #775A45;
+    text-align: center;  /* 가운데 정렬 유지 */
 }
 
 .main-explanation-1-2-small-writing, .main-explanation-2-2-small-writing {
     font-size: 1.3625rem;
     color: #BA9F8B;
+    text-align: left;  /* 왼쪽 정렬 */
 }
 
 img {
