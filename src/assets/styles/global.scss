@@ -189,21 +189,35 @@ header nav {
     }
   }
 }
-
-
 /* header/ */
 
 
 /* footer */
-footer {
-  background-color: #f8f8f8;
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 전체 뷰포트 높이를 최소 높이로 설정 */
+}
+
+.content {
+  flex: 1 0 auto; /* 내용이 늘어나도록 설정 */
+}
+
+footer {
+  flex-shrink: 0; /* footer가 줄어들지 않도록 설정 */
+  background-color: #f8f8f8;
   width: 100%;
-  height: 120px;
-  box-sizing: border-box;
-  position: relative;
   padding: 20px 0;
   font-size: 14px;
   color: #333;
@@ -212,6 +226,7 @@ footer {
   .footer-container {
     max-width: 1200px;
     width: 100%;
+    margin: 0 auto;
     padding: 0 20px;
   }
 
@@ -223,7 +238,6 @@ footer {
 
 @media screen and (max-width: 768px) {
   footer {
-    height: auto;
     padding: 10px 0;
 
     .footer-content {

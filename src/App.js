@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -21,14 +22,16 @@ function App() {
           <BrowserRouter>
             <div className="App">
               <Header />
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/ChatBotPage" element={<ChatBotPage />} />
-                <Route path="/SignPage" element={<SignPage />} />
-                <Route path="/BoardPage" element={<BoardPage />} />
-                <Route path="/StudyPage" element={<StudyPage />} />
-                <Route path="/ChatListPage" element={<ChatListPage />} />
-              </Routes>
+              <div className="content">
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/ChatBotPage" element={<ChatBotPage />} />
+                  <Route path="/SignPage" element={<SignPage />} />
+                  <Route path="/BoardPage" element={<BoardPage />} />
+                  <Route path="/StudyPage" element={<StudyPage />} />
+                  <Route path="/ChatListPage" element={<ChatListPage />} />
+                </Routes>
+              </div>
               <Footer />
             </div>
           </BrowserRouter>
