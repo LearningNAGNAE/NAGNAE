@@ -31,8 +31,7 @@ export const useFindModal = () => {
     }));
   };
 
-  const handleFindId = async (e) => {
-    e.preventDefault();
+  const handleFindId = async () => {  // e 파라미터 제거
     try {
       const emailData = {
         to: findIdData.send_email,
@@ -47,9 +46,9 @@ export const useFindModal = () => {
       alert('Failed to send ID recovery email. Please try again.');
     }
   };
+  
 
-  const handleFindPw = async (e) => {
-    e.preventDefault();
+  const handleFindPw = async () => {  // e 파라미터 제거
     try {
       const emailData = {
         to: findPwData.send_email,
@@ -67,12 +66,34 @@ export const useFindModal = () => {
     }
   };
 
+  const handleIdSubmit = (e) => {
+    e.preventDefault();
+    handleFindId();
+  };
+
+  const handlePwSubmit = (e) => {
+    e.preventDefault();
+    handleFindPw();
+  };
+
+  const handleKeyDown = (e, type) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (type === 'id') {
+        handleFindId();
+      } else if (type === 'pw') {
+        handleFindPw();
+      }
+    }
+  };
+
   return {
     findIdData,
     findPwData,
     handleIdChange,
     handlePwChange,
-    handleFindId,
-    handleFindPw
+    handleIdSubmit,
+    handlePwSubmit,
+    handleKeyDown
   };
 };

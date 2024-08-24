@@ -20,8 +20,9 @@ function Find_Modal({ isOpen, onClose }) {
     findPwData,
     handleIdChange,
     handlePwChange,
-    handleFindId,
-    handleFindPw
+    handleIdSubmit,
+    handlePwSubmit,
+    handleKeyDown
   } = useFindModal();
 
   return (
@@ -39,7 +40,7 @@ function Find_Modal({ isOpen, onClose }) {
           <div className="find-id-pw-container">
             <div className="find-id-section">
               <h2>Find ID</h2>
-              <form onSubmit={handleFindId}>
+              <form onSubmit={handleIdSubmit}>
                 <div className="input-group">
                   <input
                     type="text"
@@ -59,13 +60,14 @@ function Find_Modal({ isOpen, onClose }) {
                   />
                 </div>
                 <div className="input-group">
-                  <input
-                    type="send_email"
-                    name="send_email"
-                    placeholder="Your EMAIL"
-                    value={findIdData.send_email}
-                    onChange={handleIdChange}
-                  />
+                <input
+                  type="send_email"
+                  name="send_email"
+                  placeholder="Your EMAIL"
+                  value={findIdData.send_email}
+                  onChange={handleIdChange}
+                  onKeyDown={(e) => handleKeyDown(e, 'id')}
+                />
                 </div>
                 <button type="submit" className="find-button">Find ID</button>
               </form>
@@ -75,13 +77,22 @@ function Find_Modal({ isOpen, onClose }) {
 
             <div className="find-pw-section">
               <h2>Find PW</h2>
-              <form onSubmit={handleFindPw}>
+              <form onSubmit={handlePwSubmit}>
                 <div className="input-group">
                   <input
                     type="text"
                     name="id"
                     placeholder="Your ID"
                     value={findPwData.id}
+                    onChange={handlePwChange}
+                  />
+                </div>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    value={findPwData.name}
                     onChange={handlePwChange}
                   />
                 </div>
@@ -98,18 +109,10 @@ function Find_Modal({ isOpen, onClose }) {
                   <input
                     type="send_email"
                     name="send_email"
-                    placeholder="Your EMAIL"
+                    placeholder="The Email Address to send"
                     value={findPwData.send_email}
                     onChange={handlePwChange}
-                  />
-                </div>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Your Name"
-                    value={findPwData.name}
-                    onChange={handlePwChange}
+                    onKeyDown={(e) => handleKeyDown(e, 'pw')}
                   />
                 </div>
                 <button type="submit" className="find-button">Find PW</button>
