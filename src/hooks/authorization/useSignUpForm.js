@@ -20,6 +20,7 @@ export function useSignUpForm() {
   const [emailId, setEmailId] = useState('');
   const [emailDomain, setEmailDomain] = useState('');
   const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isNationalityInputEditable, setIsNationalityInputEditable] = useState(false);
 
   // 이메일 입력 필드가 변경될 때마다 isEmailVerified를 false로 설정
   useEffect(() => {
@@ -51,6 +52,30 @@ export function useSignUpForm() {
         ...prevState,
         [name]: trimmedValue
       }));
+    }
+  };
+
+  const handleNationalityChange = (e) => {
+    const { value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      nationlity: value
+    }));
+  };
+  const handleNationalitySelectChange = (event) => {
+    const selectedValue = event.target.value;
+    if (selectedValue === 'EnterManually') {
+      setFormData(prevState => ({
+        ...prevState,
+        nationlity: ''
+      }));
+      setIsNationalityInputEditable(true);
+    } else {
+      setFormData(prevState => ({
+        ...prevState,
+        nationlity: selectedValue
+      }));
+      setIsNationalityInputEditable(false);
     }
   };
 
@@ -179,6 +204,9 @@ export function useSignUpForm() {
     errors,
     handleIdCheck,
     passwordConfirm,
-    isEmailVerified
+    isEmailVerified,
+    handleNationalityChange,
+    handleNationalitySelectChange,
+    isNationalityInputEditable
   };
 }

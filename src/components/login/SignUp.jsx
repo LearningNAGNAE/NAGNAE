@@ -18,7 +18,10 @@ function SignUp() {
     errors,
     handleIdCheck,
     passwordConfirm,
-    isEmailVerified
+    isEmailVerified,
+    handleNationalityChange,
+    handleNationalitySelectChange,
+    isNationalityInputEditable
   } = useSignUpForm();
 
   return (
@@ -54,12 +57,12 @@ function SignUp() {
                 type="text" 
                 value={emailDomain} 
                 onChange={handleEmailDomainChange} 
-                placeholder="EMAIL ADDRESS"
+                placeholder="DOMAIN"
                 readOnly={!isInputEditable}
                 onKeyDown={handleKeyDown}
               />
               <select id="email-select" onChange={handleSelectChange}>
-                <option value="">주소를 선택하세요.</option>
+                <option value="">Select Domain</option>
                 <option value="@naver.com">naver.com</option>
                 <option value="@gmail.com">gmail.com</option>
                 <option value="@nate.com">nate.com</option>
@@ -73,7 +76,7 @@ function SignUp() {
                 className={`id-check-btn ${isEmailVerified ? 'verified' : ''}`}
                 onClick={handleIdCheck}
               >
-                {isEmailVerified ? '중복 확인' : '중복 확인'}
+                {isEmailVerified ? 'Duplicate Check' : 'Duplicate Check'}
               </button>
             </div>
           </div>
@@ -116,13 +119,69 @@ function SignUp() {
         </div>
         <div className="input-row">
           <div className="input-group">
-            <input
-              type="text"
-              name="nationlity"
-              placeholder="NATIONLITY"
-              value={formData.nationlity}
-              onChange={handleChange}
-            />
+            <div className="nationality-input-group">
+              <input
+                type="text"
+                name="nationlity"
+                placeholder="NATIONLITY"
+                value={formData.nationlity}
+                onChange={handleNationalityChange}
+                readOnly={!isNationalityInputEditable}
+              />
+              <select onChange={handleNationalitySelectChange}>
+                <option value="">Select Nationality</option>
+                <option value="United States">United States</option>
+                <option value="China">China</option>
+                <option value="Japan">Japan</option>
+                <option value="Germany">Germany</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="France">France</option>
+                <option value="Italy">Italy</option>
+                <option value="Canada">Canada</option>
+                <option value="South Korea">South Korea</option>
+                <option value="Russia">Russia</option>
+                <option value="Australia">Australia</option>
+                <option value="Spain">Spain</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Indonesia">Indonesia</option>
+                <option value="Netherlands">Netherlands</option>
+                <option value="Saudi Arabia">Saudi Arabia</option>
+                <option value="Turkey">Turkey</option>
+                <option value="Switzerland">Switzerland</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Sweden">Sweden</option>
+                <option value="Poland">Poland</option>
+                <option value="Belgium">Belgium</option>
+                <option value="Thailand">Thailand</option>
+                <option value="Austria">Austria</option>
+                <option value="Norway">Norway</option>
+                <option value="United Arab Emirates">United Arab Emirates</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="Israel">Israel</option>
+                <option value="Ireland">Ireland</option>
+                <option value="Denmark">Denmark</option>
+                <option value="Singapore">Singapore</option>
+                <option value="Malaysia">Malaysia</option>
+                <option value="Philippines">Philippines</option>
+                <option value="South Africa">South Africa</option>
+                <option value="Egypt">Egypt</option>
+                <option value="Finland">Finland</option>
+                <option value="Greece">Greece</option>
+                <option value="Portugal">Portugal</option>
+                <option value="Czech Republic">Czech Republic</option>
+                <option value="Romania">Romania</option>
+                <option value="New Zealand">New Zealand</option>
+                <option value="Vietnam">Vietnam</option>
+                <option value="Chile">Chile</option>
+                <option value="Peru">Peru</option>
+                <option value="Bangladesh">Bangladesh</option>
+                <option value="Colombia">Colombia</option>
+                <option value="Ukraine">Ukraine</option>
+                <option value="Hungary">Hungary</option>
+                <option value="Morocco">Morocco</option>
+                <option value="EnterManually">Enter Manually</option>
+              </select>
+            </div>
             {errors.nationlity && <span className="error-message">{errors.nationlity}</span>}
           </div>
         </div>
