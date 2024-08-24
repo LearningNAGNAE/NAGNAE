@@ -13,6 +13,7 @@ export const PostDetailProvider = ({ children }) => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const token = sessionStorage.getItem("token");
 
 
   const incrementViews = useCallback(async (boardno) => {
@@ -31,7 +32,7 @@ export const PostDetailProvider = ({ children }) => {
     try {
       // Increment views
       await incrementViews(boardno);
-      const response = await axios.get(`${SpringbaseUrl}/board/freeboardread`, {
+      const response = await axios.get(`${SpringbaseUrl}/board/boardread`, {
         params: { boardno }
       });
       setPost(response.data.data);
@@ -49,14 +50,18 @@ export const PostDetailProvider = ({ children }) => {
   const deletePost = useCallback(async (boardno) => {
     if (!boardno) return;
     try {
-      await axios.delete(`${SpringbaseUrl}/board/freereaddelete`, {
-        params: { boardno }
-      });
+      await axios.delete(`${SpringbaseUrl}/board/readdelete`, {
+        params: { boardno },
+        headers:{"Content-Type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + token
+        }
+      }
+    );
     } catch (error) {
       console.error('Error deleting post:', error);
       setError(error);
     }
-  }, [SpringbaseUrl]);
+  }, [SpringbaseUrl,token]);
 
   const postComment = useCallback(async (commentcontent, userData, boardno) => {
     if (!userData || !userData.apiData) {
@@ -64,21 +69,25 @@ export const PostDetailProvider = ({ children }) => {
       throw new Error('User data is not available');
     }
     try {
-      const response = await axios.post(`${SpringbaseUrl}/board/freeboardcommentwrite`, {
+      const response = await axios.post(`${SpringbaseUrl}/board/boardcommentwrite`, {
         content: commentcontent,
         commenterno: userData.apiData.userno,
-        boardno
-      });
+        boardno,
+        
+      },{headers:{"Content-Type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token
+      }}
+    );
       return response.data;
     } catch (error) {
       console.error('Error creating comment:', error);
       throw error;
     }
-  }, [SpringbaseUrl]);
+  }, [SpringbaseUrl,token]);
 
   const getCommentList = useCallback(async (boardno) => {
     try {
-      const response = await axios.get(`${SpringbaseUrl}/board/freeboardcommentlist`, {
+      const response = await axios.get(`${SpringbaseUrl}/board/boardcommentlist`, {
         params: { boardno },
       });
       return response.data;

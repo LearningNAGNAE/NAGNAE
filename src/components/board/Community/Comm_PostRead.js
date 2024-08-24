@@ -28,7 +28,7 @@ function PostFormRead() {
         <h1 className='comm_h1'>Community</h1>
         <div className="comm-header-buttons">
           <Link className='comm-list' to="/BoardPage?type=Comm_PostList">목록</Link>
-          <Link className='comm-modify' to="/BoardPage?type=Comm_PostList">수정</Link>
+          <Link className='comm-modify' to="/BoardPage?type=Comm_PostModify">수정</Link>
           {userNo && post && Number(userNo) === Number(post.insertuserno) && (
             <button className="comm-delete" onClick={handleDelete}>삭제</button>
           )}

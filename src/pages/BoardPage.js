@@ -3,12 +3,11 @@ import { useLocation } from 'react-router-dom';
 import CommPostList from '../components/board/Community/Comm_PostList';
 import CommPostForm from '../components/board/Community/Comm_PostForm';
 import CommPostRead from '../components/board/Community/Comm_PostRead';
+import CommPostModify from '../components/board/Community/Comm_PostModify';
 import AnnPostList from '../components/board/Announcements/Ann_PostList';
 import AnnPostForm from '../components/board/Announcements/Ann_PostForm';
 import AnnPostRead from '../components/board/Announcements/Ann_PostRead';
-import InfoPostList from '../components/board/Information/Info_PostList';
-import InfoPostForm from '../components/board/Information/Info_PostForm';
-import InfoPostRead from '../components/board/Information/Info_PostRead';
+import AnnPostModify from '../components/board/Announcements/Ann_PostModify';
 import BoardMain from '../components/board/BoardMain';
 import BoardSideBar from '../components/board/BoardSideBar';
 import '../assets/styles/board/BoardPage.scss';
@@ -26,6 +25,8 @@ function BoardPage() {
                 return <CommPostRead />;
             case 'Comm_PostList':
                 return <CommPostList />;
+            case 'Comm_PostModify':
+                return <CommPostModify />;    
 
             case 'Ann_PostForm':
                 return <AnnPostForm />;
@@ -33,13 +34,9 @@ function BoardPage() {
                 return <AnnPostRead />;
             case 'Ann_PostList':
                 return <AnnPostList />;
+            case 'Ann_PostModify':
+                return <AnnPostModify />;
 
-            case 'Info_PostForm':
-                return <InfoPostForm />;
-            case 'Info_PostRead':
-                return <InfoPostRead />;
-            case 'Info_PostList':
-                return <InfoPostList />;
             default:
                 return <BoardMain />;
         }
