@@ -63,7 +63,7 @@ function Find_Modal({ isOpen, onClose }) {
                 <input
                   type="send_email"
                   name="send_email"
-                  placeholder="Your EMAIL"
+                  placeholder="The Email Address to send"
                   value={findIdData.send_email}
                   onChange={handleIdChange}
                   onKeyDown={(e) => handleKeyDown(e, 'id')}
