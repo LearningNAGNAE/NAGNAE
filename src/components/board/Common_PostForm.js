@@ -17,10 +17,10 @@ function CommonPostForm({
   const quillRef = useRef(null);
 
   useEffect(() => {
-    if (quillRef.current && content) {
-      quillRef.current.getEditor().root.innerHTML = content;
+    if (quillRef.current) {
+      quillRef.current.getEditor();
     }
-  }, [content]);
+  });
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -28,8 +28,9 @@ function CommonPostForm({
       alert("제목을 입력해주세요.");
       return;
     }
-    const quillContent = quillRef.current.getEditor().root.innerHTML;
-    handleSubmit(title, quillContent);
+    const content = quillRef.current.getEditor().editor.delta
+    console.log(content)
+    handleSubmit(title, content);
   };
 
   return (

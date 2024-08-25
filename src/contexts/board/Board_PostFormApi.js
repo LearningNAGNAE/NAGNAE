@@ -42,6 +42,47 @@ export const PostFormAPIProvider = ({ children }) => {
     [SpringbaseUrl]
   );
 
+  const dataURLtoFile = (dataurl, filename) => {
+    let arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+  };
+
+  const processImage = useCallback(async (imageData) => {
+    if (imageData.startsWith('data:image')) {
+      const file = dataURLtoFile(imageData, 'image.png');
+      return await uploadImage(file);
+    }
+    return imageData;
+  }, [uploadImage]);
+
+  const processContent = useCallback(async (content) => {
+    if (!content || !content.ops) {
+      throw new Error('잘못된 콘텐츠 형식입니다');
+    }
+    const processedOps = await Promise.all(content.ops.map(async (op) => {
+      if (op.insert && typeof op.insert === 'object' && op.insert.image) {
+        const imageUrl = await processImage(op.insert.image);
+        return {
+          ...op,
+          insert: {
+            image: imageUrl
+          }
+        };
+      }
+      return op;
+    }));
+
+    return { ops: processedOps };
+  }, [processImage]);
+
+
   const submitPost = useCallback(
     async (title, content, userData, categoryno) => {
       if (!userData || !userData.apiData) {
@@ -49,7 +90,10 @@ export const PostFormAPIProvider = ({ children }) => {
       }
 
       try {
-        const htmlContent = convertToHtml(content);
+        const processedContent = await processContent(content);
+        const htmlContent = convertToHtml(processedContent);
+        console.log(content);
+        console.log(htmlContent);
         const imageUrls = extractImageUrls(htmlContent);
 
         const postData = {
