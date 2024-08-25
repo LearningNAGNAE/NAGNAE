@@ -1,44 +1,37 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ConfigProvider, Form, Input, Button, Alert, Checkbox, Row, Col } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-
-import { useAuth } from '../../hooks/authorization/useAuth';
+import { GoogleLogin } from '@react-oauth/google';
+import { useAuth } from '../../hooks/authorization/useAuth'; // Adjust the path based on your project structure
 import '../../assets/styles/style.scss';
 import FindModal from './FindModal';
-import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
-  const { 
-    email, 
-    setEmail, 
-    password, 
-    setPassword, 
-    error, 
-    handleSubmit, 
-    rememberMe, 
-    setRememberMe, 
-    handleModalOpen, 
-    handleModalClose, 
-    isModalVisible, 
-    onFinish, 
-    onSuccess, 
-    onFailure,
-    form
+  // Destructure the necessary states and functions from the useAuth hook
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    error,
+    handleSubmit,
+    isModalVisible,
+    handleModalOpen,
+    handleModalClose,
+    onFinish,
+    onSuccess,
+    onFailure
   } = useAuth();
-  const navigate = useNavigate();
-
-
 
   return (
     <ConfigProvider>
       <div className="login-page">
         <div className="login-container">
           <Form
-            form={form}
-            className="login-form" 
+            className="login-form"
             onFinish={onFinish}
-            initialValues={{ email, password, remember: rememberMe }}
+            initialValues={{ email, password }}
           >
             <h2 className="login-title">Sign In</h2>
             {error && <Alert message={error} type="error" className="error-message" />}
@@ -73,10 +66,12 @@ const SignIn = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Item>
-            <Form.Item name="remember" valuePropName="checked" className="remember">
+            <Form.Item className="remember" valuePropName="checked">
               <Row justify="space-between">
                 <Col>
-                  <Checkbox checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)}>
+                  <Checkbox
+                    onChange={(e) => localStorage.setItem('rememberMe', e.target.checked)}
+                  >
                     Remember me
                   </Checkbox>
                 </Col>
@@ -93,14 +88,14 @@ const SignIn = () => {
               </Row>
             </Form.Item>
             <Form.Item>
-              <GoogleLogin 
+              <GoogleLogin
                 onSuccess={onSuccess}
                 onError={onFailure}
-                width={"100px"}
               />
             </Form.Item>
           </Form>
         </div>
+
         <FindModal isOpen={isModalVisible} onClose={handleModalClose} />
       </div>
     </ConfigProvider>

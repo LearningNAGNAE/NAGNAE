@@ -12,7 +12,6 @@ function SignPage() {
   return (
     <div className="login-wrap">
       <div className="login-contents">
-        <div>
         {(() => {
           switch (type) {
             case 'signup':
@@ -23,7 +22,6 @@ function SignPage() {
               return <ModifyAccount />;
           }
         })()}
-        </div>
       </div>
     </div>
   )
