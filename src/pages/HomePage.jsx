@@ -76,9 +76,15 @@ function HomePage() {
     if (height <= 713) {
       setSlideInThreshold(600);
     } else if (width <= 566) {
+      setSlideInThreshold(1400);
+    } else if (width <= 627) {
       setSlideInThreshold(1200);
-    } else if (width <= 920) {
-      setSlideInThreshold(800);
+    }  else if (width <= 728) {
+      setSlideInThreshold(1000);
+    }  else if (width <= 869) {
+      setSlideInThreshold(850);
+    }   else if (width <= 1258) {
+      setSlideInThreshold(700);
     } else {
       setSlideInThreshold(1100);
     }
