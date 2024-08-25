@@ -1,18 +1,15 @@
 import React, {
   forwardRef,
   useEffect,
-  useLayoutEffect,
+  useImperativeHandle,
   useRef,
   useCallback,
 } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import "../../assets/styles/board/quillstyle.css";
-import { usePostFormAPI } from "../../contexts/board/Board_PostFormApi";
-
-
-// Import Quill's image resize module
 import ImageResize from "quill-image-resize-module-react";
+
 Quill.register("modules/imageResize", ImageResize);
 
 const Size = Quill.import("formats/size");
@@ -81,13 +78,14 @@ const QuillToolbar = () => (
   </div>
 );
 
-const Editor = forwardRef(
-  ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
-    const containerRef = useRef(null);
-    const defaultValueRef = useRef(defaultValue);
-    const onTextChangeRef = useRef(onTextChange);
-    const onSelectionChangeRef = useRef(onSelectionChange);
-    const { uploadImage, handleImageSelect } = usePostFormAPI();
+const BoardQuillCustom = forwardRef(
+  ({ readOnly, defaultValue, onTextChange, onImageUpload }, ref) => {
+    const editorRef = useRef(null);
+    const quillInstance = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+      getEditor: () => quillInstance.current,
+    }));
 
     const imageHandler = useCallback(() => {
       const input = document.createElement("input");
@@ -98,114 +96,96 @@ const Editor = forwardRef(
       input.onchange = async () => {
         const file = input.files[0];
         if (file) {
-          // 파일 미리보기 생성
-          const reader = new FileReader();
-          reader.onload = async (e) => {
-            const range = ref.current.getSelection();
-            const tempImageUrl = e.target.result;
+          try {
+            const range = quillInstance.current.getSelection(true);
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+              const tempImageUrl = e.target.result;
+              quillInstance.current.insertEmbed(
+                range.index,
+                "image",
+                tempImageUrl
+              );
 
-            // 미리보기 이미지 삽입
-            ref.current.insertEmbed(range.index, "image", tempImageUrl);
-
-            try {
-              // 실제 이미지 업로드
-              const uploadedImageUrl = await uploadImage(file);
-
-              // 미리보기 이미지를 업로드된 이미지로 교체
-              const [leaf] = ref.current.getLeaf(range.index);
-              leaf.domNode.src = uploadedImageUrl;
-
-              // 선택된 이미지 정보 저장
-              handleImageSelect({ file, dataUrl: uploadedImageUrl });
-            } catch (error) {
-              console.error("Error uploading image:", error);
-              // 업로드 실패 시 에러 메시지 표시
-              ref.current.deleteText(range.index, 1);
-              ref.current.insertText(range.index, "Image upload failed", {
-                color: "red",
-                italic: true,
-              });
-            }
-          };
-          reader.readAsDataURL(file);
+              try {
+                const uploadedImageUrl = await onImageUpload(file);
+                quillInstance.current.deleteText(range.index, 1);
+                quillInstance.current.insertEmbed(
+                  range.index,
+                  "image",
+                  uploadedImageUrl
+                );
+              } catch (error) {
+                console.error("Error uploading image:", error);
+                quillInstance.current.deleteText(range.index, 1);
+                quillInstance.current.insertText(
+                  range.index,
+                  "Image upload failed",
+                  {
+                    color: "red",
+                    italic: true,
+                  }
+                );
+              }
+            };
+            reader.readAsDataURL(file);
+          } catch (error) {
+            console.error("Error handling image:", error);
+          }
         }
       };
-    }, [uploadImage, handleImageSelect, ref]);
-
-    useLayoutEffect(() => {
-      onTextChangeRef.current = onTextChange;
-      onSelectionChangeRef.current = onSelectionChange;
-    }, [onTextChange, onSelectionChange]);
+    }, [onImageUpload]);
 
     useEffect(() => {
-      if (ref.current) {
-        ref.current.enable(!readOnly);
-      }
-    }, [ref, readOnly]);
-
-    useEffect(() => {
-      const container = containerRef.current;
-      if (!container) return;
-
-      const editorContainer = container.appendChild(
-        container.ownerDocument.createElement("div")
-      );
-      editorContainer.className = "quill-editor";
-
-      const quill = new Quill(editorContainer, {
-        modules: {
-          toolbar: {
-            container: "#toolbar",
-            handlers: {
-              image: imageHandler,
+      if (!quillInstance.current) {
+        quillInstance.current = new Quill(editorRef.current, {
+          modules: {
+            toolbar: {
+              container: "#toolbar",
+              handlers: {
+                image: imageHandler,
+              },
+            },
+            history: {
+              delay: 1000,
+              maxStack: 500,
+              userOnly: true,
+            },
+            imageResize: {
+              parchment: Quill.import("parchment"),
+              modules: ["Resize", "DisplaySize"],
             },
           },
-          history: {
-            delay: 1000,
-            maxStack: 500,
-            userOnly: true,
-          },
-          imageResize: {
-            parchment: Quill.import("parchment"),
-            modules: ["Resize", "DisplaySize"],
-          },
-        },
-        theme: "snow",
-      });
+          theme: "snow",
+        });
 
-      if (ref) {
-        ref.current = quill;
-      }
-
-      if (defaultValueRef.current) {
-        quill.setContents(defaultValueRef.current);
-      }
-
-      quill.on("text-change", (...args) => {
-        onTextChangeRef.current?.(...args);
-      });
-
-      quill.on("selection-change", (...args) => {
-        onSelectionChangeRef.current?.(...args);
-      });
-
-      return () => {
-        if (ref.current) {
-          ref.current = null;
+        if (defaultValue) {
+          quillInstance.current.root.innerHTML = defaultValue;
         }
-        container.innerHTML = "";
-      };
-    }, [ref, imageHandler]);
+
+        quillInstance.current.on("text-change", () => {
+          if (onTextChange) {
+            onTextChange(quillInstance.current.root.innerHTML);
+          }
+        });
+      }
+    }, [defaultValue, onTextChange, imageHandler]);
+
+    useEffect(() => {
+      if (quillInstance.current) {
+        quillInstance.current.enable(!readOnly);
+      }
+    }, [readOnly]);
 
     return (
       <div>
         <QuillToolbar />
-        <div ref={containerRef}></div>
+        <div ref={editorRef} className="quill-editor"></div>
       </div>
     );
   }
 );
 
-Editor.displayName = "Editor";
+BoardQuillCustom.displayName = "BoardQuillCustom";
 
-export default Editor;
+export default BoardQuillCustom;

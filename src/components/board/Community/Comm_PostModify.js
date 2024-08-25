@@ -1,88 +1,72 @@
-import React, { useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useBoard_PostModify } from "../../../hooks/board/useBoard_PostModify.js";
+import React from "react";
+import { useBoard_PostModify } from "../../../hooks/board/useBoard_PostModify";
+import { PostModifyAPIProvider } from "../../../contexts/board/Board_PostModifyApi";
+import CommonPostForm from "../Common_PostForm";
 import "../../../assets/styles/board/Community/Comm_PostForm.scss";
-import Editor from "../BoardQuillCustum.js";
-import "react-quill/dist/quill.snow.css";
-import { PostModifyAPIProvider } from "../../../contexts/board/Board_PostModifyApi.js";
 
-function PostFormContent() {
-  const { title, setTitle, handleUpdate, handleImageUpload } =useBoard_PostModify();
-  const quillRef = useRef(null);
+function PostFormModify() {
+  const {
+    title,
+    setTitle,
+    content,
+    setContent,
+    handleUpdate,
+    handleImageUpload,
+    loading,
+    error,
+    userData,
+  } = useBoard_PostModify();
 
-  useEffect(() => {
-    if (quillRef.current) {
-      quillRef.current.getContents();
-    }
-  }, []);
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    if (!title.trim()) {
-      alert("제목을 입력해주세요.");
-      return;
-    }
-
-    const content = quillRef.current.getContents();
-    if (
-      !content.ops ||
-      content.ops.length === 0 ||
-      (content.ops.length === 1 && content.ops[0].insert.trim() === "")
-    ) {
-      alert("내용을 입력해주세요.");
-      return;
-    }
-
-    handleUpdate(title, content);
+  const cssClasses = {
+    formContainer: "comm-form-container",
+    formWrap: "comm-form-wrap",
+    h1: "comm_h1",
+    inputBox: "comm-input-box",
+    inputGroup: "comm-input-group",
+    writeTitle: "comm-write-title",
+    titleId: "comm-title",
+    listWriteBtn: "comm-list-write-btn",
+    submitButton: "comm-submit-button",
+    linkBtn: "comm-link-btn",
   };
 
-  return (
-    <div className="comm-form-container">
-      <div className="comm-form-wrap">
-        <h1 className="comm_h1">Community</h1>
-        <form onSubmit={onSubmit}>
-          <div className="comm-input-box">
-            <div className="comm-input-group">
-              <label className="comm-write-title" htmlFor="comm-title">
-                Title
-              </label>
-              <input
-                id="comm-title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
+  if (loading) {
+    return <div className="comm-loading">로딩 중...</div>;
+  }
 
-            <div className="comm-input-group">
-              <Editor
-                ref={quillRef}
-                placeholder="내용을 입력하세요..."
-                onImageUpload={handleImageUpload}
-              />
-            </div>
-          </div>
-          <div className="comm-list-write-btn">
-            <button type="submit" className="comm-submit-button">
-              Write
-            </button>
-            <Link className="comm-link-btn" to="/BoardPage?type=Comm_PostList">
-              List
-            </Link>
-          </div>
-        </form>
+  if (error) {
+    return <div className="comm-error">오류 발생: {error}</div>;
+  }
+
+  if (!userData) {
+    return (
+      <div className="comm-error">
+        사용자 데이터가 없습니다. 다시 로그인해주세요.
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <CommonPostForm
+      title={title}
+      setTitle={setTitle}
+      content={content}
+      setContent={setContent}
+      handleSubmit={handleUpdate}
+      handleImageUpload={handleImageUpload}
+      formType="Modify Community Post"
+      listPageUrl="/BoardPage?type=Comm_PostList"
+      cssClasses={cssClasses}
+    />
   );
 }
 
-function Comm_PostForm() {
+function Comm_PostModify() {
   return (
     <PostModifyAPIProvider>
-      <PostFormContent />
+      <PostFormModify />
     </PostModifyAPIProvider>
   );
 }
 
-export default Comm_PostForm;
+export default Comm_PostModify;

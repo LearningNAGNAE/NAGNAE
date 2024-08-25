@@ -1,12 +1,16 @@
 import React, { createContext, useContext, useCallback, useState } from "react";
 import axios from "axios";
 import store from "../../redux/Store";
-import Quill from "quill";
+import { convertToHtml, extractImageUrls } from "../../components/board/BoardUtil";
 
 const PostFormAPIContext = createContext();
 
 export const usePostFormAPI = () => {
-  return useContext(PostFormAPIContext);
+  const context = useContext(PostFormAPIContext);
+  if (!context) {
+    throw new Error("usePostFormAPI must be used within a PostFormAPIProvider");
+  }
+  return context;
 };
 
 export const PostFormAPIProvider = ({ children }) => {
@@ -17,7 +21,6 @@ export const PostFormAPIProvider = ({ children }) => {
   const uploadImage = useCallback(
     async (file, userno) => {
       try {
-        console.log(userno);
         const formData = new FormData();
         formData.append("image", file);
         const response = await axios.post(
@@ -39,53 +42,14 @@ export const PostFormAPIProvider = ({ children }) => {
     [SpringbaseUrl]
   );
 
-
-  const processImage = useCallback(
-    async (imageData) => {
-      if (imageData.startsWith("data:image")) {
-        const file = dataURLtoFile(imageData, "image.png");
-        return await uploadImage(file);
-      }
-      return imageData;
-    },
-    [uploadImage]
-  );
-
-  const processContent = useCallback(
-    async (content) => {
-      if (!content || !content.ops) {
-        throw new Error("잘못된 콘텐츠 형식입니다");
-      }
-      const processedOps = await Promise.all(
-        content.ops.map(async (op) => {
-          if (op.insert && typeof op.insert === "object" && op.insert.image) {
-            const imageUrl = await processImage(op.insert.image);
-            return {
-              ...op,
-              insert: {
-                image: imageUrl,
-              },
-            };
-          }
-          return op;
-        })
-      );
-      return { ops: processedOps };
-    },
-    [processImage]
-  );
-
   const submitPost = useCallback(
-    async (title, content, userData,categoryno) => {
+    async (title, content, userData, categoryno) => {
       if (!userData || !userData.apiData) {
         throw new Error("사용자 데이터가 없습니다");
       }
 
       try {
-        const processedContent = await processContent(content);
-        const htmlContent = convertToHtml(processedContent);
-
-        // 이미지 URL들을 추출
+        const htmlContent = convertToHtml(content);
         const imageUrls = extractImageUrls(htmlContent);
 
         const postData = {
@@ -94,16 +58,17 @@ export const PostFormAPIProvider = ({ children }) => {
           insertuserno: userData.apiData.userno,
           modifyuserno: userData.apiData.userno,
           categoryno,
-          imageUrls: imageUrls, // 추출된 이미지 URL들을 함께 전송
+          imageUrls: imageUrls,
         };
 
         const response = await axios.post(
-          `${SpringbaseUrl}/board/boardwrite`,{
-            postData,
-          
-            headers:{"Content-Type": "application/json; charset=utf-8",
-            Authorization: "Bearer " + token
-            }
+          `${SpringbaseUrl}/board/boardwrite`,
+          postData,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=utf-8",
+              Authorization: "Bearer " + token,
+            },
           }
         );
         return response.data;
@@ -112,44 +77,22 @@ export const PostFormAPIProvider = ({ children }) => {
         throw error;
       }
     },
-    [SpringbaseUrl, processContent,token]
+    [SpringbaseUrl, token]
   );
-
-  // HTML 내용에서 이미지 URL을 추출하는 함수
-  const extractImageUrls = (htmlContent) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlContent, "text/html");
-    const images = doc.getElementsByTagName("img");
-    return Array.from(images).map((img) => img.src);
-  };
-
-  const convertToHtml = (delta) => {
-    const tempContainer = document.createElement("div");
-    const quill = new Quill(tempContainer);
-    quill.setContents(delta);
-    return quill.root.innerHTML;
-  };
-
-  const dataURLtoFile = (dataurl, filename) => {
-    let arr = dataurl.split(","),
-      mime = arr[0].match(/:(.*?);/)[1],
-      bstr = atob(arr[1]),
-      n = bstr.length,
-      u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, { type: mime });
-  };
 
   const handleImageSelect = useCallback((imageData) => {
     setSelectedImages((prev) => [...prev, imageData]);
   }, []);
 
+  const value = {
+    submitPost,
+    uploadImage,
+    handleImageSelect,
+    selectedImages,
+  };
+
   return (
-    <PostFormAPIContext.Provider
-      value={{ submitPost, uploadImage, handleImageSelect }}
-    >
+    <PostFormAPIContext.Provider value={value}>
       {children}
     </PostFormAPIContext.Provider>
   );

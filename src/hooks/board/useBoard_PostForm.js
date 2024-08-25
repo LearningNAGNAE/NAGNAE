@@ -1,10 +1,11 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePostFormAPI } from "../../contexts/board/Board_PostFormApi";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 export const useBoard_PostForm = () => {
   const [title, setTitle] = useState("");
+  const [content, setContent] = useState(""); // 추가된 부분
   const navigate = useNavigate();
   const { submitPost, uploadImage } = usePostFormAPI();
   const userData = JSON.parse(sessionStorage.getItem("userData"));
@@ -21,19 +22,18 @@ export const useBoard_PostForm = () => {
   const handleSubmit = useCallback(
     async (title, content) => {
       try {
-        if(userData !== null){
-          await submitPost(title, content, userData,categoryno);
+        if (userData !== null) {
+          await submitPost(title, content, userData, categoryno);
           navigate("/BoardPage?type=Comm_PostList");
-        }else {
+        } else {
           alert("로그인 후 이용해주세요");
           navigate("/SignPage?type=signin");
         }
-        
       } catch (error) {
         console.error("Error creating post:", error);
       }
     },
-    [userData, submitPost, navigate,categoryno]
+    [userData, submitPost, navigate, categoryno]
   );
 
   const handleImageUpload = useCallback(
@@ -54,6 +54,8 @@ export const useBoard_PostForm = () => {
   return {
     title,
     setTitle,
+    content, 
+    setContent, 
     handleSubmit,
     handleImageUpload,
     getUserNo,

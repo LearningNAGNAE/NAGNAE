@@ -66,15 +66,16 @@ export const usePostDetail = () => {
     }
   }, [boardno, commentContent, fetchComments, postComment, userData,navigate]);
 
-  return { 
-    post, 
-    loading, 
-    error, 
+  return {
+    post,
+    loading,
+    error,
     commentContent,
     commentList,
     userNo,
-    setCommentContent, 
-    handleDelete, 
-    handleComment
+    setCommentContent,
+    handleDelete,
+    handleComment,
+    boardno,
   };
 };

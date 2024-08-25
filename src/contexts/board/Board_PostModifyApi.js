@@ -1,22 +1,34 @@
 import React, { createContext, useContext, useCallback, useState } from "react";
 import axios from "axios";
 import store from "../../redux/Store";
-import Quill from "quill";
+import {
+  convertToHtml,
+  extractImageUrls,
+} from "../../components/board/BoardUtil";
 
 const PostModifyAPIContext = createContext();
 
 export const usePostModifyAPI = () => {
-  return useContext(PostModifyAPIContext);
+  const context = useContext(PostModifyAPIContext);
+  if (!context) {
+    throw new Error(
+      "usePostModifyAPI must be used within a PostModifyAPIProvider"
+    );
+  }
+  return context;
 };
 
 export const PostModifyAPIProvider = ({ children }) => {
   const SpringbaseUrl = store.getState().url.SpringbaseUrl;
   const [selectedImages, setSelectedImages] = useState([]);
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = sessionStorage.getItem("token");
 
   const uploadImage = useCallback(
     async (file, userno) => {
       try {
-        console.log(userno);
         const formData = new FormData();
         formData.append("image", file);
         const response = await axios.post(
@@ -38,111 +50,99 @@ export const PostModifyAPIProvider = ({ children }) => {
     [SpringbaseUrl]
   );
 
-
-  const processImage = useCallback(
-    async (imageData) => {
-      if (imageData.startsWith("data:image")) {
-        const file = dataURLtoFile(imageData, "image.png");
-        return await uploadImage(file);
-      }
-      return imageData;
-    },
-    [uploadImage]
-  );
-
-  const processContent = useCallback(
-    async (content) => {
-      if (!content || !content.ops) {
-        throw new Error("잘못된 콘텐츠 형식입니다");
-      }
-      const processedOps = await Promise.all(
-        content.ops.map(async (op) => {
-          if (op.insert && typeof op.insert === "object" && op.insert.image) {
-            const imageUrl = await processImage(op.insert.image);
-            return {
-              ...op,
-              insert: {
-                image: imageUrl,
-              },
-            };
-          }
-          return op;
-        })
-      );
-      return { ops: processedOps };
-    },
-    [processImage]
-  );
-
-  const updatePost = useCallback(
-    async (title, content, userData,categoryno) => {
+const updatePost = useCallback(
+    async (boardno, title, content, userData, categoryno) => {
+      console.log("updatePost called with:", { boardno, title, content, userData, categoryno });
       if (!userData || !userData.apiData) {
+        console.error("Invalid userData:", userData);
         throw new Error("사용자 데이터가 없습니다");
       }
 
-      try {
-        const processedContent = await processContent(content);
-        const htmlContent = convertToHtml(processedContent);
+      // 토큰 디버깅
+      console.log("Token from userData:", token);
 
-        // 이미지 URL들을 추출
+      try {
+        const htmlContent = convertToHtml(content);
         const imageUrls = extractImageUrls(htmlContent);
 
         const postData = {
+          boardno,
           title,
           content: htmlContent,
-          insertuserno: userData.apiData.userno,
           modifyuserno: userData.apiData.userno,
-          imageUrls: imageUrls, // 추출된 이미지 URL들을 함께 전송
+          imageUrls: imageUrls,
         };
+
+        console.log("Request data:", postData);
+        console.log("Request headers:", {
+          "Content-Type": "application/json; charset=utf-8",
+          Authorization: `Bearer ${token}`,
+        });
 
         const response = await axios.put(
           `${SpringbaseUrl}/board/boardupdate`,
-          postData
+          postData,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=utf-8",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
+
+        console.log("Update response:", response.data);
         return response.data;
       } catch (error) {
-        console.error("게시물 생성 중 오류 발생:", error);
+        console.error("게시물 수정 중 오류 발생:", error);
+        console.error("Error response:", error.response);
         throw error;
       }
     },
-    [SpringbaseUrl, processContent]
+    [SpringbaseUrl]
   );
 
-  // HTML 내용에서 이미지 URL을 추출하는 함수
-  const extractImageUrls = (htmlContent) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlContent, "text/html");
-    const images = doc.getElementsByTagName("img");
-    return Array.from(images).map((img) => img.src);
-  };
-
-  const convertToHtml = (delta) => {
-    const tempContainer = document.createElement("div");
-    const quill = new Quill(tempContainer);
-    quill.setContents(delta);
-    return quill.root.innerHTML;
-  };
-
-  const dataURLtoFile = (dataurl, filename) => {
-    let arr = dataurl.split(","),
-      mime = arr[0].match(/:(.*?);/)[1],
-      bstr = atob(arr[1]),
-      n = bstr.length,
-      u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, { type: mime });
-  };
-
+  const fetchPost = useCallback(
+    async (boardno) => {
+      if (!boardno) {
+        console.error("boardno is undefined");
+        return null;
+      }
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get(`${SpringbaseUrl}/board/boardread`, {
+          params: { boardno },
+        });
+        console.log("API Response:", response.data); // 전체 응답 로깅
+        if (response.data) {
+          return response.data.data; 
+        } else {
+          throw new Error("Invalid response structure");
+        }
+      } catch (error) {
+        console.error("Error fetching post:", error);
+        setError(error.message);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [SpringbaseUrl]
+  );
   const handleImageSelect = useCallback((imageData) => {
     setSelectedImages((prev) => [...prev, imageData]);
   }, []);
 
+  const value = {
+    updatePost,
+    uploadImage,
+    handleImageSelect,
+    selectedImages,
+    fetchPost,
+  };
+
   return (
-    <PostModifyAPIContext.Provider
-      value={{ updatePost, uploadImage, handleImageSelect }}
-    >
+    <PostModifyAPIContext.Provider value={value}>
       {children}
     </PostModifyAPIContext.Provider>
   );
