@@ -121,7 +121,7 @@ export const PostFormAPIProvider = ({ children }) => {
         throw error;
       }
     },
-    [SpringbaseUrl, token]
+    [SpringbaseUrl, token,processContent]
   );
 
   const handleImageSelect = useCallback((imageData) => {
