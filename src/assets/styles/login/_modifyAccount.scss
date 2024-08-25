@@ -1,22 +1,38 @@
-.join-nagnae-container {
+.modify-nagnae-container {
     font-family: 'HSBombaram3.0_세로쓰기전용_Vertical_Regular', sans-serif;
-    background-color: #BA9F8B;
-    border-radius: 100px;
-    padding: 0px 100px 30px 100px;
-    width: 600px;
-    margin: 150px auto;
-    text-align: center;
-    .join-title {
-        color: white;
-        margin-bottom: 20px;
-        font-size: 64px;
+    background-image: url('../../images/나그네가입.jpg');
+    background-position: top center;
+    background-size: 1280px 100%; // 가로 1024px, 세로는 컨테이너의 100%로 설정
+    background-repeat: no-repeat;
+    width: 1280px;
+    min-height: 1700px; // 원하는 최소 높이로 설정 (필요에 따라 조정 가능)
+    margin: 100px auto;
+    padding: 0px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .form-content {
+      padding: 40px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 800px;
+      margin-top: 120px;
+    }
+  
+    .modify-title {
+      text-align: center;
+      color: #8c7a6b;
+      font-size: 48px;
+      margin-bottom: 30px;
     }
     .profile-picture {
         width: 150px;
         height: 150px;
         background-color: #f2e8e1;
+        border: 5px solid #8c7a6b;
         border-radius: 100%;
-        margin: 0 auto 20px;
+        margin: 250px auto 20px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -51,7 +67,7 @@
     }
 
 
-    .join-form-box {
+    .modify-form-box {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -115,7 +131,7 @@
   
 /* 반응형 디자인을 위한 미디어 쿼리 */
 @media (max-width: 480px) {
-.join-nagnae-container {
+.modify-nagnae-container {
     width: 90%;
     padding: 20px;
     }
