@@ -353,26 +353,9 @@ img {
     z-index: 0;
 }
 
-@media (max-width: 937px) {
-    .speech-bubble {
-        position: absolute;
-        background-color: #F5DEB3;
-        border: 2px solid #775A45;
-        border-radius: 10px;
-        padding: 10px;
-        max-width: 25%;
-        top: 42vh;
-        left: 31vw;
-        transform: translateX(-50%);
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s, visibility 0.3s;
-    }
-}
-
-@media (max-width: 920px) {
+@media (max-width: 1258px) {
     .contents {
-        height: 200vh;
+        height: 220vh;
         overflow: hidden;
         position: relative;
     }  
@@ -415,6 +398,67 @@ img {
     }
 }
 
+@media (max-width: 618px) {
+    .contents {
+        height: 2100px;
+        overflow: hidden;
+        position: relative;
+    }
+    .screen2 {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+        transition: transform 0.3s ease;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        height: 2300px;
+        width: 100vw;
+    }
+}
+
+@media (max-width: 566px) {
+    .contents {
+        height: 2300px;
+        overflow: hidden;
+        position: relative;
+    }
+    .screen2 {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+        transition: transform 0.3s ease;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        height: 2400px;
+        width: 100vw;
+    }
+
+    .screen3.slide-in {
+        transform: translateX(0);
+    }
+}
+
+@media (max-height: 869px) {
+    .contents {
+        height: 1900px;
+        overflow: hidden;
+        position: relative;
+    }
+    .screen2 {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+        transition: transform 0.3s ease;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        height: 2200px;
+        width: 100vw;
+    }
+}
+
 @media (max-width: 880px) {
     .youtube-logo-img {
         max-height: 30px;
@@ -434,6 +478,24 @@ img {
     .appstore-logo-img {
         max-height: 33px; 
         top: 173px;
+    }
+}
+
+
+@media (max-width: 937px) {
+    .speech-bubble {
+        position: absolute;
+        background-color: #F5DEB3;
+        border: 2px solid #775A45;
+        border-radius: 10px;
+        padding: 10px;
+        max-width: 25%;
+        top: 42vh;
+        left: 31vw;
+        transform: translateX(-50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
     }
 }
 
@@ -468,48 +530,6 @@ img {
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s, visibility 0.3s;
-    }
-}
-
-@media (max-width: 566px) {
-    .contents {
-        height: 2200px;
-        overflow: hidden;
-        position: relative;
-    }
-    .screen2 {
-        position: relative;
-        width: 100%;
-        z-index: 2;
-        transition: transform 0.3s ease;
-        background-color: #fff;
-        display: flex;
-        justify-content: center;
-        height: 2400px;
-        width: 100vw;
-    }
-
-    .screen3.slide-in {
-        transform: translateX(0);
-    }
-}
-
-@media (max-height: 713px) {
-    .contents {
-        height: 1900px;
-        overflow: hidden;
-        position: relative;
-    }
-    .screen2 {
-        position: relative;
-        width: 100%;
-        z-index: 2;
-        transition: transform 0.3s ease;
-        background-color: #fff;
-        display: flex;
-        justify-content: center;
-        height: 2200px;
-        width: 100vw;
     }
 }
 
