@@ -39,10 +39,13 @@ export const useBoard_PostForm = () => {
     return tempContainer.innerHTML;
   }, [uploadImage, getUserNo]);
 
-  const handleSubmit = useCallback(async (title, quillContent) => {
+  const handleSubmit = useCallback(async (e) => {
+    e.preventDefault();
     try {
-      console.log("Submitting post with title:", title);
-      console.log("Quill content:", quillContent);
+      if (!title.trim()) {
+        alert("제목을 입력해주세요.");
+        return;
+      }
 
       if (userData !== null) {
         if (!quillRef.current) {
@@ -50,10 +53,7 @@ export const useBoard_PostForm = () => {
           return;
         }
         const delta = quillRef.current.getEditor().getContents();
-        console.log("Quill delta:", delta);
-
         const processedContent = await processContent(delta);
-        console.log("Processed content:", processedContent);
 
         const result = await submitPost(title, processedContent, userData, categoryno);
         console.log("Submit post result:", result);
@@ -66,7 +66,7 @@ export const useBoard_PostForm = () => {
     } catch (error) {
       console.error("Error creating post:", error);
     }
-  }, [userData, submitPost, navigate, categoryno, quillRef, processContent]);
+  }, [title, userData, submitPost, navigate, categoryno, quillRef, processContent]);
 
   return {
     title,

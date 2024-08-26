@@ -11,7 +11,7 @@ function Comm_PostForm() {
     content,
     setContent,
     handleSubmit,
-    handleImageUpload,
+    quillRef,
   } = useBoard_PostForm();
 
   const cssClasses = {
@@ -35,10 +35,10 @@ function Comm_PostForm() {
         content={content}
         setContent={setContent}
         handleSubmit={handleSubmit}
-        handleImageUpload={handleImageUpload}
         formType="Community"
         listPageUrl="/BoardPage?type=Comm_PostList"
         cssClasses={cssClasses}
+        quillRef={quillRef}
       />
     </PostFormAPIProvider>
   );

@@ -14,25 +14,11 @@ function CommonPostForm({
   cssClasses,
   quillRef,
 }) {
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (!title.trim()) {
-      alert("제목을 입력해주세요.");
-      return;
-    }
-    if (!quillRef.current) {
-      console.error("Quill editor reference is not available");
-      return;
-    }
-    const quillContent = quillRef.current.getEditor().getContents();
-    await handleSubmit(title, quillContent);
-  };
-
   return (
     <div className={cssClasses.formContainer}>
       <div className={cssClasses.formWrap}>
         <h1 className={cssClasses.h1}>{formType}</h1>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className={cssClasses.inputBox}>
             <div className={cssClasses.inputGroup}>
               <label

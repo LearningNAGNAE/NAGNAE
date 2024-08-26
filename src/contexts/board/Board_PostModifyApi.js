@@ -87,17 +87,17 @@ export const PostModifyAPIProvider = ({ children }) => {
     }
 
     try {
-      const processedContent = await processContent(content);
-      const htmlContent = convertToHtml(processedContent);
-      const imageUrls = extractImageUrls(htmlContent);
+      const imageUrls = extractImageUrls(content);
 
       const postData = {
         boardno,
         title,
-        content: htmlContent,
+        content,
         modifyuserno: userData.apiData.userno,
         imageUrls: imageUrls,
       };
+
+      console.log("Sending update data:", postData);  // Add this line for debugging
 
       const response = await axios.put(
         `${SpringbaseUrl}/board/boardupdate`,
@@ -112,10 +112,12 @@ export const PostModifyAPIProvider = ({ children }) => {
       return response.data;
     } catch (error) {
       console.error("게시물 수정 중 오류 발생:", error);
-      console.error("Error response:", error.response);
+      if (error.response) {
+        console.error("서버 응답:", error.response.data);
+      }
       throw error;
     }
-  }, [SpringbaseUrl, processContent, token]);
+  }, [SpringbaseUrl, token]);
 
   const fetchPost = useCallback(async (boardno) => {
     if (!boardno) {

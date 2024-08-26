@@ -8,9 +8,9 @@ import React, {
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import "../../assets/styles/board/quillstyle.css";
-import ImageResize from "quill-image-resize-module-react";
+import QuillResizeImage from "quill-resize-image";
 
-Quill.register("modules/imageResize", ImageResize);
+Quill.register("modules/resize", QuillResizeImage);
 
 const Size = Quill.import("formats/size");
 Size.whitelist = ["small", "medium", "large", "huge"];
@@ -78,79 +78,83 @@ const QuillToolbar = () => (
   </div>
 );
 
-const BoardQuillCustom = forwardRef(
-  ({ readOnly, value, onTextChange }, ref) => {
-    const editorRef = useRef(null);
-    const quillInstance = useRef(null);
+const BoardQuillCustom = forwardRef(({ readOnly, value, onTextChange }, ref) => {
+  const editorRef = useRef(null);
+  const quillInstance = useRef(null);
 
-    useImperativeHandle(ref, () => ({
-      getEditor: () => quillInstance.current,
-      getContents: () => quillInstance.current.getContents(),
-    }));
+  useImperativeHandle(ref, () => ({
+    getEditor: () => quillInstance.current,
+    getContents: () => quillInstance.current.getContents(),
+  }));
 
-    const imageHandler = useCallback(() => {
-      const input = document.createElement("input");
-      input.setAttribute("type", "file");
-      input.setAttribute("accept", "image/*");
-      input.click();
+  const imageHandler = useCallback(() => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
 
-      input.onchange = () => {
-        const file = input.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const range = quillInstance.current.getSelection(true);
-            quillInstance.current.insertEmbed(range.index, "image", e.target.result);
-          };
-          reader.readAsDataURL(file);
-        }
-      };
-    }, []);
+    input.onchange = () => {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const range = quillInstance.current.getSelection(true);
+          quillInstance.current.insertEmbed(range.index, "image", e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+  }, []);
 
-    useEffect(() => {
-      if (!quillInstance.current) {
-        quillInstance.current = new Quill(editorRef.current, {
-          modules: {
-            toolbar: {
-              container: "#toolbar",
-              handlers: {
-                image: imageHandler,
-              },
-            },
-            imageResize: {
-              parchment: Quill.import("parchment"),
-              modules: ["Resize", "DisplaySize"],
+  useEffect(() => {
+    if (!quillInstance.current) {
+      quillInstance.current = new Quill(editorRef.current, {
+        modules: {
+          toolbar: {
+            container: "#toolbar",
+            handlers: {
+              image: imageHandler,
             },
           },
-          theme: "snow",
-        });
+          resize: {
+            locale: {},
+          },
+        },
+        theme: "snow",
+        placeholder: "Write your content here...",
+      });
 
-        if (value) {
-          quillInstance.current.setContents(value);
+      if (value) {
+        quillInstance.current.setContents(value);
+      }
+
+      quillInstance.current.on("text-change", () => {
+        if (onTextChange) {
+          onTextChange(quillInstance.current.getContents());
         }
+      });
+    }
 
-        quillInstance.current.on("text-change", () => {
-          if (onTextChange) {
-            onTextChange(quillInstance.current.getContents());
-          }
-        });
-      }
-    }, [imageHandler, onTextChange, value]);
-
-    useEffect(() => {
+    return () => {
       if (quillInstance.current) {
-        quillInstance.current.enable(!readOnly);
+        quillInstance.current.off("text-change");
       }
-    }, [readOnly]);
+    };
+  }, [imageHandler, onTextChange, value]);
 
-    return (
-      <div>
-        <QuillToolbar />
-        <div ref={editorRef} className="quill-editor"></div>
-      </div>
-    );
-  }
-);
+  useEffect(() => {
+    if (quillInstance.current) {
+      quillInstance.current.enable(!readOnly);
+    }
+  }, [readOnly]);
+
+  return (
+    <div>
+      <QuillToolbar />
+      <div ref={editorRef} className="quill-editor"></div>
+    </div>
+  );
+});
 
 BoardQuillCustom.displayName = "BoardQuillCustom";
 

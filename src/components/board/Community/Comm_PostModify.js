@@ -15,6 +15,7 @@ function PostFormModify() {
     loading,
     error,
     userData,
+    quillRef,
   } = useBoard_PostModify();
 
   const cssClasses = {
@@ -47,19 +48,18 @@ function PostFormModify() {
   }
 
   return (
-    <div className={cssClasses.formContainer}>
-      <CommonPostForm
-        title={title}
-        setTitle={setTitle}
-        content={content}
-        setContent={setContent}
-        handleSubmit={handleUpdate}
-        handleImageUpload={handleImageUpload}
-        formType="Modify Community Post"
-        listPageUrl="/BoardPage?type=Comm_PostList"
-        cssClasses={cssClasses}
-      />
-    </div>
+    <CommonPostForm
+      title={title}
+      setTitle={setTitle}
+      content={content}
+      setContent={setContent}
+      handleSubmit={handleUpdate}
+      handleImageUpload={handleImageUpload}
+      formType="Modify Community Post"
+      listPageUrl="/BoardPage?type=Comm_PostList"
+      cssClasses={cssClasses}
+      quillRef={quillRef}
+    />
   );
 }
 
