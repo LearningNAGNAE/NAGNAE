@@ -49,10 +49,19 @@ export function useModifyAccountForm() {
     }
   };
 
+  const validatePassword = (password) => {
+    const regex = /^(?=.*[A-Za-z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{6,}$/;
+    return regex.test(password);
+  };
+
   const validateForm = () => {
     let tempErrors = {};
-    if (formData.password && formData.password !== passwordConfirm) {
-      tempErrors.passwordConfirm = "비밀번호가 일치하지 않습니다.";
+    if (formData.password) {
+      if (!validatePassword(formData.password)) {
+        tempErrors.password = "비밀번호는 6자리 이상이며, 영문자, 숫자, 특수문자를 각각 1개 이상 포함해야 합니다.";
+      } else if (formData.password !== passwordConfirm) {
+        tempErrors.passwordConfirm = "비밀번호가 일치하지 않습니다.";
+      }
     }
     if (!formData.username) tempErrors.username = "이름을 입력해주세요.";
     if (!formData.nationlity) tempErrors.nationlity = "국적을 입력해주세요.";

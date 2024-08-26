@@ -52,6 +52,8 @@ function ModifyAccount() {
                 value={formData.password}
                 onChange={handleChange} 
               />
+              {errors.password && <span className="error-message">{errors.password}</span>}
+              <small className="password-hint">비밀번호는 6자리 이상이며, 영문자, 숫자, 특수문자를 각각 1개 이상 포함해야 합니다.</small>
             </div>
           </div>
           <div className="input-row">
