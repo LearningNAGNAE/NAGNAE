@@ -39,7 +39,7 @@ function BoardMain() {
             (data.map((item, index) => (
               <tr key={item.boardno}>
                 <td className='board-main-tbody-no'>{data2-index}</td>
-                <td><Link to={'/BoardPage?type=Comm_PostRead'} state={{ boardno: item.boardno }}>{item.title}</Link></td>
+                <td><Link to={'/BoardPage?type=Board_PostRead'} state={{ boardno: item.boardno }}>{item.title}</Link></td>
                 <td className='board-main-tbody-writer'>{item.userName}</td>
                 <td className='board-main-tbody-insertDate'>
                   {new Date(item.insertDate).toLocaleDateString('ko-KR', {

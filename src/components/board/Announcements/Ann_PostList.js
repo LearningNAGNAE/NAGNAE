@@ -69,7 +69,7 @@ function AnnPostList({
                 <td>{totalPosts - ((currentPage - 1) * pageSize + index)}</td>
                 <td align="left">
                   <Link
-                    to={"/BoardPage?type=Ann_PostRead"}
+                    to={"/BoardPage?type=Board_PostRead"}
                     state={{ boardno: post.boardno }}
                   >
                     {post.title}
@@ -134,8 +134,8 @@ function AnnPostList({
 
         <div className="write-btn">
           {userData != null ?
-            (userNo === 1 ?(
-              <Link to={"/BoardPage?type=Ann_PostForm"} 
+            (userNo === 64 ?(
+              <Link to={"/BoardPage?type=Comm_PostForm"} 
               state ={{categoryno : 2}}>Write</Link>
             ):(
               <div></div>

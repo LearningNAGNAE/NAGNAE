@@ -60,7 +60,7 @@ function CommPostList({ posts = [], currentPage, totalPages, totalPosts, pageSiz
                 <td>{totalPosts - ((currentPage - 1) * pageSize + index)}</td>
                 <td align="left">
                   <Link
-                    to={"/BoardPage?type=Comm_PostRead"}
+                    to={"/BoardPage?type=Board_PostRead"}
                     state={{ boardno: post.boardno }}
                   >
                     {post.title}
