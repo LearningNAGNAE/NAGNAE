@@ -18,11 +18,11 @@ function ChatBotPage() {
     <ChakraProvider>
       <RecentChatsProvider>
         <ChatLegalVisaProvider>
-          <div className="main-content">
-            <div className="chatbot-contents">
-              <Sidebar onSelectChat={handleChatSelect} initialSelectedChat={selectedChat} />
+            <div className="main-content">
+              <div className="chatbot-contents">
+                <Sidebar onSelectChat={handleChatSelect} initialSelectedChat={selectedChat} />
+              </div>
             </div>
-          </div>
         </ChatLegalVisaProvider>
       </RecentChatsProvider>
     </ChakraProvider>

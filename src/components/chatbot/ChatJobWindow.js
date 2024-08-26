@@ -1,63 +1,56 @@
-import React, { useState, useEffect, useRef } from 'react';
-import ChatMessage from './ChatJobMessage';
+import React from 'react';
+import ChatJobMessage from './ChatJobMessage';
 import '../../assets/styles/chatbot/ChatWindow.css';
+import { useScrollToBottom, useMessageInput } from '../../hooks/chatbot/useScrollToBottom';
 import sendIcon from '../../assets/images/send.png';
 import RecordModal from '../chatbot/RecordModal';
 import { useChatJob } from '../../hooks/chatbot/useChatJob'; // useChatJob 훅 불러오기
 
-function ChatJobWindow() {
-  const { messages, sendMessage, loading } = useChatJob(); // 훅 사용
-  const [input, setInput] = useState('');
-  const messagesContainerRef = useRef(null);
+function ChatJobWindow({ selectedChat, categoryNo, onChatComplete }) {
+  const { messages, loading, error, sendMessage } = useChatJob(selectedChat, categoryNo);
+  const messagesContainerRef = useScrollToBottom([messages]);
+  const { input, setInput, handleKeyPress } = useMessageInput(sendMessage);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const scrollToBottom = () => {
-    if (messagesContainerRef.current) {
-      const { scrollHeight, clientHeight } = messagesContainerRef.current;
-      messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    sendMessage(input);
+  const handleSendMessage = (messageText) => {
+    sendMessage(messageText);
     setInput('');
+    if (onChatComplete) onChatComplete();
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSubmit(e);
-    }
-  };
 
   return (
     <div className="chat-window">
       <div className="messages" ref={messagesContainerRef}>
-        {messages.map(message => (
-          <ChatMessage key={message.id} message={message} />
-        ))}
-        {loading && <div className="loading-spinner">Loading...</div>}
+        {messages.length > 0 ? (
+          messages.map((message, index) => (
+            <ChatJobMessage key={`msg-${index}`} message={message} />
+          ))
+        ) : (
+          <p>새로운 대화를 시작하세요.</p>
+        )}
+        {loading && <p>로딩 중...</p>}
+        {error && <p>오류: {error.message}</p>}
       </div>
       <div className='wrap-form-box'>
-        <form onSubmit={handleSubmit} className='form-box'>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          handleSendMessage(input);
+        }} className='form-box'>
           <div className='modal_input_btn'>
-            <RecordModal 
+            <RecordModal
               onRecordingComplete={(blob) => console.log('Recording completed', blob)}
               onAudioSend={(data) => console.log('Audio data', data)}
             />
-            <input 
+            <input
               className='botinput'
-              type="text" 
-              value={input} 
-              onChange={(e) => setInput(e.target.value)} 
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Type a message..."
+              placeholder="메시지를 입력하세요..."
             />
           </div>
-          <button className='send-btn' type="submit">
+          <button className='send-btn' type="submit" disabled={!input.trim()}>
             <img src={sendIcon} alt="Send" className="window-send-icon" />
           </button>
         </form>

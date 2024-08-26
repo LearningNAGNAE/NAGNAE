@@ -8,6 +8,7 @@ import ChatJobWindow from '../chatbot/ChatJobWindow';
 import { ChatAcademicProvider } from '../../contexts/chatbot/ChatAcademicApi';
 import { ChatLegalVisaProvider } from '../../contexts/chatbot/ChatLegalVisaApi';
 import { ChatMedicalProvider } from '../../contexts/chatbot/ChatMedicalApi';
+import { ChatJobProvider } from '../../contexts/chatbot/ChatJobApi';
 import categoryOneImage from '../../assets/images/category1.png';
 import categoryTwoImage from '../../assets/images/category2.png';
 import categoryThreeImage from '../../assets/images/category3.png';
@@ -199,8 +200,14 @@ function Sidebar({ onSelectChat, initialSelectedChat }) {
               overflowX="auto"
               backgroundColor='#BA9F8B'
             >
-              {/* ChatJobProvider */}
-              <ChatJobWindow />
+              <ChatJobProvider>
+                <ChatJobWindow
+                  key={selectedChat ? selectedChat.chatHisNo : `new-chat-${selectedTab}`}
+                  selectedChat={selectedChat}
+                  categoryNo={selectedTab + 6}
+                  onChatComplete={loadRecentChats}
+                />
+              </ChatJobProvider>
             </TabPanel>
           </TabPanels>
         </Flex>
