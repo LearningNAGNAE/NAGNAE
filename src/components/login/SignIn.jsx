@@ -93,11 +93,15 @@ const SignIn = () => {
               </Row>
             </Form.Item>
             <Form.Item>
-              <GoogleLogin 
+            <div className="google-login-wrapper">
+              <GoogleLogin
                 onSuccess={onSuccess}
                 onError={onFailure}
-                width={"100px"}
+                shape="rectangular"
+                size="large"
+                width="281px"
               />
+            </div>
             </Form.Item>
           </Form>
         </div>

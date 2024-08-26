@@ -120,6 +120,22 @@
               background-color: #573e2e;
             }
           }
+          .google-login-wrapper {
+            width: 100%; // 300px에서 100%로 변경
+            margin-top: 10px; // 간격 추가
+        
+            > div {
+              width: 100% !important;
+            }
+        
+            button {
+              width: 100% !important;
+              justify-content: center;
+              border-radius: 4px !important;
+              box-shadow: none !important;
+            }
+            
+          }
 
         }
       }
