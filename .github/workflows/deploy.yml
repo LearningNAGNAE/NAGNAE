@@ -52,3 +52,5 @@ jobs:
             -p 80:80 \
             -v /home/ubuntu/upload:/app/upload \
             hyunsujung3679/nagnae-react-20240823-4:latest
+
+            
