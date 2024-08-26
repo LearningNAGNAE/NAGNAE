@@ -37,10 +37,10 @@ function ChatJobWindow({ selectedChat, categoryNo, onChatComplete }) {
           handleSendMessage(input);
         }} className='form-box'>
           <div className='modal_input_btn'>
-            <RecordModal
+            {/* <RecordModal
               onRecordingComplete={(blob) => console.log('Recording completed', blob)}
               onAudioSend={(data) => console.log('Audio data', data)}
-            />
+            /> */}
             <input
               className='botinput'
               type="text"
