@@ -25,10 +25,10 @@ function ChatMedicalWindow({ selectedChat, categoryNo, onChatComplete }) {
             <ChatMedicalMessage key={`msg-${index}`} message={message} />
           ))
         ) : (
-          <p>새로운 대화를 시작하세요.</p>
+          <p>Start a new conversation</p>
         )}
-        {loading && <p>로딩 중...</p>}
-        {error && <p>오류: {error.message}</p>}
+        {loading && <p>loading...</p>}
+        {error && <p>error: {error.message}</p>}
       </div>
       <div className='wrap-form-box'>
         <form onSubmit={(e) => {
@@ -46,7 +46,7 @@ function ChatMedicalWindow({ selectedChat, categoryNo, onChatComplete }) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="메시지를 입력하세요..."
+              placeholder="Type a message..."
             />
           </div>
           <button className='send-btn' type="submit" disabled={!input.trim()}>
