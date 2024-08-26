@@ -79,7 +79,7 @@ function Sidebar({ onSelectChat, initialSelectedChat }) {
               transition="background-color 0.3s"
             >
               <img src={categoryOneImage} alt="Legal and Visa" className="image-class" />
-              Multilingual Law / Visa Assistant
+              Multilingual Legal / Visa Assistant
             </Tab>
             <Tab 
               display="flex" 
@@ -223,7 +223,7 @@ function Sidebar({ onSelectChat, initialSelectedChat }) {
         </ul>
       ) : (
         <div className='recent-ul-no'>
-          <p>There is no recent chat history</p>
+          <p>최근 채팅 내역이 없습니다.</p>
         </div>
       )}
     </aside>
