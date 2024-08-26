@@ -81,7 +81,7 @@ const SignIn = () => {
                   </Checkbox>
                 </Col>
                 <Col>
-                  <a className='find-btn' onClick={handleModalOpen}>Find ID / PW</a>
+                  <button className='find-btn' onClick={handleModalOpen}>Find ID / PW</button>
                 </Col>
               </Row>
             </Form.Item>

@@ -13,7 +13,7 @@ export function useScrollToBottom(dependencies) {
 
   useEffect(() => {
     scrollToBottom();
-  }, dependencies);
+  }, [dependencies]);
 
   return messagesContainerRef;
 }
