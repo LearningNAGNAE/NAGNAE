@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { usePostModifyAPI } from "../../contexts/board/Board_PostModifyApi";
 import Quill from "quill";
+import { convertToHtml, extractImageUrls } from "../../components/board/BoardUtil";
 
 export const useBoard_PostModify = () => {
   const [title, setTitle] = useState("");
@@ -30,73 +31,47 @@ export const useBoard_PostModify = () => {
     loadUserData();
   }, []);
 
-  useEffect(() => {
-    const loadPost = async () => {
-      if (boardno) {
-        setLoading(true);
-        try {
-          const postData = await fetchPost(boardno);
-          if (postData && postData.title && postData.content) {
-            setTitle(postData.title);
-            const delta = convertHtmlToDelta(postData.content);
-            setContent(delta);
-          } else {
-            throw new Error("Invalid post data structure");
-          }
-        } catch (err) {
-          console.error("Error in loadPost:", err);
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
+  const handleImageUpload = useCallback(async (file) => {
+    try {
+      if (!userData || !userData.apiData) {
+        throw new Error("사용자 데이터가 없습니다. 다시 로그인해주세요.");
       }
-    };
+      const userNo = userData.apiData.userno;
+      const imageUrl = await uploadImage(file, userNo);
+      return imageUrl; 
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error;
+    }
+  }, [userData, uploadImage]);
 
-    loadPost();
-  }, [boardno, fetchPost]);
-
-  const convertHtmlToDelta = (html) => {
+  const convertHtmlToDelta = useCallback((html) => {
     const tempContainer = document.createElement("div");
     tempContainer.innerHTML = html;
     const quill = new Quill(tempContainer);
     return quill.getContents();
-  };
+  }, []);
 
-  const convertDeltaToHtml = (delta) => {
-    const tempContainer = document.createElement("div");
-    const quill = new Quill(tempContainer);
-    quill.setContents(delta);
-    return tempContainer.innerHTML;
-  };
 
-  useEffect(() => {
-    const loadPost = async () => {
-      if (boardno) {
-        setLoading(true);
-        try {
-          const postData = await fetchPost(boardno);
-          if (postData && postData.title && postData.content) {
-            setTitle(postData.title);
-            const delta = convertHtmlToDelta(postData.content);
-            setContent(delta);
-          } else {
-            throw new Error("Invalid post data structure");
-          }
-        } catch (err) {
-          console.error("Error in loadPost:", err);
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-      }
-    };
+  const dataURLtoFile = useCallback((dataurl, filename) => {
+    let arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+  }, []);
 
-    loadPost();
-  }, [boardno, fetchPost]);
+  const replaceImageUrls = useCallback((htmlContent, oldUrls, newUrls) => {
+    let updatedContent = htmlContent;
+    oldUrls.forEach((oldUrl, index) => {
+      updatedContent = updatedContent.replace(oldUrl, newUrls[index]);
+    });
+    return updatedContent;
+  }, []);
 
   const handleUpdate = useCallback(async (e) => {
     e.preventDefault();
@@ -109,8 +84,25 @@ export const useBoard_PostModify = () => {
         throw new Error("Quill editor reference is not available");
       }
       const updatedContent = quillRef.current.getEditor().getContents();
-      const htmlContent = convertDeltaToHtml(updatedContent);
-      await updatePost(boardno, title, htmlContent, userData, categoryno);
+      const htmlContent = convertToHtml(updatedContent);
+      
+      // 이미지 URL을 추출하고 처리합니다.
+      const imageUrls = extractImageUrls(htmlContent);
+      const processedImageUrls = await Promise.all(
+        imageUrls.map(async (url) => {
+          if (url.startsWith('data:')) {
+            // base64 이미지를 파일로 변환
+            const file = dataURLtoFile(url, 'image.png');
+            return await handleImageUpload(file);
+          }
+          return url;
+        })
+      );
+
+      // 처리된 이미지 URL로 HTML 내용을 업데이트합니다.
+      const finalHtmlContent = replaceImageUrls(htmlContent, imageUrls, processedImageUrls);
+
+      await updatePost(boardno, title, finalHtmlContent, userData, categoryno);
       navigate("/BoardPage?type=Comm_PostList");
     } catch (error) {
       console.error("Error updating post:", error);
@@ -118,21 +110,34 @@ export const useBoard_PostModify = () => {
     } finally {
       setLoading(false);
     }
-  }, [boardno, categoryno, navigate, updatePost, userData, title, quillRef]);
-  
-  const handleImageUpload = useCallback(async (file) => {
-    try {
-      if (!userData || !userData.apiData) {
-        throw new Error("사용자 데이터가 없습니다. 다시 로그인해주세요.");
+  }, [boardno, categoryno, navigate, updatePost, userData, title, quillRef, handleImageUpload, dataURLtoFile, replaceImageUrls]);
+
+  useEffect(() => {
+    const loadPost = async () => {
+      if (boardno) {
+        setLoading(true);
+        try {
+          const postData = await fetchPost(boardno);
+          if (postData && postData.title && postData.content) {
+            setTitle(postData.title);
+            const delta = convertHtmlToDelta(postData.content);
+            setContent(delta);
+          } else {
+            throw new Error("Invalid post data structure");
+          }
+        } catch (err) {
+          console.error("Error in loadPost:", err);
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
       }
-      const userNo = userData.apiData.userno;
-      const imageUrl = await uploadImage(file, userNo);
-      return imageUrl;
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      throw error;
-    }
-  }, [userData, uploadImage]);
+    };
+
+    loadPost();
+  }, [boardno, fetchPost, convertHtmlToDelta]);
 
   return {
     title,
@@ -145,5 +150,7 @@ export const useBoard_PostModify = () => {
     error,
     userData,
     quillRef,
+    convertToHtml,
+    extractImageUrls,
   };
 };
