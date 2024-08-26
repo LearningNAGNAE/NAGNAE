@@ -20,6 +20,7 @@ function SignPage() {
               return <SignIn />;
             case 'modifyaccount':
               return <ModifyAccount />;
+            default:
           }
         })()}
       </div>
