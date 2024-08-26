@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../../assets/styles/board/Community/Comm_PostRead.scss";
-import { usePostDetail } from "../../../hooks/board/BoardComm_PostRead";
-import HtmlViewer from "../HtmlViewer";
-import { PostDetailProvider } from "../../../contexts/board/Board_Comm_PostReadAPi";
+import "../../assets/styles/board/Community/Comm_PostRead.scss";
+import { usePostDetail } from "../../hooks/board/BoardComm_PostRead";
+import HtmlViewer from "./HtmlViewer";
+import { PostDetailProvider } from "../../contexts/board/Board_Comm_PostReadAPi";
 
 function PostFormRead() {
   const {
@@ -23,7 +23,7 @@ function PostFormRead() {
   if (error) return <div>게시글을 불러오는 중 오류 발생: {error.message}</div>;
 
   const isAuthor =
-    userNo && post && Number(userNo) === Number(post.insertuserno);
+    userNo && post && Number(userNo) === Number(post.insertuserno) || Number(userNo) === 1;
 
   return (
     <div className="comm-commouncements">
@@ -69,6 +69,10 @@ function PostFormRead() {
 
         <div className="comm-article-content">
           <HtmlViewer html={post.content} />
+        </div>
+        <div className="com-article-aicontentsummary">
+          <h3 className="com-aicontentsummary-title">AI Summary</h3>
+          <p className="com-aicontentsummary">안녕안녕아녕아녕나아낭낭나안아낭나안아낭나안아낭낭아낭dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</p>
         </div>
       </article>
       <section className="comm-comments">

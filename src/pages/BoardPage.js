@@ -4,12 +4,9 @@ import { PostFormAPIProvider } from "../contexts/board/Board_PostFormApi";
 import { PostModifyAPIProvider } from "../contexts/board/Board_PostModifyApi";
 import CommPostList from "../components/board/Community/Comm_PostList";
 import CommPostForm from "../components/board/Community/Comm_PostForm";
-import CommPostRead from "../components/board/Community/Comm_PostRead";
+import PostRead from "../components/board/Board_PostRead";
 import CommPostModify from "../components/board/Community/Comm_PostModify";
 import AnnPostList from "../components/board/Announcements/Ann_PostList";
-import AnnPostForm from "../components/board/Announcements/Ann_PostForm";
-import AnnPostRead from "../components/board/Announcements/Ann_PostRead";
-import AnnPostModify from "../components/board/Announcements/Ann_PostModify";
 import BoardMain from "../components/board/BoardMain";
 import BoardSideBar from "../components/board/BoardSideBar";
 import "../assets/styles/board/BoardPage.scss";
@@ -28,8 +25,8 @@ function BoardPage() {
             <CommPostForm />
           </PostFormAPIProvider>
         );
-      case "Comm_PostRead":
-        return <CommPostRead />;
+      case "Board_PostRead":
+        return <PostRead />;
       case "Comm_PostList":
         return <CommPostList />;
       case "Comm_PostModify":
@@ -39,22 +36,8 @@ function BoardPage() {
           </PostModifyAPIProvider>
         );
 
-      case "Ann_PostForm":
-        return (
-          <PostFormAPIProvider>
-            <AnnPostForm />
-          </PostFormAPIProvider>
-        );
-      case "Ann_PostRead":
-        return <AnnPostRead />;
       case "Ann_PostList":
         return <AnnPostList />;
-      case "Ann_PostModify":
-        return (
-          <PostModifyAPIProvider>
-            <AnnPostModify />
-          </PostModifyAPIProvider>
-        );
 
       default:
         return <BoardMain />;

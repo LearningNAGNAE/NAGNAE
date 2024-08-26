@@ -1,4 +1,5 @@
 .comm-commouncements {
+  max-width: 50vw;
   min-width: 717px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
@@ -101,8 +102,21 @@
     }
     .comm-article-content {
       line-height: 1.6;
-      border-bottom: 1px solid #775A45;
+      border-bottom: 1px solid #D7BAA5;
       padding: 20px 0px;
+    }
+    .com-article-aicontentsummary {
+      min-height: 100px;
+      border-bottom: 1px solid #775A45;
+      .com-aicontentsummary-title {
+        font-family: 'HSBombaram3.0_Thin', sans-serif;
+        font-size: 20px;
+        margin: 10px 0px 10px 10px;
+      }
+      .com-aicontentsummary{
+
+        margin-left: 10px;
+      }
     }
   }
 
