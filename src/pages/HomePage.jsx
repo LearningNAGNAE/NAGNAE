@@ -74,9 +74,9 @@ function HomePage() {
     const { width, height } = windowDimensions;
     
     if (height <= 713) {
-      setSlideInThreshold(600);
+      setSlideInThreshold(500);
     } else if (width <= 566) {
-      setSlideInThreshold(1400);
+      setSlideInThreshold(1350);
     } else if (width <= 627) {
       setSlideInThreshold(1200);
     }  else if (width <= 728) {
