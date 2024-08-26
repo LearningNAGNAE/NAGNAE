@@ -75,7 +75,7 @@ export const usePostDetail = () => {
         console.log('Error deleting comment:', error);
       }
     }
-  }, [commentContent,deleteComment,fetchComments]);
+  }, [deleteComment,fetchComments]);
 
   return {
     post,
