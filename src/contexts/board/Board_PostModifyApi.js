@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useCallback, useState } from "react";
 import axios from "axios";
 import store from "../../redux/Store";
-import { convertToHtml, extractImageUrls } from "../../components/board/BoardUtil";
+import { extractImageUrls } from "../../components/board/BoardUtil";
 
 const PostModifyAPIContext = createContext();
 
@@ -81,7 +81,7 @@ export const PostModifyAPIProvider = ({ children }) => {
     return { ops: processedOps };
   }, [processImage]);
 
-  const updatePost = useCallback(async (boardno, title, content, userData, categoryno) => {
+  const updatePost = useCallback(async (boardno, title, content, userData) => {
     if (!userData || !userData.apiData) {
       throw new Error("사용자 데이터가 없습니다");
     }

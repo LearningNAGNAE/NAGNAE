@@ -67,14 +67,15 @@ export const usePostDetail = () => {
   }, [boardno, commentContent, fetchComments, postComment, userData,navigate]);
 
   const commentDelete = useCallback(async (commentno) =>{
-    if(commentContent){
+    if(commentno){
       try {
         await deleteComment(commentno);
+        await fetchComments();  // 삭제 후 댓글 목록을 다시 불러오기
       } catch (error) {
         console.log('Error deleting comment:', error);
       }
     }
-  }, [commentContent,deleteComment]);
+  }, [commentContent,deleteComment,fetchComments]);
 
   return {
     post,

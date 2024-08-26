@@ -35,7 +35,6 @@ export const PostDetailProvider = ({ children }) => {
       const response = await axios.get(`${SpringbaseUrl}/board/boardread`, {
         params: { boardno }
       });
-      console.log(response.data.data);
       setPost(response.data.data);
       setError(null);
       
@@ -90,7 +89,6 @@ export const PostDetailProvider = ({ children }) => {
       const response = await axios.get(`${SpringbaseUrl}/board/boardcommentlist`, {
         params: { boardno },
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching comments:', error);
@@ -110,7 +108,7 @@ export const PostDetailProvider = ({ children }) => {
       console.error('Error deleting comments:', error);
       throw error;
     }
-  }, [SpringbaseUrl]);
+  }, [SpringbaseUrl, token]);
 
   const value = {
     post,
