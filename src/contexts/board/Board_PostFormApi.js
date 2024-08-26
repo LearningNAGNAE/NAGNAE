@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useCallback, useState } from "react";
 import axios from "axios";
 import store from "../../redux/Store";
-import { convertToHtml, extractImageUrls } from "../../components/board/BoardUtil";
+import { extractImageUrls } from "../../components/board/BoardUtil";
 
 const PostFormAPIContext = createContext();
 
@@ -18,121 +18,87 @@ export const PostFormAPIProvider = ({ children }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const token = sessionStorage.getItem("token");
 
-  const uploadImage = useCallback(
-    async (file, userno) => {
-      try {
-        const formData = new FormData();
-        formData.append("image", file);
-        const response = await axios.post(
-          `${SpringbaseUrl}/board/upload-image`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            params: { userno },
-          }
-        );
+  const uploadImage = useCallback(async (file, userno) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const response = await axios.post(
+        `${SpringbaseUrl}/board/upload-image`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+          params: { userno },
+        }
+      );
+      if (response.data && response.data.imageUrl) {
         return response.data.imageUrl;
-      } catch (error) {
-        console.error("이미지 업로드 중 오류 발생:", error);
-        throw error;
+      } else {
+        console.error("Invalid response format:", response.data);
+        throw new Error("Invalid response format from server");
       }
-    },
-    [SpringbaseUrl]
-  );
-
-  const dataURLtoFile = (dataurl, filename) => {
-    let arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), 
-        n = bstr.length, 
-        u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, {type:mime});
-  };
-
-  const processImage = useCallback(async (imageData) => {
-    if (imageData.startsWith('data:image')) {
-      const file = dataURLtoFile(imageData, 'image.png');
-      return await uploadImage(file);
-    }
-    return imageData;
-  }, [uploadImage]);
-
-  const processContent = useCallback(async (content) => {
-    if (!content || !content.ops) {
-      throw new Error('잘못된 콘텐츠 형식입니다');
-    }
-    const processedOps = await Promise.all(content.ops.map(async (op) => {
-      if (op.insert && typeof op.insert === 'object' && op.insert.image) {
-        const imageUrl = await processImage(op.insert.image);
-        return {
-          ...op,
-          insert: {
-            image: imageUrl
-          }
-        };
+    } catch (error) {
+      console.error("이미지 업로드 중 오류 발생:", error);
+      if (error.response) {
+        console.error("서버 응답:", error.response.data);
       }
-      return op;
-    }));
+      throw error;
+    }
+  }, [SpringbaseUrl, token]);
 
-    return { ops: processedOps };
-  }, [processImage]);
+  const submitPost = useCallback(async (title, content, userData, categoryno) => {
+    try {
+      console.log("Submitting post with data:", { title, content, userData, categoryno });
 
-
-  const submitPost = useCallback(
-    async (title, content, userData, categoryno) => {
       if (!userData || !userData.apiData) {
         throw new Error("사용자 데이터가 없습니다");
       }
 
-      try {
-        const processedContent = await processContent(content);
-        const htmlContent = convertToHtml(processedContent);
-        console.log(content);
-        console.log(htmlContent);
-        const imageUrls = extractImageUrls(htmlContent);
+      const imageUrls = extractImageUrls(content);
+      console.log("Extracted image URLs:", imageUrls);
 
-        const postData = {
-          title,
-          content: htmlContent,
-          insertuserno: userData.apiData.userno,
-          modifyuserno: userData.apiData.userno,
-          categoryno,
-          imageUrls: imageUrls,
-        };
+      const postData = {
+        title,
+        content,
+        insertuserno: userData.apiData.userno,
+        modifyuserno: userData.apiData.userno,
+        categoryno,
+        imageUrls,
+      };
 
-        const response = await axios.post(
-          `${SpringbaseUrl}/board/boardwrite`,
-          postData,
-          {
-            headers: {
-              "Content-Type": "application/json; charset=utf-8",
-              Authorization: "Bearer " + token,
-            },
-          }
-        );
-        return response.data;
-      } catch (error) {
-        console.error("게시물 생성 중 오류 발생:", error);
-        throw error;
+      console.log("Post data being sent to server:", JSON.stringify(postData, null, 2));
+
+      const response = await axios.post(
+        `${SpringbaseUrl}/board/boardwrite`,
+        postData,
+        {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      console.log("Server response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("게시물 생성 중 오류 발생:", error);
+      if (error.response) {
+        console.error("서버 응답:", error.response.data);
+        console.error("서버 상태 코드:", error.response.status);
+        console.error("서버 헤더:", error.response.headers);
       }
-    },
-    [SpringbaseUrl, token,processContent]
-  );
-
-  const handleImageSelect = useCallback((imageData) => {
-    setSelectedImages((prev) => [...prev, imageData]);
-  }, []);
+      throw error;
+    }
+  }, [SpringbaseUrl, token]);
 
   const value = {
     submitPost,
     uploadImage,
-    handleImageSelect,
     selectedImages,
+    setSelectedImages,
   };
 
   return (

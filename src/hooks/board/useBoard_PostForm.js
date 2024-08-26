@@ -1,16 +1,17 @@
-import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useCallback, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { usePostFormAPI } from "../../contexts/board/Board_PostFormApi";
-import { useLocation } from "react-router-dom";
+import Quill from "quill";
 
 export const useBoard_PostForm = () => {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState(""); // 추가된 부분
+  const [content, setContent] = useState(null);
   const navigate = useNavigate();
   const { submitPost, uploadImage } = usePostFormAPI();
   const userData = JSON.parse(sessionStorage.getItem("userData"));
   const location = useLocation();
   const categoryno = location.state?.categoryno || null;
+  const quillRef = useRef(null);
 
   const getUserNo = useCallback(() => {
     if (!userData || !userData.apiData) {
@@ -19,45 +20,60 @@ export const useBoard_PostForm = () => {
     return userData.apiData.userno;
   }, [userData]);
 
-  const handleSubmit = useCallback(
-    async (title, content) => {
-      try {
-        if (userData !== null) {
-          await submitPost(title, content, userData, categoryno);
-          navigate("/BoardPage?type=Comm_PostList");
-        } else {
-          alert("로그인 후 이용해주세요");
-          navigate("/SignPage?type=signin");
-        }
-      } catch (error) {
-        console.error("Error creating post:", error);
-      }
-    },
-    [userData, submitPost, navigate, categoryno]
-  );
+  const processContent = useCallback(async (delta) => {
+    const tempContainer = document.createElement("div");
+    const quill = new Quill(tempContainer);
+    quill.setContents(delta);
 
-  const handleImageUpload = useCallback(
-    async (file) => {
-      try {
-        const userNo = getUserNo();
-        console.log("2222222222", userNo);
-        const imageUrl = await uploadImage(file, userNo);
-        return imageUrl;
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        throw error;
+    const images = tempContainer.getElementsByTagName("img");
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
+      if (img.src.startsWith("data:image")) {
+        const blob = await fetch(img.src).then(r => r.blob());
+        const file = new File([blob], `image${i}.png`, { type: "image/png" });
+        const imageUrl = await uploadImage(file, getUserNo());
+        img.src = imageUrl;
       }
-    },
-    [getUserNo, uploadImage]
-  );
+    }
+
+    return tempContainer.innerHTML;
+  }, [uploadImage, getUserNo]);
+
+  const handleSubmit = useCallback(async (title, quillContent) => {
+    try {
+      console.log("Submitting post with title:", title);
+      console.log("Quill content:", quillContent);
+
+      if (userData !== null) {
+        if (!quillRef.current) {
+          console.error("Quill editor reference is not available");
+          return;
+        }
+        const delta = quillRef.current.getEditor().getContents();
+        console.log("Quill delta:", delta);
+
+        const processedContent = await processContent(delta);
+        console.log("Processed content:", processedContent);
+
+        const result = await submitPost(title, processedContent, userData, categoryno);
+        console.log("Submit post result:", result);
+
+        navigate("/BoardPage?type=Comm_PostList");
+      } else {
+        alert("로그인 후 이용해주세요");
+        navigate("/SignPage?type=signin");
+      }
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  }, [userData, submitPost, navigate, categoryno, quillRef, processContent]);
 
   return {
     title,
     setTitle,
-    content, 
-    setContent, 
+    content,
+    setContent,
     handleSubmit,
-    handleImageUpload,
-    getUserNo,
+    quillRef,
   };
 };

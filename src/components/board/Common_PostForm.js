@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import BoardQuillCustom from "../board/BoardQuillCustum";
 import "react-quill/dist/quill.snow.css";
@@ -9,27 +9,23 @@ function CommonPostForm({
   content,
   setContent,
   handleSubmit,
-  handleImageUpload,
   formType,
   listPageUrl,
   cssClasses,
+  quillRef,
 }) {
-  const quillRef = useRef(null);
-
-  useEffect(() => {
-    if (quillRef.current) {
-      quillRef.current.getEditor();
-    }
-  });
-
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) {
       alert("제목을 입력해주세요.");
       return;
     }
-    const content = quillRef.current.getEditor().editor.delta
-    handleSubmit(title, content);
+    if (!quillRef.current) {
+      console.error("Quill editor reference is not available");
+      return;
+    }
+    const quillContent = quillRef.current.getEditor().getContents();
+    await handleSubmit(title, quillContent);
   };
 
   return (
@@ -55,9 +51,8 @@ function CommonPostForm({
             <div className={cssClasses.inputGroup}>
               <BoardQuillCustom
                 ref={quillRef}
-                defaultValue={content}
+                value={content}
                 onTextChange={(value) => setContent(value)}
-                onImageUpload={handleImageUpload}
               />
             </div>
           </div>

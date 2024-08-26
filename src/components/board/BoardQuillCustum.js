@@ -79,12 +79,13 @@ const QuillToolbar = () => (
 );
 
 const BoardQuillCustom = forwardRef(
-  ({ readOnly, defaultValue, onTextChange, onImageUpload }, ref) => {
+  ({ readOnly, value, onTextChange }, ref) => {
     const editorRef = useRef(null);
     const quillInstance = useRef(null);
 
     useImperativeHandle(ref, () => ({
       getEditor: () => quillInstance.current,
+      getContents: () => quillInstance.current.getContents(),
     }));
 
     const imageHandler = useCallback(() => {
@@ -93,48 +94,18 @@ const BoardQuillCustom = forwardRef(
       input.setAttribute("accept", "image/*");
       input.click();
 
-      input.onchange = async () => {
+      input.onchange = () => {
         const file = input.files[0];
         if (file) {
-          try {
+          const reader = new FileReader();
+          reader.onload = (e) => {
             const range = quillInstance.current.getSelection(true);
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-              const tempImageUrl = e.target.result;
-              quillInstance.current.insertEmbed(
-                range.index,
-                "image",
-                tempImageUrl
-              );
-
-              try {
-                const uploadedImageUrl = await onImageUpload(file);
-                quillInstance.current.deleteText(range.index, 1);
-                quillInstance.current.insertEmbed(
-                  range.index,
-                  "image",
-                  uploadedImageUrl
-                );
-              } catch (error) {
-                console.error("Error uploading image:", error);
-                quillInstance.current.deleteText(range.index, 1);
-                quillInstance.current.insertText(
-                  range.index,
-                  "Image upload failed",
-                  {
-                    color: "red",
-                    italic: true,
-                  }
-                );
-              }
-            };
-            reader.readAsDataURL(file);
-          } catch (error) {
-            console.error("Error handling image:", error);
-          }
+            quillInstance.current.insertEmbed(range.index, "image", e.target.result);
+          };
+          reader.readAsDataURL(file);
         }
       };
-    }, [onImageUpload]);
+    }, []);
 
     useEffect(() => {
       if (!quillInstance.current) {
@@ -146,11 +117,6 @@ const BoardQuillCustom = forwardRef(
                 image: imageHandler,
               },
             },
-            history: {
-              delay: 1000,
-              maxStack: 500,
-              userOnly: true,
-            },
             imageResize: {
               parchment: Quill.import("parchment"),
               modules: ["Resize", "DisplaySize"],
@@ -159,17 +125,17 @@ const BoardQuillCustom = forwardRef(
           theme: "snow",
         });
 
-        if (defaultValue) {
-          quillInstance.current.root.innerHTML = defaultValue;
+        if (value) {
+          quillInstance.current.setContents(value);
         }
 
         quillInstance.current.on("text-change", () => {
           if (onTextChange) {
-            onTextChange(quillInstance.current.root.innerHTML);
+            onTextChange(quillInstance.current.getContents());
           }
         });
       }
-    }, [defaultValue, onTextChange, imageHandler]);
+    }, [imageHandler, onTextChange, value]);
 
     useEffect(() => {
       if (quillInstance.current) {
