@@ -47,17 +47,19 @@ function PostFormModify() {
   }
 
   return (
-    <CommonPostForm
-      title={title}
-      setTitle={setTitle}
-      content={content}
-      setContent={setContent}
-      handleSubmit={handleUpdate}
-      handleImageUpload={handleImageUpload}
-      formType="Modify Community Post"
-      listPageUrl="/BoardPage?type=Comm_PostList"
-      cssClasses={cssClasses}
-    />
+    <div className={cssClasses.formContainer}>
+      <CommonPostForm
+        title={title}
+        setTitle={setTitle}
+        content={content}
+        setContent={setContent}
+        handleSubmit={handleUpdate}
+        handleImageUpload={handleImageUpload}
+        formType="Modify Community Post"
+        listPageUrl="/BoardPage?type=Comm_PostList"
+        cssClasses={cssClasses}
+      />
+    </div>
   );
 }
 
