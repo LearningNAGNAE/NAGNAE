@@ -91,8 +91,8 @@ function PostFormRead() {
                 <div className="comm-comment-content">{comment.content}</div>
               </div>
               <div>
-                <button className="comment-trashbtn" type="button" onClick={commentDelete}>
-                  <img className="comment-trashbtn" src={TrashImage} />
+                <button className="comment-trashbtn" type="button" onClick={() => commentDelete(comment.commentno)}>
+                  <img className="comment-trashbtn" src={TrashImage}  alt="Delete Comment"/>
                 </button>
               </div>
             </div>

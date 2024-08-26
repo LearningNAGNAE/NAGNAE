@@ -70,11 +70,11 @@ export const usePostDetail = () => {
     if(commentContent){
       try {
         await deleteComment(commentno);
-      } catch (ereor) {
+      } catch (error) {
         console.log('Error deleting comment:', error);
       }
     }
-  }, [commentContent]);
+  }, [commentContent,deleteComment]);
 
   return {
     post,
