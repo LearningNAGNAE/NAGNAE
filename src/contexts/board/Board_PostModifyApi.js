@@ -92,20 +92,14 @@ export const PostModifyAPIProvider = ({ children }) => {
 
   const updatePost = useCallback(
     async (boardno, title, content, userData, categoryno) => {
-      console.log("updatePost called with:", { boardno, title, content, userData, categoryno });
       if (!userData || !userData.apiData) {
-        console.error("Invalid userData:", userData);
         throw new Error("사용자 데이터가 없습니다");
       }
 
-      // 토큰 디버깅
-      console.log("Token from userData:", token);
 
       try {
         const processedContent = await processContent(content);
         const htmlContent = convertToHtml(processedContent);
-        console.log(content);
-        console.log(htmlContent);
         const imageUrls = extractImageUrls(htmlContent);
 
         const postData = {
@@ -115,12 +109,6 @@ export const PostModifyAPIProvider = ({ children }) => {
           modifyuserno: userData.apiData.userno,
           imageUrls: imageUrls,
         };
-
-        console.log("Request data:", postData);
-        console.log("Request headers:", {
-          "Content-Type": "application/json; charset=utf-8",
-          Authorization: `Bearer ${token}`,
-        });
 
         const response = await axios.put(
           `${SpringbaseUrl}/board/boardupdate`,
@@ -132,8 +120,6 @@ export const PostModifyAPIProvider = ({ children }) => {
             },
           }
         );
-
-        console.log("Update response:", response.data);
         return response.data;
       } catch (error) {
         console.error("게시물 수정 중 오류 발생:", error);
@@ -156,7 +142,6 @@ export const PostModifyAPIProvider = ({ children }) => {
         const response = await axios.get(`${SpringbaseUrl}/board/boardread`, {
           params: { boardno },
         });
-        console.log("API Response:", response.data); // 전체 응답 로깅
         if (response.data) {
           return response.data.data; 
         } else {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { getAnnPosts } from "../../contexts/board/Board_Ann_PostListApi";
 
 export const useBoard_Ann_PostList = (initialPage = 1) => {

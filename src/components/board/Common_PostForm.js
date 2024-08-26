@@ -29,7 +29,6 @@ function CommonPostForm({
       return;
     }
     const content = quillRef.current.getEditor().editor.delta
-    console.log(content)
     handleSubmit(title, content);
   };
 

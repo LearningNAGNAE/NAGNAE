@@ -17,7 +17,6 @@ export const useBoard_PostModify = () => {
   useEffect(() => {
     const loadUserData = () => {
       const storedUserData = JSON.parse(sessionStorage.getItem("userData"));
-      console.log("Stored user data:", storedUserData);
       if (storedUserData && storedUserData.apiData) {
         setUserData(storedUserData);
       } else {
@@ -35,7 +34,6 @@ export const useBoard_PostModify = () => {
         setLoading(true);
         try {
           const postData = await fetchPost(boardno);
-          console.log("Fetched post data:", postData);
           if (postData && postData.title && postData.content) {
             setTitle(postData.title);
             setContent(postData.content);
@@ -59,7 +57,6 @@ export const useBoard_PostModify = () => {
   const handleUpdate = useCallback(async (updatedTitle, updatedContent) => {
     setLoading(true);
     try {
-      console.log("Updating post with userData:", userData);
       if (!userData) {
         throw new Error("사용자 데이터가 없습니다. 다시 로그인해주세요.");
       }
