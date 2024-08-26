@@ -113,9 +113,11 @@
         font-size: 20px;
         margin: 10px 0px 10px 10px;
       }
-      .com-aicontentsummary{
-
+      .com-aicontentsummary {
         margin-left: 10px;
+      }
+      .com-aicontentsummary2 {
+        text-align: center;
       }
     }
   }
@@ -143,6 +145,14 @@
               font-weight: bold;
               margin-bottom: 5px;
           }
+          .comm-comment-content{
+            width: 44.75vw;
+            min-width: 624px;
+          }
+      }
+      .comment-trashbtn {
+        width: 20px;
+        height: 20px;
       }
     }
   }

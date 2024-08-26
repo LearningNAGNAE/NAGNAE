@@ -4,6 +4,7 @@ import "../../assets/styles/board/Community/Comm_PostRead.scss";
 import { usePostDetail } from "../../hooks/board/BoardComm_PostRead";
 import HtmlViewer from "./HtmlViewer";
 import { PostDetailProvider } from "../../contexts/board/Board_Comm_PostReadAPi";
+import TrashImage from '../../assets/images/trash.png';
 
 function PostFormRead() {
   const {
@@ -16,6 +17,7 @@ function PostFormRead() {
     setCommentContent,
     handleDelete,
     handleComment,
+    commentDelete,
     boardno
   } = usePostDetail();
 
@@ -23,7 +25,7 @@ function PostFormRead() {
   if (error) return <div>게시글을 불러오는 중 오류 발생: {error.message}</div>;
 
   const isAuthor =
-    userNo && post && Number(userNo) === Number(post.insertuserno) || Number(userNo) === 1;
+    (userNo && post && Number(userNo) === Number(post.insertuserno)) || (Number(userNo) === 1);
 
   return (
     <div className="comm-commouncements">
@@ -60,7 +62,7 @@ function PostFormRead() {
               </div>
             </div>
             <div className="comm-date-hits-box">
-              <span className="comm-date">{post.insertDate}</span>
+              <span className="comm-date">{post.modifyDate}</span>
               <span className="comm-hits">hits: {post.views}</span>
             </div>
           </div>
@@ -72,7 +74,11 @@ function PostFormRead() {
         </div>
         <div className="com-article-aicontentsummary">
           <h3 className="com-aicontentsummary-title">AI Summary</h3>
-          <p className="com-aicontentsummary">안녕안녕아녕아녕나아낭낭나안아낭나안아낭나안아낭낭아낭dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</p>
+          {post.summary != null ?(
+            <p className="com-aicontentsummary">{post.summary}</p>
+          ):(
+            <p className="com-aicontentsummary2">*The summary is not ready. Summaries are generated every 30 minutes.*</p>
+          )}
         </div>
       </article>
       <section className="comm-comments">
@@ -83,6 +89,11 @@ function PostFormRead() {
               <div className="comm-commenter-box">
                 <div className="comm-commenter">{comment.username}</div>
                 <div className="comm-comment-content">{comment.content}</div>
+              </div>
+              <div>
+                <button className="comment-trashbtn" type="button" onClick={commentDelete}>
+                  <img className="comment-trashbtn" src={TrashImage} />
+                </button>
               </div>
             </div>
           ))}

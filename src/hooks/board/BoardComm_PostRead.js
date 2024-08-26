@@ -4,7 +4,7 @@ import { usePostDetailContext } from '../../contexts/board/Board_Comm_PostReadAP
 import { useLocation } from 'react-router-dom';
 
 export const usePostDetail = () => {
-  const { post, loading, error, fetchPost, deletePost, postComment, getCommentList } = usePostDetailContext();
+  const { post, loading, error, fetchPost, deletePost, postComment, getCommentList, deleteComment } = usePostDetailContext();
   const [commentContent, setCommentContent] = useState('');
   const [commentList, setCommentList] = useState([]);
   const [userData, setUserData] = useState(null);
@@ -66,6 +66,16 @@ export const usePostDetail = () => {
     }
   }, [boardno, commentContent, fetchComments, postComment, userData,navigate]);
 
+  const commentDelete = useCallback(async (commentno) =>{
+    if(commentContent){
+      try {
+        await deleteComment(commentno);
+      } catch (ereor) {
+        console.log('Error deleting comment:', error);
+      }
+    }
+  }, [commentContent]);
+
   return {
     post,
     loading,
@@ -76,6 +86,7 @@ export const usePostDetail = () => {
     setCommentContent,
     handleDelete,
     handleComment,
+    commentDelete,
     boardno,
   };
 };

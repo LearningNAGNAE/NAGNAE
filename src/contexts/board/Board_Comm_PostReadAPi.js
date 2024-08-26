@@ -35,6 +35,7 @@ export const PostDetailProvider = ({ children }) => {
       const response = await axios.get(`${SpringbaseUrl}/board/boardread`, {
         params: { boardno }
       });
+      console.log(response.data.data);
       setPost(response.data.data);
       setError(null);
       
@@ -55,8 +56,7 @@ export const PostDetailProvider = ({ children }) => {
         headers:{"Content-Type": "application/json; charset=utf-8",
           Authorization: "Bearer " + token
         }
-      }
-    );
+      });
     } catch (error) {
       console.error('Error deleting post:', error);
       setError(error);
@@ -90,9 +90,24 @@ export const PostDetailProvider = ({ children }) => {
       const response = await axios.get(`${SpringbaseUrl}/board/boardcommentlist`, {
         params: { boardno },
       });
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching comments:', error);
+      throw error;
+    }
+  }, [SpringbaseUrl]);
+
+  const deleteComment = useCallback(async (commentno) =>{
+    try{
+      await axios.delete(`${SpringbaseUrl}/board/deletecomment`, {
+        params: { commentno },
+        headers:{"Content-Type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + token
+        }
+      });
+    } catch (error) {
+      console.error('Error deleting comments:', error);
       throw error;
     }
   }, [SpringbaseUrl]);
@@ -104,7 +119,8 @@ export const PostDetailProvider = ({ children }) => {
     fetchPost,
     deletePost,
     postComment,
-    getCommentList
+    getCommentList,
+    deleteComment
   };
 
   return (
