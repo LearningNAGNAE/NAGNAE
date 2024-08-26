@@ -1,12 +1,14 @@
 import React from 'react';
 import { useModifyAccountForm } from '../../hooks/authorization/useModifyAccountForm';
 import '../../assets/styles/style.scss';
+import { useSelector } from 'react-redux';
 
 function ModifyAccount() {
   const { formData, passwordConfirm, previewUrl, handleChange, handleFileChange, handleSubmit, errors } = useModifyAccountForm();
   const userData = JSON.parse(sessionStorage.getItem('userData'))
   const savenameinfo = userData.apiData.savename;
-
+  const SpringbaseUrl = useSelector(state => state.url.SpringbaseUrl);
+  
   return (
     <div className="modify-nagnae-container">
       <div className="form-content">
@@ -20,7 +22,7 @@ function ModifyAccount() {
             ) : (
               (() => {
                 if (savenameinfo != null) {
-                  return <img className='user-profile-img' src={require(`../../assets/images/profile/${savenameinfo}`)} alt="Profile preview" />;
+                  return <img className='user-profile-img' src={`${SpringbaseUrl}/upload/${savenameinfo}`} alt="Profile preview" />;
                 } else {
                   return <span>picture</span>;
                 }
