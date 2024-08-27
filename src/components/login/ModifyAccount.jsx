@@ -1,12 +1,14 @@
 import React from 'react';
 import { useModifyAccountForm } from '../../hooks/authorization/useModifyAccountForm';
 import '../../assets/styles/style.scss';
+import { useSelector } from 'react-redux';
 
 function ModifyAccount() {
   const { formData, passwordConfirm, previewUrl, handleChange, handleFileChange, handleSubmit, errors } = useModifyAccountForm();
   const userData = JSON.parse(sessionStorage.getItem('userData'))
   const savenameinfo = userData.apiData.savename;
-
+  const SpringbaseUrl = useSelector(state => state.url.SpringbaseUrl);
+  
   return (
     <div className="modify-nagnae-container">
       <div className="form-content">
@@ -20,7 +22,7 @@ function ModifyAccount() {
             ) : (
               (() => {
                 if (savenameinfo != null) {
-                  return <img className='user-profile-img' src={require(`../../assets/images/profile/${savenameinfo}`)} alt="Profile preview" />;
+                  return <img className='user-profile-img' src={`${SpringbaseUrl}/upload/${savenameinfo}`} alt="Profile preview" />;
                 } else {
                   return <span>picture</span>;
                 }
@@ -50,6 +52,8 @@ function ModifyAccount() {
                 value={formData.password}
                 onChange={handleChange} 
               />
+              {errors.password && <span className="error-message">{errors.password}</span>}
+              <small className="password-hint">비밀번호는 6자리 이상이며, 영문자, 숫자, 특수문자를 각각 1개 이상 포함해야 합니다.</small>
             </div>
           </div>
           <div className="input-row">

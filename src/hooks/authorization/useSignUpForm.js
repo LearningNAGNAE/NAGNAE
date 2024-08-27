@@ -111,6 +111,11 @@ export function useSignUpForm() {
       setEmailDomain(value);
     }
   };
+
+  const validatePassword = (password) => {
+    const regex = /^(?=.*[A-Za-z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{6,}$/;
+    return regex.test(password);
+  };
   
   const validateForm = () => {
     let tempErrors = {};
@@ -119,7 +124,11 @@ export function useSignUpForm() {
     if (!/^[a-zA-Z0-9]+$/.test(emailId)) tempErrors.email = "이메일 아이디는 영문자와 숫자만 사용할 수 있습니다.";
     if (!/^@[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+$/.test(emailDomain)) tempErrors.email = "유효하지 않은 이메일 도메인입니다.";
     if (!isEmailVerified) tempErrors.email = "이메일 중복 확인을 해주세요.";
-    if (!formData.password) tempErrors.password = "비밀번호를 입력해주세요.";
+    if (!formData.password) {
+      tempErrors.password = "비밀번호를 입력해주세요.";
+    } else if (!validatePassword(formData.password)) {
+      tempErrors.password = "비밀번호는 6자리 이상이며, 영문자, 숫자, 특수문자를 각각 1개 이상 포함해야 합니다.";
+    }
     if (!passwordConfirm) tempErrors.passwordConfirm = "비밀번호 확인을 입력해주세요.";
     if (formData.password !== passwordConfirm) tempErrors.passwordConfirm = "비밀번호가 일치하지 않습니다.";
     if (!formData.username) tempErrors.username = "이름을 입력해주세요.";
@@ -128,6 +137,19 @@ export function useSignUpForm() {
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
+
+
+  
+
+
+
+
+
+
+
+
+
+
 
 
   const handleSubmit = async (e) => {
