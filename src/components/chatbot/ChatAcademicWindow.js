@@ -25,10 +25,10 @@ function ChatAcademicWindow({ selectedChat, categoryNo, onChatComplete }) {
             <ChatAcademicMessage key={`msg-${index}`} message={message} />
           ))
         ) : (
-          <p>새로운 대화를 시작하세요.</p>
+          <p>Start a new conversation</p>
         )}
-        {loading && <p>로딩 중...</p>}
-        {error && <p>오류: {error.message}</p>}
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error.message}</p>}
       </div>
       <div className='wrap-form-box'>
         <form onSubmit={(e) => {
@@ -36,17 +36,17 @@ function ChatAcademicWindow({ selectedChat, categoryNo, onChatComplete }) {
           handleSendMessage(input);
         }} className='form-box'>
           <div className='modal_input_btn'>
-            <RecordModal
+            {/* <RecordModal
               onRecordingComplete={(blob) => console.log('Recording completed', blob)}
               onAudioSend={(data) => console.log('Audio data', data)}
-            />
+            /> */}
             <input
               className='botinput'
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="메시지를 입력하세요..."
+              placeholder="Enter a message..."
             />
           </div>
           <button className='send-btn' type="submit" disabled={!input.trim()}>

@@ -28,7 +28,7 @@
     color: black;
     flex: 1;
     padding: 0.5rem;
-    border-radius: 0px 50px 50px 0px;
+    border-radius: 50px 50px 50px 50px;
 }
 
 .send-btn {
