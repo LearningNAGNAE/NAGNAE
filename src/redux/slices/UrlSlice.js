@@ -7,7 +7,7 @@ const urlSlice = createSlice({
     SpringbaseUrl: 'https://3.34.127.243',
 
     // 파이썬 url
-    PythonbaseUrl: 'https://43.201.116.244',
+    PythonbaseUrl: 'https://3.35.170.116',
   },
   reducers: {
     setSpringBaseUrl: (state, action) => {
